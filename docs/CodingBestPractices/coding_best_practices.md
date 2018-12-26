@@ -173,6 +173,10 @@ In Fortran it is also possible to restrict what to use from modules, e.g.,
 use, intrinsic :: iso_fortran_env, only : REAL64, INT32
 ~~~~
 
+The `only` keyword ensures that only the parameters `REAL64` and `INT32` are imported from the `iso_fortran_env` module.
+
+Note that the `intriinsic` keyword is used to ensure that the compiler supplied module is used, and not a module with the same name defined by you.
+
 When developing multi-threaded C/C++ programs using OpenMP, limiting the scope of variables to parallel regions makes those variables thread-private, hence reducing the risk of data races. We will discuss this in more detail in a later section.  Unfortunately, the semantics for the Fortran `block` statement in an OpenMP do loop is not defined, at least up to the OpenMP 4.5 specification.  Although `gfortran` accepts such code constructs, and seems to generate code with the expected behavior, it should be avoided since Intel Fortran compiler will report an error for such code.
 
 This recommendation is [mentioned](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Res-scope) in the C++ core guidelines.
