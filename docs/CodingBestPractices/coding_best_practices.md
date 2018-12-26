@@ -89,7 +89,7 @@ However, the gist is clear: code is as simple as possible, but not simpler.
 
 Even for scientific code, a function has no more lines of code than fit comfortably on your screen. It is all too easy to lose track of the semantics if you can't get an overview of the code. Remember, not everyone has the budget for a 5K monitor.
 
-If you find yourself writing a very long code fragment, ask yourself whether that is atomic, or whether the task it represents can be broken up into subtasks. If so, and that is very likely, introduce new functions for those subtasks with descriptive names. This will make the narrative all the easier to understand.
+If you find yourself writing a very long code fragment, ask yourself whether that is atomic, or whether the task it represents can be broken up into sub-tasks. If so, and that is very likely, introduce new functions for those sub-tasks with descriptive names. This will make the narrative all the easier to understand.
 
 A function should have a single purpose, i.e., you should design it to do one thing, and one thing only.
 
@@ -152,14 +152,14 @@ END DO
 
 The compiler would give an error for the code fragment above since all variables have to be declared explicitly, and `totl` was not.
 
-When developing multithreaded C/C++ programs using OpenMP, limiting the scope of variables to parallel regions makes those variables thread-private, hence reducing the risk of data races. We will discuss this in more detail in a later section.
+When developing multi-threaded C/C++ programs using OpenMP, limiting the scope of variables to parallel regions makes those variables thread-private, hence reducing the risk of data races. We will discuss this in more detail in a later section.  Unfortunately, the semantics for the Fortran `block` statement in an OpenMP do loop is not defined, at least up to the OpenMP 4.5 specification.  Although `gfortran` accepts such code constructs, and seems to generate code with the expected behavior, it should be avoided since Intel Fortran compiler will report an error for such code.
 
 This recommendation is [mentioned](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Res-scope) in the C++ core guidelines.
 
 
 ## Be explicit about constants
 
-If a variable's value is not supposed to change during the runtime of a program, declare it as a constant, so that the compiler will warn you if you inadvertently modify its value. In C/C++, use the `const` qualifier, in Fortran, use `PARAMETER`.
+If a variable's value is not supposed to change during the run time of a program, declare it as a constant, so that the compiler will warn you if you inadvertently modify its value. In C/C++, use the `const` qualifier, in Fortran, use `PARAMETER`.
 
 If arguments passed to function should be read-only, use `const` in C/C++ code, and `INTENT(IN)` in Fortran. Although Fortran doesn't require that you state the intent of arguments passed to procedures, it is nevertheless wise to do so. The compiler will catch at least some programming mistakes if you do.
 
@@ -200,8 +200,9 @@ In summary:
 |-----------------|-----------------------------------------------|---------|
 | private         | access restricted to class/struct             | access restricted to module |
 | protected       | access restricted to class/struct and derived | variables: modify access restricted to module, read everywhere |
-| public          | attributes and methods can be accessed from everwhere | variables, types and procedures can be accessed from everywhere |
+| public          | attributes and methods can be accessed from everywhere | variables, types and procedures can be accessed from everywhere |
 | none            | class: private, struct: public                | public |
+
 
 
 ## Variable initialisation
