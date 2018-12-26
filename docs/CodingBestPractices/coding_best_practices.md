@@ -192,6 +192,17 @@ In C++, object attributes and methods are private by default, while structure fi
 
 Interestingly, both Fortran and C++ have the keyword `protected`, albeit with very different semantics.  In Fortran, `protected` means that a variable defined in a module can be read by the compilation unit that uses it, but not modified.  In the module where it is defined, it can be modified though.  In C++, an attribute or a method that is declared `protected` can be accessed from derived classes as well as the class that defines it.  However, like attributes and methods declared `private`, it can not be accessed elsewhere.
 
+This is another example where getting confused about the semantics can lead to interesting bugs.
+
+In summary:
+
+| access modifier | C++                                           | Fortran |
+|-----------------|-----------------------------------------------|---------|
+| private         | access restricted to class/struct             | access restricted to module |
+| protected       | access restricted to class/struct and derived | variables: modify access restricted to module, read everywhere |
+| public          | attributes and methods can be accessed from everwhere | variables, types and procedures can be accessed from everywhere |
+| none            | class: private, struct: public                | public |
+
 
 ## Variable initialisation
 
