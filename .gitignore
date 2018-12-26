@@ -1,2 +1,6 @@
 # vim backup files
 *~
+*.swp
+
+# site directory
+site
