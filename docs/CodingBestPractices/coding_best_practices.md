@@ -190,6 +190,8 @@ When defining classes in C++ and Fortran, some attention should be paid to acces
 
 In C++, object attributes and methods are private by default, while structure fields and methods are public.  For Fortran, fields in user defined types and procedures defined in modules are public by default. Regardless of the defaults, it is useful to specify the access restrictions explicitly. It is good practice to specify private access as the default, and public as the exception to that rule.
 
+Interestingly, both Fortran and C++ have the keyword `protected`, albeit with very different semantics.  In Fortran, `protected` means that a variable defined in a module can be read by the compilation unit that uses it, but not modified.  In the module where it is defined, it can be modified though.  In C++, an attribute or a method that is declared `protected` can be accessed from derived classes as well as the class that defines it.  However, like attributes and methods declared `private`, it can not be accessed elsewhere.
+
 
 ## Variable initialisation
 
