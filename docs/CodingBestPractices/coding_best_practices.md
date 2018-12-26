@@ -152,6 +152,27 @@ END DO
 
 The compiler would give an error for the code fragment above since all variables have to be declared explicitly, and `totl` was not.
 
+Limiting scope of of declarations extends to headers files that are included in C/C++.  It is recommended not to include files that are not required.  Not only will it polute the namespace with clutter, but it will also increase build times.
+
+In C++, you can importing everything defined in a namespace, e.g.,
+
+~~~~c
+using namespace std;
+~~~~
+
+Although it saves on typing, it is better to either use the namesapce prefix explicitly, or use only what is required, e.g.,
+
+~~~~c
+using std::cout;
+using std::endl;
+~~~~
+
+In Fortran it is also possible to restrict what to use from modules, e.g.,
+
+~~~~fortran
+use, intrinsic :: iso_fortran_env, only : REAL64, INT32
+~~~~
+
 When developing multi-threaded C/C++ programs using OpenMP, limiting the scope of variables to parallel regions makes those variables thread-private, hence reducing the risk of data races. We will discuss this in more detail in a later section.  Unfortunately, the semantics for the Fortran `block` statement in an OpenMP do loop is not defined, at least up to the OpenMP 4.5 specification.  Although `gfortran` accepts such code constructs, and seems to generate code with the expected behavior, it should be avoided since Intel Fortran compiler will report an error for such code.
 
 This recommendation is [mentioned](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Res-scope) in the C++ core guidelines.
