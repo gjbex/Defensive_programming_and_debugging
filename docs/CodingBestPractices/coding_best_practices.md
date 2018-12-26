@@ -35,7 +35,7 @@ int factorial(int n) {
 }
 ~~~~
 
-The idiomatic formulation of line 4 would be `fac *=i`.
+The idiomatic formulation of line 4 would be `fac *= i`.
 
 In Fortran for example, you would write
 
