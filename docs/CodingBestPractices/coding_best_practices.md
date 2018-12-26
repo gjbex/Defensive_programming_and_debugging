@@ -181,8 +181,6 @@ int main(void) {
 }
 ~~~~
 
-We will revisit this example in a later section.
-
 In fact, this is [explicitly mentioned](https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines#Res-casts-const) in the C++ core guidelines.
 
 
