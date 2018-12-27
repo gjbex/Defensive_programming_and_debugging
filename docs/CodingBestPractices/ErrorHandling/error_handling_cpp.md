@@ -1,6 +1,6 @@
 # Error handling in C++
 
-All advise given on error handling in C is of course also relevant for C++.  However, C++ adds exception handling as a way to deal with runtime errors, and propagate these through your applicatin.
+All advise given on error handling in C is of course also relevant for C++.  However, C++ adds exception handling as a way to deal with run-time errors, and propagate these through your application.
 
 To accommodate this, C++ has a few keywords: `throw`, `try` and `catch`.  When an error has been detected, an exception can be thrown, e.g.,
 
@@ -21,7 +21,7 @@ int fac(int n) {
 }
 ~~~~
 
-The `throw` statment will transfer control to the calling context of the `fac` function.  The destructor of all objects on the stack will be called since they go out of scope.
+The `throw` statement will transfer control to the calling context of the `fac` function.  The destructor of all objects on the stack will be called since they go out of scope.
 
 The exception `domain_error` used here is declared in the `stdexcept` header.  This header declares some standard exceptions that cover many cases, e.g., `logic_error`, `invalid_argument`, `out_of_range`, and so on.
 
@@ -41,7 +41,7 @@ catch (std::domain_error& e) {
 
 In the code fragment above, the exception is caught and handled in the immediate calling context.  If that is not the case, the exception percolates up the call stack, for each function calling the destructors for the stack variables that go out of scope.
 
-Using exceptions makes it easier to handle exception in context to provide the user of your application with relevant feedback.  What can be done at that point depends on the exception safety level.  Generally, four levels of exception safety are recoginised:
+Using exceptions makes it easier to handle exception in context to provide the user of your application with relevant feedback.  What can be done at that point depends on the exception safety level.  Generally, four levels of exception safety are recognised:
 
   1. Nothrow exception guarantee: the function or method never throws an exception.  This is expected from destructors.
   1. Strong exception guarantee: the state of the program is rolled to the state just before the exceptional state occurred, e.g., failed operations on STL containers.
@@ -65,4 +65,4 @@ try {
 }
 ~~~~
 
-In the callig context of this fragment of code, `e` will still have its original polymorphic type.
+In the calling context of this fragment of code, `e` will still have its original polymorphic type.
