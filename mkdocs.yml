@@ -20,10 +20,10 @@ nav:
         - 'Coding style': CodingBestPractices/coding_best_practices.md
         - 'Error handling in Fortran': CodingBestPractices/ErrorHandling/error_handling_fortran.md
         - 'Error handling in C': CodingBestPractices/ErrorHandling/error_handling_c.md
-        # - C++: CodingBestPractices/ErrorHandling/error_handling_cpp.md
+        - 'Exceptions in C++': CodingBestPractices/ErrorHandling/error_handling_cpp.md
         # - Python: CodingBestPractices/ErrorHandling/error_handling_python.md
         - 'Assertions': CodingBestPractices/ErrorHandling/assertions.md
-        - 'Additional material': CodingBestPractices/coding_best_practices_more.md
+        # - 'Additional material': CodingBestPractices/coding_best_practices_more.md
           #     - Documentation:
           #         - Introduction: Documentation/documentation_intro.md
           #         - Best practices: Documentation/documentation_best_practices.md
