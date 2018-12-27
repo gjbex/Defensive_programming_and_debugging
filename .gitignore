@@ -2,5 +2,8 @@
 *~
 *.swp
 
+# aspell backup files
+*.bak
+
 # site directory
 site
