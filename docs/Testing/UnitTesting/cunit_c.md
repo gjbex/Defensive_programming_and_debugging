@@ -1,11 +1,126 @@
-# CUnit additional features
+# CUnit testing for C
 
-[CUnit](http://cunit.sourceforge.net/) is a very rich framework for developing unit tests.  The screencast presented some of its features, but it is useful to know some more.
+[CUnit](http://cunit.sourceforge.net/) is a very rich framework for developing unit tests for C functions..
+
+
+## The basics
+
+The function under test computes the factorial of a given integer, i.e.,
+
+~~~~c
+int fac(int n) {
+    int f = 1;
+    while (n > 1)
+        f *= --n;
+    return f;
+}
+~~~~
+
+### Defining the tests
+
+Unit tests are functions that are registered as such, and executed by the framework.  The signature of these functions is `void f(void)`, and their body contains at least one CUnit assertions, e.g.,
+
+~~~~c
+#include <CUnit/CUnit.h>
+
+void test_fac_0(void) {
+    CU_ASSERT_EQUAL(fac(0), 1);
+}
+~~~~
+
+This test would verify that the computed result, i.e., `fac(0)`, the factorial of 0, is equal to the expected result 1.  Typically, several tests would be defined to cover the paths through the `fac` function, e.g.,
+
+~~~~c
+void test_fac_3(void) {
+    CU_ASSERT_EQUAL(fac(3), 6);
+}
+~~~~
+
+
+### Setting up the tests
+
+When the tests are defined, a test application can be created.  The first and last step is to initialise and clean up the test registry, i.e.,
+
+~~~~c
+#include <err.h>
+#include <CUnit/Basic.h>
+
+int main(void) {
+    if (CU_initialize_registry() != CUE_SUCCESS)
+        errx(EXIT_FAILURE, "can't initialize test registry");
+    ...
+    CU_cleanup_registry();
+    return 0;
+}
+~~~~
+
+Unit tests are grouped into suites, so you need to add at least one suite to the registry once that has been initialized.  A suite has a unique name, `fac` in the code fragment below.  For now, don't worry about the second and third argument of the `CU_add_suite` function, a later section will discuss that.
+
+~~~~c
+    ...
+    CU_pSuite facSuite = CU_add_suite("fac", NULL, NULL);
+    if (CU_get_error() != CUE_SUCCESS)
+        errx(EXIT_FAILURE, "%s", CU_get_error_msg());
+    ...
+~~~~
+
+Now the unit test functions can be added to the test suite, i.e.,
+
+~~~~c
+    ...
+    CU_add_test(facSuite, "fac(0)", test_fac_0);
+    CU_add_test(facSuite, "fac(3)", test_fac_3);
+    ...
+~~~~
+
+The last step is to ensure that the tests are executed when the application runs.  The simplest way to do this is by using the `CU_basic_run_tests` function.  This will execute all the tests in each suite that was added to the registry.  This is the complete definition of the `main` function.
+
+~~~~c
+int main(void) {
+    if (CU_initialize_registry() != CUE_SUCCESS)
+        errx(EXIT_FAILURE, "can't initialize test registry");
+    CU_pSuite facSuite = CU_add_suite("fac", NULL, NULL);
+    if (CU_get_error() != CUE_SUCCESS)
+        errx(EXIT_FAILURE, "%s", CU_get_error_msg());
+    CU_add_test(facSuite, "fac(0)", test_fac_0);
+    CU_add_test(facSuite, "fac(3)", test_fac_3);
+    CU_basic_run_tests();
+    CU_cleanup_registry();
+    return 0;
+}
+~~~~
+
+### Building and running
+
+To build the test application, remember to link with the `-lcunit` flag and other flags or libraries required on your system (use `pkg-config` to determine those).
+
+When you run the test application, you will get a report like the one below
+
+~~~~
+    CUnit - A unit testing framework for C - Version 2.1-3
+    http://cunit.sourceforge.net/
+
+
+Suite fac, Test fac(3) had failures:
+    1. tests.c:17  - CU_ASSERT_EQUAL(fac(3),6)
+
+Run Summary:    Type  Total    Ran Passed Failed Inactive
+              suites      1      1    n/a      0        0
+               tests      2      2      1      1        0
+             asserts      2      2      1      1      n/a
+
+Elapsed time =    0.000 seconds
+~~~~
+
+There is one suite in the registry, and that was run, it had two tests, both were run, one passed, the other failed.  In total, there wre two assertions, both ran, one passed, the other failed.
+
+The test that failed was `fac(3)`, clearly, the `fac` function requires some work.
 
 
 ## More assertions
 
-Besides the `CU_ASSERT_EQUAL` macro illustrated in the screencast, there is a long list of test macros available, e.g.,
+Besides the `CU_ASSERT_EQUAL` macro illustrated above, there is a long list of test macros available, e.g.,
+
   * `CU_ASSERT_TRUE`/`CU_ASSERT_FALSE`: test Boolean condition;
   * `CU_ASSERT_DOUBLE_EQUAL`: test floating point equality up to a given tolerance;
   * `CU_ASSERT_NSTRING_EQUAL`: test string equality;
@@ -61,7 +176,7 @@ void test_sum() {
 }
 ~~~~
 
-It is of course unfortunate that global variables have to be used as fixtures.  The initialisation and cleanup function can now be assigned to a test suite by passing them as arguments to `CU_`.
+It is of course unfortunate that global variables have to be used as fixtures, although at least their scope is limited to the file since they were declared static.  The initialisation and cleanup function can now be assigned to a test suite by passing them as arguments to `CU_`.
 
 ~~~~c
     ...
@@ -70,10 +185,3 @@ It is of course unfortunate that global variables have to be used as fixtures.  
 ~~~~
 
 Note that many unit testing frameworks allow more flexibility.  They can have setup and tear down functions that are called before and after each individual test.
-
-
-## C++
-
-Although you could use CUnit for testing C++ code, there are better alternatives.  A very nice framework is [Catch2](https://github.com/catchorg/Catch2).  You can express tests quite naturally using Catch2 so that they resemble a narrative.
-
-The framework takes a further step along that path by offering support for [Behaviour Driven Development](https://en.wikipedia.org/wiki/Behavior-driven_development) (BDD).
