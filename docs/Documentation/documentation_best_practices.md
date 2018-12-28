@@ -88,8 +88,6 @@ In this session, we will discuss two tools for creating attractive documentation
 Some programming languages such as Java and Python provide support for documentation as part of their specification. The languages we use most frequently in an HPC context, C, C++, and Fortran, have no such provisions. However, [Doxygen](http://www.doxygen.org/) generates reference documentation out of comment blocks for a wide variety of programming languages, including those of interest to us. This documentation is fully hyperlinked. For instance, clicking the type of a function's argument will bring you to the type's documentation.
 
 
- ### MkDocs
+### MkDocs
 
 [MkDocs](http://www.mkdocs.org/) is a very convenient tool for generating nice looking documentation that can be viewed standalone as HTML pages, or that can be served from the [Read the Docs service](http://www.readthedocs.org/). It automatically generates a navigation panel and adds search functionality. You can also define a GitHub trigger that will automatically push your project's documentation to Read the Docs each time you do a release. Documentation of previous software versions remain available. In that scenario, MkDocs will provide useful previews before you make a release of your code project.
-
-We will discuss MkDocs in more detail later in this session.
