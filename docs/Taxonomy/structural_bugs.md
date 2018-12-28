@@ -243,7 +243,7 @@ Again, only proper testing will help detect such issues.
 
 ### Semantics of logic evaluation
 
-The semantics of logic evaluation differs among programming languages.  C, C++, and Python implement lazy evaluation, Fortran does not.
+The semantics of logic evaluation differs among programming languages.  C, C++, and Python implement lazy evaluation. For Fortran the situation is more complicated since the standard doesn't specify whether logic evaluation is lazy or not.
 
 The following example was already discussed previously.  Consider a C fragment that processes a string, but only if it is non-empty.
 
@@ -290,7 +290,7 @@ The last type of potential confusion, and hence a source of bugs, is the distinc
 
 | logical operator | bitwise operator | semantics |
 |------------------|------------------|-----------|
-| `\|\|`           | `\|`             | or        |
+| `||`             | `|`              | or        |
 | `&&`             | `&`              | and       |
 | `!`              | `~`              | not       |
 
@@ -302,6 +302,8 @@ For example,
 Bitwise operators are not lazy, both operands will always be evaluated.
 
 Cppcheck will warn you about potential confusion between `&` and `&&`, and `|` and `||`.
+
+For Fortran, the semantics depends on the compiler, since the specification is silent on the matter.  The `gfortran` 8.2 compiler will generate code that does lazy logical evaluation, while for Intel's `ifort` 2018 compiler this is not the case.  Relying on the behavior of a certain compiler is sure to yield non-portable, and hence buggy applications.
 
 
 ## Processing Bugs

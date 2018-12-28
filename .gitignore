@@ -1,2 +1,9 @@
 # vim backup files
 *~
+*.swp
+
+# aspell backup files
+*.bak
+
+# site directory
+site

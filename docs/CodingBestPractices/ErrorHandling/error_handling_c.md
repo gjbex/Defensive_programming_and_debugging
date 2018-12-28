@@ -168,12 +168,12 @@ int main(int argc, char *argv[]) {
 
 This application will issue warnings if the command line arguments can not be converted properly.  The value of `end_ptr` is used to detect issues.  If  
 
-  * `*end_ptr` != '\0', then the first part the the argument could be converted to a number, but subsequent characters could not, e.g., `15abc`;
-  * `end_prt == argv[1]`, then either the argument was an empty string or it completely consists of characters that can not be converted to a number.
+  * `*end_ptr` != '\0', then the first part of the argument could be converted to a number, but subsequent characters could not, e.g., `15abc`;
+  * `end_prt == argv[1]`, then either the argument is an empty string or it completely consists of characters that can not be converted to a number.
 
 Of course, substituting `errx` for `warnx` would terminate the application rather than just print a warning message.  Which action is most appropriate depends on the application.  Just like `errx`, `warnx` is declared in `err.h`.
 
-Of course, when you have to deal with non-trivial command line arguments such as options and flags, you should consider using the functions declared in `unistd.h` for that purpose.  This is however outside the scope of this course.
+When you have to deal with non-trivial command line arguments such as options and flags, you should consider using the `getopt` function declared in `unistd.h` for that purpose.  This is however outside the scope of this course.  Alternatively, for C++, you could go with the Boost library's `program_options`.
 
 
 ## File I/O
