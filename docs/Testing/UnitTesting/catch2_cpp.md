@@ -131,3 +131,55 @@ Another quite useful macro is `REQUIRE_THAT`.  It takes two arguments, the compu
 Besides the `Matches` matcher, Catch2 also defines `StartsWith`, `EndsWith`, `Equals` and `Contains` for `std::string`.  For `std::vector`, three matchers are defined, `Contains`, `ContainsVector` (subset) and `Equals`.  Moreover, a generic `Predicate` matcher can be used to turn a lambda function (or any callable for that matter into a matcher.
 
 Note that matchers can be combined into Boolean expressions involving the operators `&&`, `||` and `!`.
+
+Finally, a second version for each  `REQUIRE` macro is defined, e.g., `CHECK`, `CHECK_THAT`, etc.  Unlike the `REQUIRE` family, execution of the test case doesn't stop when a `CHECK` fails.
+
+
+## Fixtures
+
+Fixtures for Catch2 tests are implemented as classes.  The constructor will do the set up and, if required, the destructor is responsible for the tear down.
+
+`TEST_CASE_METHOD` is used to define test cases.  This macro takes two or three arguments.  The first is the class that implements the fixture, the second is the unique name of the test case, and, optionally, the third is the tag.
+
+As a somewhat contrived example, consider a stack that is initialized, and integer values are pushed onto it, starting from 0 up to `max_value`.
+
+~~~~cpp
+#include <stack>
+
+class VectorFixture {
+    protected:
+        std::stack<int> data;
+        const int max_value {5};
+    public:
+        VectorFixture() : data() {
+            for (int i = 1; i <= max_value; ++i)
+                data.push(i);
+        };
+};
+~~~~
+
+Now tests that use this fixture can be defined as `TEST_CASE_METHOD`, e.g.,
+
+~~~~cpp
+nclude <catch2/catch.hpp>
+
+TEST_CASE_METHOD(VectorFixture, "sum", "[stack]") {
+    int sum {0};
+    while (!data.empty()) {
+        sum += data.top();
+        data.pop();
+    }
+    REQUIRE( sum == max_value*(max_value + 1)/2 );
+}
+
+TEST_CASE_METHOD(VectorFixture, "product", "[stack]") {
+    int prod {1};
+    while (!data.empty()) {
+        prod *= data.top();
+        data.pop();
+    }
+    REQUIRE( prod == fac(max_value) );
+}
+~~~~
+
+As you can see, for each test case, the stack in the fixtures is emptied, illustrating that the fixture is set up (and teared down) for each individual test case.
