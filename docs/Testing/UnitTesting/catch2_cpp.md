@@ -183,3 +183,191 @@ TEST_CASE_METHOD(VectorFixture, "product", "[stack]") {
 ~~~~
 
 As you can see, for each test case, the stack in the fixtures is emptied, illustrating that the fixture is set up (and teared down) for each individual test case.
+
+Alternatively, you can also define the test cases as ordinary object methods in for the fixture class, and register them as such using the `METHOD_AS_TEST_CASE` macro.
+
+
+## Behavior-driven design (BDD)
+
+Catch2 also supports a behavior-driven design approach to testing, and in fact, according to the library's author, this is the prefered way to handle fixtures.
+The tests for the factorial function can be implemented as a scenario, i.e.,
+
+~~~~cpp
+#include <catch2/catch.hpp>
+#include <stdexcept>
+
+SCENARIO( "factorial function return values and exceptions", "[fac]" ) {
+    GIVEN( "factorial function 'fac'" ) {
+        WHEN( "argument == 0" ) {
+            THEN( "fac(0) == 1" ) {
+                REQUIRE( fac(0) == 1 );
+            }
+        }
+        WHEN( "argument > 0" ) {
+            THEN( "fac(n) == n*fac(n-1)" ) {
+                for (int i = 1; i < 6; i++)
+                    REQUIRE( fac(i) == i*fac(i - 1) );
+            }
+        }
+        WHEN( "argument < 0" ) {
+            THEN( "exception thrown" ) {
+                REQUIRE_THROWS_AS( fac(-1), std::domain_error );
+            }
+        }
+    }
+}
+~~~~
+
+When the resulting test application is run with the `-s` option, it will show the following output.
+
+~~~~
+test_fac.exe is a Catch v2.5.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Scenario: factorial function return values and exceptions
+      Given: factorial function 'fac'
+       When: argument == 0
+       Then: fac(0) == 1
+-------------------------------------------------------------------------------
+test_fac.cpp:9
+...............................................................................
+
+test_fac.cpp:10: PASSED:
+  REQUIRE( fac(0) == 1 )
+with expansion:
+  1 == 1
+
+-------------------------------------------------------------------------------
+Scenario: factorial function return values and exceptions
+      Given: factorial function 'fac'
+       When: argument > 0
+       Then: fac(n) == n*fac(n-1)
+-------------------------------------------------------------------------------
+test_fac.cpp:14
+...............................................................................
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  1 == 1
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  2 == 2
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  6 == 6
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  24 == 24
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  120 == 120
+
+-------------------------------------------------------------------------------
+Scenario: factorial function return values and exceptions
+      Given: factorial function 'fac'
+       When: argument < 0
+       Then: exception thrown
+-------------------------------------------------------------------------------
+test_fac.cpp:20
+...............................................................................
+
+test_fac.cpp:21: PASSED:
+  REQUIRE_THROWS_AS( fac(-1), std::domain_error )
+
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+~~~~
+
+To illustrate how BDD simplifies creating and working with fixtures, considerr the following implementation of the same tests as in the section on fixtures.
+
+~~~~cpp
+#define CATCH_CONFIG_MAIN
+#include <catch2/catch.hpp>
+#include <stack>
+
+int fac(int n) {
+    int result = 1;
+    for (int i = 2; i <= n; ++i)
+        result *= i;
+    return result;
+}
+
+SCENARIO( "stack test", "[stack]" ) {
+    GIVEN( "stack with numbers 1 to 5" ) {
+        const int max_val {5};
+        std::stack<int> data;
+        for (int i = 1; i <= max_val; ++i)
+            data.push(i);
+        WHEN( "computing sum" ) {
+            int sum {0};
+            while (!data.empty()) {
+                sum += data.top();
+                data.pop();
+            }
+            THEN( "sum == 5*6/2" ) {
+                REQUIRE( sum == max_val*(max_val + 1)/2 );
+            }
+        }
+        WHEN( "computing product" ) {
+            int prod {1};
+            while (!data.empty()) {
+                prod *= data.top();
+                data.pop();
+            }
+            THEN( "product == 5!" ) {
+                REQUIRE( prod == fac(max_val) );
+            }
+        }
+    }
+}
+~~~~
+
+When the test application is run with the `-s` flag, the following output is produced.
+
+~~~~
+stack_test.exe is a Catch v2.5.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Scenario: stack test
+      Given: stack with numbers 1 to 5
+       When: computing sum
+       Then: sum == 5*6/2
+-------------------------------------------------------------------------------
+stack_test.cpp:19
+...............................................................................
+
+stack_test.cpp:25: PASSED:
+  REQUIRE( sum == max_val*(max_val + 1)/2 )
+with expansion:
+  15 == 15
+
+-------------------------------------------------------------------------------
+Scenario: stack test
+      Given: stack with numbers 1 to 5
+       When: computing product
+       Then: product == 5!
+-------------------------------------------------------------------------------
+stack_test.cpp:29
+...............................................................................
+
+stack_test.cpp:35: PASSED:
+  REQUIRE( prod == fac(max_val) )
+with expansion:
+  120 == 120
+
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+~~~~
+
+The code in the `GIVEN` section of the code is executed before each `WHEN` case.  Arguably, this is a very nice style of formulating tests.
