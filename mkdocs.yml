@@ -2,7 +2,6 @@ site_name: Defensive programming and debugging
 site_description: Online book on defensive programming and debugging
 site_author: Geert Jan Bex
 nav:
-    - 'Welcome': welcome.md
     - 'Preface':
         # - Introduction: Intro/intro_dpd.md
         - 'Motivation': Intro/economics_of_bugs.md
