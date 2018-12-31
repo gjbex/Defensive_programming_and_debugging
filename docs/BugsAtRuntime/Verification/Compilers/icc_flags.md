@@ -45,7 +45,7 @@ Additionally, the compiler can also generate code to check whether dangling poin
 $ icc  -check-pointers=rw  -check-pointers-dangling=all  ...
 ~~~~
 
-To check for stack buffer overruns, the `icc`/`icpc` compilers provide a specific flags as well.  The `-fstack-protector` enables overrun checks on some types of buffers, while `-fstack-protector-strong` will check for all types of buffers.  Additioally, the `-fstack-protector-all` flag will ensure checks in all functions.
+To check for stack buffer overruns, the `icc`/`icpc` compilers provide a specific flags as well.  The `-fstack-protector` enables overrun checks on some types of buffers, while `-fstack-protector-strong` will check for all types of buffers.  Additionally, the `-fstack-protector-all` flag will ensure checks in all functions.
 
 ~~~~bash
 $ icpc -fstack-protector-strong -fstack-protector-all ...

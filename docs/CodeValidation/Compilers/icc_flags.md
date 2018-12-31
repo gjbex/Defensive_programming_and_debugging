@@ -24,7 +24,7 @@ $ icc  -Wall  -Wremarks  -Wchecks  -w3  ...
 
 ## Floating point model
 
-The Intel compilers will optimise more aggressively than their GCC counterparts when the `-O2` flag is specified (incidentally, this is the default for Intel compilers).  A notable difference is the floating model being used.  At `-O2` the Intel compiler is free to make some assumptions that allow optimisations of your code by, e.g., using commutativity, distributivity and associativity of operators.
+The Intel compilers will optimise more aggressively than their GCC counterparts when the `-O2` flag is specified (incidentally, this is the default for Intel compilers).  A notable difference is the floating model being used.  At `-O2` the Intel compiler is free to make some assumptions that allow optimisations of your code by, e.g., using commutativity, distributive property and associativity of operators.
 
 Although these properties strictly hold for real numbers, they do not for operations on floating point numbers.  This may give rise to different, and potentially erroneous results.
 
