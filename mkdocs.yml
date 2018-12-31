@@ -2,6 +2,7 @@ site_name: Defensive programming and debugging
 site_description: Online book on defensive programming and debugging
 site_author: Geert Jan Bex
 nav:
+    - index.md
     - 'Preface':
         # - Introduction: Intro/intro_dpd.md
         - 'Motivation': Intro/economics_of_bugs.md
@@ -37,7 +38,7 @@ nav:
         - 'pfUnit for Fortran': Testing/UnitTesting/pfunit_fortran.md
         - 'CUnit for C': Testing/UnitTesting/cunit_c.md
         - 'Catch2 for C++': Testing/UnitTesting/catch2_cpp.md
-        # - pytest for Python: UnitTesting/pytest_python.md
+        # - 'pytest for Python': UnitTesting/pytest_python.md
     - 'Functional testing':
         - 'Introduction': Testing/FunctionalTesting/functional_testing_intro.md
         - 'Best practices': Testing/FunctionalTesting/functional_testing_best_practices.md
@@ -50,36 +51,35 @@ nav:
         - 'Introduction': CodeValidation/code_validation_intro.md
         - 'Flags for gfortran': CodeValidation/Compilers/gfortran_flags.md
         - 'Flags for ifort': CodeValidation/Compilers/ifort_flags.md
-        # - 'Flags for gcc/g++': CodeValidation/Compilers/gcc_flags.md
+        - 'Flags for gcc/g++': CodeValidation/Compilers/gcc_flags.md
         - 'Flags for icc/icpc': CodeValidation/Compilers/icc_flags.md
         - 'GCC sanitizer': CodeValidation/Compilers/gcc_sanitize.md
-          #             - Introduction: CodeValidation/StaticCodeAnalyzers/static_code_analyzers_intro.md
-          #             # - CppCheck: CodeValidation/StaticCodeAnalyzers/cppcheck.md
-          #             - Clang Tidy: CodeValidation/StaticCodeAnalyzers/clang_tidy.md
-          #             # - Pylint & flake8: CodeValidation/StaticCodeAnalyzers/pylint_flake8.md
-          #     - Finding bugs at runtime:
-          #         - Introduction: BugsAtRuntime/finding_bugs_intro.md
-          #         - Best practices: BugsAtRuntime/finding_bugs_best_practices.md
-          #         - Reproducibility & Heisenbugs: BugsAtRuntime/heisenbugs.md
-          #         - Best practices for parallel applications: BugsAtRuntime/parallel_debugging_best_practices.md
-          #         - Debuggers:
-          #             - GDB:
-          #               - Features: BugsAtRuntime/Debuggers/Gdb/gdb_features.md
-          #               - Attaching to a running process: BugsAtRuntime/Debuggers/Gdb/gdb_attach.md
-          #               - Reverse debugging: BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging.md
-          #               - Debugging OpenMP applications: BugsAtRuntime/Debuggers/gdb_omp_debugging.md
-          #             # - Eclipse debugger: BugsAtRuntime/Debuggers/Eclipse/eclipse.md
-          #             # - Python pdb:
-          #             - Arm DDT: BugsAtRuntime/Debuggers/ArmDdt/arm_ddt.md
-          #         - Runtime verification:
+        # - 'CppCheck': CodeValidation/StaticCodeAnalyzers/cppcheck.md
+        - 'Clang Tidy': CodeValidation/StaticCodeAnalyzers/clang_tidy.md
+        # - 'Pylint & flake8': CodeValidation/StaticCodeAnalyzers/pylint_flake8.md
+    - 'Finding bugs at runtime':
+        - 'Introduction': BugsAtRuntime/finding_bugs_intro.md
+        - 'Best practices': BugsAtRuntime/finding_bugs_best_practices.md
+        - 'Reproducibility & Heisenbugsi': BugsAtRuntime/heisenbugs.md
+        - 'Best practices for parallel applications': BugsAtRuntime/parallel_debugging_best_practices.md
+        - 'GDB Features': BugsAtRuntime/Debuggers/Gdb/gdb_features.md
+        - 'Attaching GDB to running processes': BugsAtRuntime/Debuggers/Gdb/gdb_attach.md
+        - 'Reverse debugging with GDB': BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging.md
+        - 'Debugging OpenMP applications with GDB': BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging.md
+        - 'Tracing applications': BugsAtRuntime/tracing.md
+        # - 'Eclipse debugger': BugsAtRuntime/Debuggers/Eclipse/eclipse.md
+        # - 'Python pdb': BugsAtRuntime/Debuggers/Pdb/pdb.md
+        - 'Arm DDT parallel debugger': BugsAtRuntime/Debuggers/ArmDdt/arm_ddt.md
           #             - Introduction: BugsAtRuntime/Verification/verification_intro.md
-          #             # - Valgrind: BugsAtRuntime/Verification/valgrind.md
-          #             # - Compiler instrumentation: BugsAtRuntime/Verification/compiler_instrumentation.md
-          #             # - Intel Inspector: BugsAtRuntime/Verification/intel_inspector.md
-          #             # - Intel Trace Collector and Analyzer: BugsAtRuntime/Verification/intel_itac.md
-          #             # - MUST: BugsAtRuntime/Verification/must.md
-          #         - Tracing: BugsAtRuntime/tracing.md
-          #     - Appendices:
-          #         - Rosetta stone: Appendices/rosetta_stone.md
-          #         - Syntax versus semantics: Appendices/syntax_vs_semantics.md
+        - 'Compiler instrumentation for gfortran': BugsAtRuntime/Verification/Compilers/gfortran_flags.md
+        - 'Compiler instrumentation for ifort': BugsAtRuntime/Verification/Compilers/ifort_flags.md
+        # - 'Compiler instrumentation for gcc/g++': BugsAtRuntime/Verification/Compilers/icc_flags.md
+        - 'Compiler instrumentation for icc/icpc': BugsAtRuntime/Verification/Compilers/icc_flags.md
+        # - 'Valgrind': BugsAtRuntime/Verification/valgrind.md
+        # - 'Intel Inspector': BugsAtRuntime/Verification/intel_inspector.md
+        # - 'Intel Trace Collector and Analyzer': BugsAtRuntime/Verification/intel_itac.md
+        # - 'MUST': BugsAtRuntime/Verification/must.md
+    - 'Appendices':
+        - 'Rosetta stone': Appendices/rosetta_stone.md
+        - 'Syntax versus semantics': Appendices/syntax_vs_semantics.md
 theme: readthedocs
