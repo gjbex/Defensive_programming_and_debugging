@@ -72,7 +72,7 @@ nav:
           #             - Introduction: BugsAtRuntime/Verification/verification_intro.md
         - 'Compiler instrumentation for gfortran': BugsAtRuntime/Verification/Compilers/gfortran_flags.md
         - 'Compiler instrumentation for ifort': BugsAtRuntime/Verification/Compilers/ifort_flags.md
-        - 'Sanitizer instrumentation for C/C++': CodeValidation/Compilers/gcc_sanitize.md
+        - 'Sanitizer instrumentation for C/C++': BugsAtRuntime/Verification/Compilers/gcc_sanitize.md
         - 'Compiler instrumentation for icc/icpc': BugsAtRuntime/Verification/Compilers/icc_flags.md
         # - 'Valgrind': BugsAtRuntime/Verification/valgrind.md
         # - 'Intel Inspector': BugsAtRuntime/Verification/intel_inspector.md
