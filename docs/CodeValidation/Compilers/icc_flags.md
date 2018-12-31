@@ -22,40 +22,6 @@ $ icc  -Wall  -Wremarks  -Wchecks  -w3  ...
 ~~~~
 
 
-## Bounds & pointer checks
-
-Getting an array index wrong is easy, and trying to access an array using an index that is out of bounds usually results in a crash of your application with a segmentation fault (or not, which is most likely worse).
-
-The compiler can insert code into your application to check array bounds at runtime.  When you run an application that has been compiled using this option, your application will still crash, but with an informative error message.
-
-~~~~bash
-$ icc  -check-pointers=rw  ...
-~~~~
-
-In the example above, both read and write access through pointers is checked at runtime.  To limit checks to writes only, specify `write` rather than `rw`.
-
-_Note:_ this compiler option should only be used for development and testing, not for production.  A performance penalty is incurred since extra instructions have to be executed when your application runs.
-
-Additionally, the compiler can also generate code to check whether dangling pointers are used, i.e., pointers to memory that has already been deallocated.
-
-~~~~bash
-$ icc  -check-pointers=rw  -check-pointers-dangling=all  ...
-~~~~
-
-
-## Uninitialised variables
-
-It is good practice to explicitly initialise variables.  In many circumstances, forgetting to initialise a variable can lead to interesting and random results.  The compiler can instrument the code to check for uninitialised variables at runtime.  When such a variable is used, your application will crash with an appropriate informative error message.
-
-~~~~bash
-$ icc  -check=uninit  ...
-~~~~
-
-_Note:_ this compiler option should only be used for development and testing, not for production.  A performance penalty is incurred since extra instructions have to be executed when your application runs.
-
-_Note:_ when the compiler flag `-Wremarks` is used, the compiler will also generate warnings on potentially uninitialised variables.
-
-
 ## Floating point model
 
 The Intel compilers will optimise more aggressively than their GCC counterparts when the `-O2` flag is specified (incidentally, this is the default for Intel compilers).  A notable difference is the floating model being used.  At `-O2` the Intel compiler is free to make some assumptions that allow optimisations of your code by, e.g., using commutativity, distributivity and associativity of operators.
