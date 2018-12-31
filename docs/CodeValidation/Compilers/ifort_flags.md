@@ -22,65 +22,7 @@ $ ifort  -warn all  -diag-enable remark  ...
 ~~~~
 
 
-## Implicit typing
-
-To disable Fortran implicit typing, it is good practice to add an `implicit none` statement at the start of each compilation unit, e.g.,
-
-~~~~fortran
-integer function fac(n)
-    implicit none
-    integer, intent(in) :: n
-    integer :: i
-    fac = 1
-    do i = 2, n
-        fac = fac*n
-    end do
-end function fac
-~~~~
-
-Needless to say, this is easy to forget, so it is good practice to compile your code with a flag that disables implicit typing for all code.
-
-~~~~bash
-$ ifort  -implicit-none  ...
-~~~~
-
-
-## Bounds checks
-
-Getting an array index wrong is easy, and trying to access an array using an index that is out of bounds usually results in a crash of your application with a segmentation fault (or not, which is most likely worse).
-
-The compiler can insert code into your application to check array bounds at runtime.  When you run an application that has been compiled using this option, your application will still crash, but with an informative error message.
-
-~~~~bash
-$ ifort  -check bounds  ...
-~~~~
-
-_Note:_ this compiler option should only be used for development and testing, not for production.  A performance penalty is incurred since extra instructions have to be executed when your application runs.
-
-
-## Uninitialised variables
-
-It is good practice to explicitly initialise variables.  In some circumstances, forgetting to initialise a variable can lead to interesting and random results.  The compiler can instrument the code to check for uninitialised variables at runtime.  When such a variable is used, your application will crash with an appropriate informative error message.
-
-~~~~bash
-$ ifort  -check uninit  ...
-~~~~
-
-_Note:_ this compiler option should only be used for development and testing, not for production.  A performance penalty is incurred since extra instructions have to be executed when your application runs.
-
-
-## Stack traces
-
-When your application crashes, you want as much information as possible, so that the problem can be fixed as soon as possible.  Compiling with debugging information enabled will of course help, but the Intel compiler has an additional option to provide more useful information.
-
-~~~~bash
-$ ifort  -traceback  ...
-~~~~
-
-This traceback option will produce a stack dump that is much more informative than what is ordinarily produced by the Fortran runtime.
-
-
-## Fortran standards
+## Language specification conformance
 
 The current Intel Fortran compiler is heir to a long lineage of compilers that implemented various extensions to the Fortran specifications over the decades.  This implies that if you, intentionally or otherwise, use such an extension, your code may not compile using other Fortran compilers, or that the semantics for these extensions differ subtly between compiler implementations.
 
@@ -93,9 +35,18 @@ $ ifort  -stand f08  ...
 Regardless of this option, it is good practice to ensure that neither the Intel, nor the GCC compiler generates warnings on your code, so compiling with both during development is definitely a good idea.
 
 
+## Additional warnings
+
+To disable Fortran implicit typing, it is good practice to add an `implicit none` statement at the start of each compilation unit.  Needless to say, this is easy to forget, so it is good practice to compile your code with a flag that disables implicit typing for all code.
+  
+~~~~bash
+$ ifort  -implicit-none  ...
+~~~~
+
+
 ## Floating point model
 
-The Intel compilers will optimise more aggressively than their GCC counterparts when the `-O2` flag is specified (incidentally, this is the default for Intel compilers).  A notable difference is the floating model being used.  At `-O2` the Intel compiler is free to make some assumptions that allow optimisations of your code by, e.g., using commutativity, distributivity and associativity of operators.
+The Intel compilers will optimise more aggressively than their GCC counterparts when the `-O2` flag is specified (incidentally, this is the default for Intel compilers).  A notable difference is the floating model being used.  At `-O2` the Intel compiler is free to make some assumptions that allow optimisations of your code by, e.g., using commutativity, distributive property and associativity of operators.
 
 Although these properties strictly hold for real numbers, they do not for operations on floating point numbers.  This may give rise to different, and potentially erroneous results.
 

@@ -2,7 +2,6 @@ site_name: Defensive programming and debugging
 site_description: Online book on defensive programming and debugging
 site_author: Geert Jan Bex
 nav:
-    - 'Welcome': welcome.md
     - 'Preface':
         # - Introduction: Intro/intro_dpd.md
         - 'Motivation': Intro/economics_of_bugs.md
@@ -21,43 +20,39 @@ nav:
         - 'Error handling in Fortran': CodingBestPractices/ErrorHandling/error_handling_fortran.md
         - 'Error handling in C': CodingBestPractices/ErrorHandling/error_handling_c.md
         - 'Exceptions in C++': CodingBestPractices/ErrorHandling/error_handling_cpp.md
-        # - Python: CodingBestPractices/ErrorHandling/error_handling_python.md
+        # - 'Exception in Python': CodingBestPractices/ErrorHandling/error_handling_python.md
         - 'Assertions': CodingBestPractices/ErrorHandling/assertions.md
         # - 'Additional material': CodingBestPractices/coding_best_practices_more.md
     - 'Documentation':
         - 'Introduction': Documentation/documentation_intro.md
         - 'Best practices': Documentation/documentation_best_practices.md
-          #         - API documentation:
-          #             # - Fortran: Documentation/doxygen_fortran.md
-          #             # - C/C++: Documentation/doxygen_c.md
-          #             # - Python: Documentation/docstrings_sphinx.md
-        - 'Application documentation': Documentation/mkdocs.md
-          #         - Additional material: Documentation/documentation_more.md
+        # - 'Doxygen & Fortran': Documentation/doxygen_fortran.md
+        # - 'Doxygen & C/C++': Documentation/doxygen_c.md
+        # - 'Documenting Python': Documentation/docstrings_sphinx.md
+        - 'MkDocs for application documentation': Documentation/mkdocs.md
+        # - 'Additional material': Documentation/documentation_more.md
     - 'Unit testing':
         - 'Introduction': Testing/UnitTesting/unit_testing_intro.md
         - 'Best practices': Testing/UnitTesting/unit_testing_best_practices.md
         - 'pfUnit for Fortran': Testing/UnitTesting/pfunit_fortran.md
         - 'CUnit for C': Testing/UnitTesting/cunit_c.md
         - 'Catch2 for C++': Testing/UnitTesting/catch2_cpp.md
-          #             # - pytest for Python: UnitTesting/pytest_python.md
+        # - pytest for Python: UnitTesting/pytest_python.md
     - 'Functional testing':
         - 'Introduction': Testing/FunctionalTesting/functional_testing_intro.md
         - 'Best practices': Testing/FunctionalTesting/functional_testing_best_practices.md
-          #             # - shunit2 for functional testing: FunctionalTesting/shunit.md
-          #         - Code coverage:
-          #             - Introduction: CodeCoverage/code_coverage_intro.md
-          #             - Best practices: CodeCoverage/code_coverage_best_practices.md
-          #         # - Continuous integration: Testing/continuous_integration.md
-          #     - Code validation:
-          #         # - Introduction: CodeValidation/code_validation_intro.md
-          #         - Compiler flags for debugging:
-          #             - Introduction: CodeValidation/Compilers/compiler_flags_intro.md
-          #             # - Flags for gfortran: CodeValidation/Compilers/gfortran_flags.md
-          #             - Flags for ifort: CodeValidation/Compilers/ifort_flags.md
-          #             # - Flags for gcc/g++: CodeValidation/Compilers/gcc_flags.md
-          #             - Flags for icc/icpc: CodeValidation/Compilers/icc_flags.md
-          #             - GCC sanitizer: CodeValidation/Compilers/gcc_sanitizer.md
-          #         - Static code analyzers:
+        # - 'shunit2 for functional testing': FunctionalTesting/shunit.md
+    - 'Code coverage':
+        - 'Introduction': Testing/CodeCoverage/code_coverage_intro.md
+        - 'Best practices': Testing/CodeCoverage/code_coverage_best_practices.md
+    # - 'Continuous integration': Testing/continuous_integration.md
+    - 'Code validation':
+        - 'Introduction': CodeValidation/code_validation_intro.md
+        - 'Flags for gfortran': CodeValidation/Compilers/gfortran_flags.md
+        - 'Flags for ifort': CodeValidation/Compilers/ifort_flags.md
+        # - 'Flags for gcc/g++': CodeValidation/Compilers/gcc_flags.md
+        - 'Flags for icc/icpc': CodeValidation/Compilers/icc_flags.md
+        - 'GCC sanitizer': CodeValidation/Compilers/gcc_sanitize.md
           #             - Introduction: CodeValidation/StaticCodeAnalyzers/static_code_analyzers_intro.md
           #             # - CppCheck: CodeValidation/StaticCodeAnalyzers/cppcheck.md
           #             - Clang Tidy: CodeValidation/StaticCodeAnalyzers/clang_tidy.md

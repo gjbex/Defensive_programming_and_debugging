@@ -27,7 +27,7 @@ int fac(int n) {
 
 ### Defining the tests
 
-Defining tests for Catch2 is quite straightforward using the `TESTCASE` macro.  It takes one or two arguments, the name of the test that has to be unique, and, optionally, a tag that is used to group tests. In the example below, `"factorials"` is the name of this test, while `"[fac]"` is the tag.
+Defining tests for Catch2 is quite straightforward using the `TEST_CASE` macro.  It takes one or two arguments, the name of the test that has to be unique, and, optionally, a tag that is used to group tests. In the example below, `"factorials"` is the name of this test, while `"[fac]"` is the tag.
 
 ~~~~cpp
 #include <catch/catch.hpp>
@@ -112,7 +112,7 @@ Catch2 has no dedicated macro for testing floating point equality, but the `Appr
     REQUIRE( compute_pi() == Approx.epsilong(0.01) );
 ~~~~
 
-Althernatively, the following test would check whether the computed value is in the interval [3.13, 3.15]:
+Alternatively, the following test would check whether the computed value is in the interval [3.13, 3.15]:
 
 ~~~~cpp
     REQUIRE( compute_pi() == Approx.magrin(0.01) );
@@ -161,7 +161,7 @@ class VectorFixture {
 Now tests that use this fixture can be defined as `TEST_CASE_METHOD`, e.g.,
 
 ~~~~cpp
-nclude <catch2/catch.hpp>
+#include <catch2/catch.hpp>
 
 TEST_CASE_METHOD(VectorFixture, "sum", "[stack]") {
     int sum {0};
@@ -189,7 +189,7 @@ Alternatively, you can also define the test cases as ordinary object methods in 
 
 ## Behavior-driven design (BDD)
 
-Catch2 also supports a behavior-driven design approach to testing, and in fact, according to the library's author, this is the prefered way to handle fixtures.
+Catch2 also supports a behavior-driven design approach to testing, and in fact, according to the library's author, this is the preferred way to handle fixtures.
 The tests for the factorial function can be implemented as a scenario, i.e.,
 
 ~~~~cpp
@@ -288,7 +288,7 @@ test_fac.cpp:21: PASSED:
 All tests passed (7 assertions in 1 test case)
 ~~~~
 
-To illustrate how BDD simplifies creating and working with fixtures, considerr the following implementation of the same tests as in the section on fixtures.
+To illustrate how BDD simplifies creating and working with fixtures, consider the following implementation of the same tests as in the section on fixtures.
 
 ~~~~cpp
 #define CATCH_CONFIG_MAIN
