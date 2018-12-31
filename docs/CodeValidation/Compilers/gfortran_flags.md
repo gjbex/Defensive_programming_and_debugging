@@ -1,6 +1,10 @@
 # Options for GCC's Fortran compiler
 
-By default, the `gfortran` compiler issues some warnings, but it can produce more.  It is always good practice to switch on "all warnings" with `-Wall`.  Contrary to expectations, `-Wall` doesn't activate all warnings though.  A number of extra warnings on top of those enabled by `-Wall` can be switched on by specifying `-Wextra`.  It is highly recommended to always use these two compiler options, and eliminate all warnings reported by them.
+By default, the `gfortran` compiler issues some warnings, but it can produce more.  It is always good practice to switch on "all warnings" with `-Wall`.  Contrary to expectations, `-Wall` doesn't activate all warnings though.  A number of extra warnings on top of those enabled by `-Wall` can be switched on by specifying `-Wextra`.  It is highly recommended to always use these two compiler options, and eliminate all warnings reported by them, i.e.,
+
+~~~~bash
+$ gfortran -Wall -Wextra ...
+~~~~
 
 
 ## Language specification conformance
@@ -12,6 +16,12 @@ The `gfortran` compiler can also check for language specification conformity, at
   * `-std=f2008`
   * `-std=f2018`
 
+For example, to check for Fortran 2003 compliance, use
+
+~~~~bash
+$ gfortran ... -Wpedantic -std=f2003 ...
+~~~~
+
 
 ## Additional warnings
 
@@ -20,6 +30,8 @@ A few other options can be helpful as well.  Those are not activated by `-Wall` 
 It is good practice to have `implicit none` in each compilation unit, but that is also easy to forget.  The compiler has a flag, `-fimplicit-none`, that will verify that all variables have been declared, regardless of whether `implicit none` was specified.
 
 Another good practice is to explicitly declare what to use from a module in a `use` statement.  The compiler can warn you when this has not been done if you specify the `-Wuse-without-only` flags.
+
+Although Fortran initialises variables automatically to "sensible" values, you may want to be warned if it does so, since this could not be what you intend.  Use the `-Wuninitialized` flag to do so.
 
 It can also be useful to verify that procedures are either intrinsic, or have been declared `external` explicitly.  You can activate this check using the `-Wimplicit-procedure` flag.
 
