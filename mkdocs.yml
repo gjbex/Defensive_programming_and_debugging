@@ -53,7 +53,6 @@ nav:
         - 'Flags for ifort': CodeValidation/Compilers/ifort_flags.md
         - 'Flags for gcc/g++': CodeValidation/Compilers/gcc_flags.md
         - 'Flags for icc/icpc': CodeValidation/Compilers/icc_flags.md
-        - 'GCC sanitizer': CodeValidation/Compilers/gcc_sanitize.md
         # - 'CppCheck': CodeValidation/StaticCodeAnalyzers/cppcheck.md
         - 'Clang Tidy': CodeValidation/StaticCodeAnalyzers/clang_tidy.md
         # - 'Pylint & flake8': CodeValidation/StaticCodeAnalyzers/pylint_flake8.md
@@ -73,7 +72,7 @@ nav:
           #             - Introduction: BugsAtRuntime/Verification/verification_intro.md
         - 'Compiler instrumentation for gfortran': BugsAtRuntime/Verification/Compilers/gfortran_flags.md
         - 'Compiler instrumentation for ifort': BugsAtRuntime/Verification/Compilers/ifort_flags.md
-        # - 'Compiler instrumentation for gcc/g++': BugsAtRuntime/Verification/Compilers/icc_flags.md
+        - 'Sanitizer instrumentation for C/C++': CodeValidation/Compilers/gcc_sanitize.md
         - 'Compiler instrumentation for icc/icpc': BugsAtRuntime/Verification/Compilers/icc_flags.md
         # - 'Valgrind': BugsAtRuntime/Verification/valgrind.md
         # - 'Intel Inspector': BugsAtRuntime/Verification/intel_inspector.md
