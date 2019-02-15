@@ -12,6 +12,7 @@ Here you will find a number of references to additional reading material and sof
   * *Refactoring: improving the design of existing code*, Martin Fowler, Addison-Wesley, 1999
   * *Exception handling in Fortran*, Arjen Markus, Newsletter ACM SIGPLAN Fortran Forum, volume 32, issue 2, p. 7‒13, 2013
   * [11 signs you’re writing great code](https://www.infoworld.com/article/3268310/application-development/11-signs-youre-writing-great-code.html), Andrew C. Oliver, InfoWorld, April 2018
+  * [MISRA C](https://en.wikipedia.org/wiki/MISRA_C): Motor Industry Software Reliability Association (MISRA) guidelines for software development.
 
 ### Software stack
 
