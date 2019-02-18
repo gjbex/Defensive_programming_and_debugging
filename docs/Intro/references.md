@@ -7,6 +7,7 @@
   * [Epic failures: 11 infamous software bugs](https://www.computerworld.com/article/2515483/enterprise-applications/epic-failures--11-infamous-software-bugs.html)
   * ["It's not a bug, it's a feature." trite---or just right?](https://www.wired.com/story/its-not-a-bug-its-a-feature)
   * ["The 44-year-old operating system bug"](https://thenewstack.io/the-44-year-old-operating-system-bug/)
+  * [They say software will eat the world.](https://www.theregister.co.uk/2018/12/11/software_bugs_that_ate_the_world/)
 
 
 ## Bug bounties
