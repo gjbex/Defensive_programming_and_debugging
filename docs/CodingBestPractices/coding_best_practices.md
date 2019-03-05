@@ -232,7 +232,7 @@ In summary:
 
 ## Variable initialisation
 
-Although Fortran doesn't require you to initialise variables, and will set `INTEGER` and `REAL` to zero for you, it is nevertheless good practice to always initialise variables explicitly. It makes your intent clear. Although C/C++ will likely produce nonsense results when you forget to initialise a variable, the compilers will typically let you get away with it. However, most compilers have optional flags that catch expressions involving uninitialised variables. We will discuss these and other compiler flags in a later section.
+The specifications for Fortran, C and C++ do not define the value an uninitialized variable will have. So you should always initialise variables explicitly, otherwise your code will have undefined, and potentially non-deterministic behavior. When you forget to initialise a variable, the compilers will typically let you get away with it. However, most compilers have optional flags that catch expressions involving uninitialised variables. We will discuss these and other compiler flags in a later section.
 
 When initialising or, more generally, assigning a value to a variable that involves constants, your code will be easier to understand when those values indicate the intended type. For example, using `1.0` rather than `1` for floating point is more explicit. This may also avoid needless conversions. This also prevents arithmetic bugs since `1/2` will evaluate to `0` in C, C++ as well as Fortran.  Perhaps even more subtly, `1.25 + 1/2` will also evaluate to `1.25`, since the division will be computed using integer values, evaluating to `0`, which is subsequently converted to the floating point value `0.0`, and added to `1.25`.
 
