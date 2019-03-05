@@ -31,7 +31,7 @@ It is good practice to have `implicit none` in each compilation unit, but that i
 
 Another good practice is to explicitly declare what to use from a module in a `use` statement.  The compiler can warn you when this has not been done if you specify the `-Wuse-without-only` flags.
 
-You may want to be warned if you use variables that are not uninitialised, since this could lead to nasty bugs.  Use the `-Wmaybe-uninitialized` flag to do so (included in `-Wall`).
+You may want to be warned if you use variables that are not uninitialised, since this could lead to nasty bugs.  Use the `-Wmaybe-uninitialized` flag to do so (included in `-Wall`). *Note:* this warning will only be reported when the compiler is optimising the code, i.e., when you specify at least `-O1`.  Without optimisation, enabling this warning would produce too many false positives.
 
 It can also be useful to verify that procedures are either intrinsic, or have been declared `external` explicitly.  You can activate this check using the `-Wimplicit-procedure` flag.
 
