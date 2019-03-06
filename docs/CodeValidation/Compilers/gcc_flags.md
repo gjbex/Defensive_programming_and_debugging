@@ -45,3 +45,17 @@ For C code, the options `-Wbad-function-cast` will warn when the result of a fun
 Although some conversions from a larger to a smaller type are legal, they may be unintended, use the `-Wconversion` flag to be warned about these.
 
 The preprocessor can also issue warnings when required.  `-Wundef` will warn when a macro variable that is used has not been assigned a value.  `-Wunused-macros` will warn about macros that were defined in the main file, but never used.
+
+If-statements with many many branches are generally hard to read, and it is easy to make mistakes by repeating the same condition twice, or even duplicate code in branches.  This typically results from copy/pasting code fragments.  The options that help you detect such issues are `-Wduplicated-cond` and `-Wduplicated-branches` respectively.
+
+
+Although the option `-Wmaybe-uninitialized` is activated by `-Wall` it is worth noting that it is only enabled when the compiler also optimises the code, i.e., at least at `-O1`.  
+
+
+## C++ specific warnings
+
+Specifically for C++, the `-Wnon-virtual-dtor` option is very useful as a class derived from a virtual base class that has no virtual destructor may lead to memory leaks.
+
+The `-Woverloaded-virtual` option will warn you when a virtual function in a base class is overloaded, rather than overridden in the derived class, which may not have been your intention.
+
+C++ has a safer way of performing type cast than C using `static_cast`, `dynamic_cast` and so on.  It is good practice to use appropriate C++ style casting, rather than C h style casts.  Warnings can be generated using `-Wold-style-cast`.
