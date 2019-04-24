@@ -11,7 +11,7 @@ Similarly, we use the term variable for constants, and also for attributes of ob
 
 To quote Robert C. Martin, "Code formatting is about communication, and communication is the professional developer’s first order of business".
 
-All programming languages have one or possible multiple conventions about how to format source code. For example, consistent indentation of code helps considerably to assess the structure of a function at a glance. For multi-level indentation, always use the same width, e.g., multiples of four spaces.
+All programming languages have one or possibly multiple conventions about how to format source code. For example, consistent indentation of code helps considerably to assess the structure of a function at a glance. For multi-level indentation, always use the same width, e.g., multiples of four spaces.
 
 The convention you have to use is often determined by the community you are working with, like your co-workers.  It is best to stick to that convention, since coding is communicating. If no convention is established, consider introducing one.  The one which is prevalent in the programming language community is most likely to be your best choice.
 
