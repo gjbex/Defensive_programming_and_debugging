@@ -4,7 +4,7 @@ Even while you maintain a clean coding style and practices, and use the compiler
 
 Programming is not easy, often algorithms and data structures are quite sophisticated, and the application fails for edge or corner cases that were not taken into account. The semantics of a programming language can be quite subtle at times, so that the code may do things we don't expect.
 
-Whatever the cause, bugs will be present, and given the somewhat depressing statistics on the time the average developee spends on that, we would better go about it as efficiently as possible.
+Whatever the cause, bugs will be present, and given the somewhat depressing statistics on the time the average developer spends on that, we would better go about it as efficiently as possible.
 
 Many of us would start inserting statements to write information about the program state to the screen to get a handle on what is going on, and identify the point in the code where variables are assigned suspicious values. When done systematically, this approach will work.
 
