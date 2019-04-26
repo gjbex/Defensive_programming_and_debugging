@@ -67,7 +67,7 @@ If you decide while debugging that there is no point for it to run, you can stop
 
 ## Tracing system calls
 
-The linux command `strace` can be used to quickly get an idea of what is going on if your application seems to be stuck.  It will print a trace of the system calls done by the process, e.g., read/write operations or exec calls.
+The Linux command `strace` can be used to quickly get an idea of what is going on if your application seems to be stuck.  It will print a trace of the system calls done by the process, e.g., read/write operations or exec calls.
 
 Although this gives of course much less information than attaching a debugger, it can be useful nevertheless.  For instance, you can detect at a glance that the application is stuck in a read operation, so it might be waiting for a reply from a network operation.
 

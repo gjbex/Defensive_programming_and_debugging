@@ -1,8 +1,8 @@
 # Arm DDT
 
-Arm DDT is an excellent debugger that helps you debug applications at almost any scale, that run on tenthousands of cores.  It is a commercial product, so you need a license to run it, but perhaps your HPC center has one.
+Arm DDT is an excellent debugger that helps you debug applications at almost any scale, that run on tens of thousands of cores.  It is a commercial product, so you need a license to run it, but perhaps your HPC center has one.
 
-On their website, Arm desscribes DDT as follows:
+On their website, Arm describes DDT as follows:
 
 > Arm DDT is the number one debugger in research, industry, and academia for software engineers and scientists developing C++, C, Fortran parallel and threaded applications on CPUs, GPUs, Intel and Arm. Arm DDT is trusted as a powerful tool for automatic detection of memory bugs and divergent behavior to achieve lightning-fast performance at all scales.
 
@@ -24,7 +24,7 @@ Evaluating expressions at runtime can also be done.  These expressions are displ
 
 ## Data exploration
 
-Arm DDT was indeed designed to work at scale, to debug applications that have thousands of processes and threads.  A lot of attention has been paid to ensure that information is aggregated as much as possible.  From the visualisation of the call stack, you can immediately see how many processes are pauzed in various function calls.
+Arm DDT was indeed designed to work at scale, to debug applications that have thousands of processes and threads.  A lot of attention has been paid to ensure that information is aggregated as much as possible.  From the visualisation of the call stack, you can immediately see how many processes are paused in various function calls.
 
 Another area where information aggregation is very important is the inspection of variables.  The user interface is cleverly designed to support doing this effectively for parallel code.  Spark lines give you insight into the values across processes or threads.  This helps to spot potential issues quickly, even without switching to other processes or threads.
 

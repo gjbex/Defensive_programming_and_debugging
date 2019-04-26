@@ -11,7 +11,7 @@ Similarly, we use the term variable for constants, and also for attributes of ob
 
 To quote Robert C. Martin, "Code formatting is about communication, and communication is the professional developer’s first order of business".
 
-All programming languages have one or possible multiple conventions about how to format source code. For example, consistent indentation of code helps considerably to assess the structure of a function at a glance. For multi-level indentation, always use the same width, e.g., multiples of four spaces.
+All programming languages have one or possibly multiple conventions about how to format source code. For example, consistent indentation of code helps considerably to assess the structure of a function at a glance. For multi-level indentation, always use the same width, e.g., multiples of four spaces.
 
 The convention you have to use is often determined by the community you are working with, like your co-workers.  It is best to stick to that convention, since coding is communicating. If no convention is established, consider introducing one.  The one which is prevalent in the programming language community is most likely to be your best choice.
 
@@ -152,7 +152,7 @@ END DO
 
 The compiler would give an error for the code fragment above since all variables have to be declared explicitly, and `totl` was not.
 
-Limiting scope of of declarations extends to headers files that are included in C/C++.  It is recommended not to include files that are not required.  Not only will it polute the namespace with clutter, but it will also increase build times.
+Limiting scope of of declarations extends to headers files that are included in C/C++.  It is recommended not to include files that are not required.  Not only will it pollute the namespace with clutter, but it will also increase build times.
 
 In C++, you can importing everything defined in a namespace, e.g.,
 
@@ -160,7 +160,7 @@ In C++, you can importing everything defined in a namespace, e.g.,
 using namespace std;
 ~~~~
 
-Although it saves on typing, it is better to either use the namesapce prefix explicitly, or use only what is required, e.g.,
+Although it saves on typing, it is better to either use the namespace prefix explicitly, or use only what is required, e.g.,
 
 ~~~~c
 using std::cout;
@@ -175,7 +175,7 @@ use, intrinsic :: iso_fortran_env, only : REAL64, INT32
 
 The `only` keyword ensures that only the parameters `REAL64` and `INT32` are imported from the `iso_fortran_env` module.
 
-Note that the `intriinsic` keyword is used to ensure that the compiler supplied module is used, and not a module with the same name defined by you.
+Note that the `intrinsic` keyword is used to ensure that the compiler supplied module is used, and not a module with the same name defined by you.
 
 When developing multi-threaded C/C++ programs using OpenMP, limiting the scope of variables to parallel regions makes those variables thread-private, hence reducing the risk of data races. We will discuss this in more detail in a later section.  Unfortunately, the semantics for the Fortran `block` statement in an OpenMP do loop is not defined, at least up to the OpenMP 4.5 specification.  Although `gfortran` accepts such code constructs, and seems to generate code with the expected behavior, it should be avoided since Intel Fortran compiler will report an error for such code.
 
@@ -232,9 +232,20 @@ In summary:
 
 ## Variable initialisation
 
-Although Fortran doesn't require you to initialise variables, and will set `INTEGER` and `REAL` to zero for you, it is nevertheless good practice to always initialise variables explicitly. It makes your intent clear. Although C/C++ will likely produce nonsense results when you forget to initialise a variable, the compilers will typically let you get away with it. However, most compilers have optional flags that catch expressions involving uninitialised variables. We will discuss these and other compiler flags in a later section.
+The specifications for Fortran, C and C++ do not define the value an uninitialized variable will have. So you should always initialise variables explicitly, otherwise your code will have undefined, and potentially non-deterministic behavior. When you forget to initialise a variable, the compilers will typically let you get away with it. However, most compilers have optional flags that catch expressions involving uninitialised variables. We will discuss these and other compiler flags in a later section.
 
 When initialising or, more generally, assigning a value to a variable that involves constants, your code will be easier to understand when those values indicate the intended type. For example, using `1.0` rather than `1` for floating point is more explicit. This may also avoid needless conversions. This also prevents arithmetic bugs since `1/2` will evaluate to `0` in C, C++ as well as Fortran.  Perhaps even more subtly, `1.25 + 1/2` will also evaluate to `1.25`, since the division will be computed using integer values, evaluating to `0`, which is subsequently converted to the floating point value `0.0`, and added to `1.25`.
+
+Specifically for C++, I'd strongly encourage you to use list initialisation, since narrowing conversion would lead to warnings.  In the code fragment below, the first local variable `n1` will be initialised to `7` without any warnings, while the compiler will generate a warning for the initialisation of `n2`.
+
+~~~~c++
+int conversion(double x) {
+    int n1 = x;
+    int n2 {x};
+    return n1 + n2;
+}
+~~~~
+
 
 
 ## To comment or not to comment?
@@ -263,7 +274,10 @@ Moreover, that implies that even if your code compiles with a specific compiler,
 
 Using language extensions makes code harder to read. As a proficient programmer, you're still not necessarily familiar with language extensions, so you may interpret those constructs incorrectly.
 
-Hence I'd encourage you strongly to strictly adhere to a specific language specification.  For C there are three specifications that are still relevant, C89, C99, and C11.  For C++ that would be C++11, and C++14.  The relevant specification for Fortran are those of 2003 and 2008. References to those specifications can be found in the section on additional material.
+Hence I'd encourage you strongly to strictly adhere to a specific language specification.  For C there are three specifications that are still relevant, C89, C99 and C11.  For C++ that would be C++11, C++14 and C++17.  The relevant specification for Fortran are those of 2003 and 2008. References to those specifications can be found in the section on additional material.
+
+For C, you may be interested to read the MISRA C software development guidelines, a collections of directives and rules specified by the Motor Industry Software Reliability Association (MISRA) aimed at ensuring safer and more reliable software systems in the automotive industry.  A reference to this specification is mentioned in the additional material section.
+
 
 
 ## Copy/paste is evil

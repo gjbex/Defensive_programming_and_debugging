@@ -12,7 +12,7 @@ In mathematics, the set of integer number is infinite, while in most programming
 
 This means that the largest signed integer that can be represented using 32 bits is `2^31 - 1`.  The smallest signed 32 bits integer is `-2^31`.
 
-Adding 1 to that number causes a numerical overflow, and will result in a negative number, `-2^31`. Obviously, all further computations based on that result are meaningless.  The situation is of course symmetric, similar problems will arise when substracting 1 from the smallest integer.
+Adding 1 to that number causes a numerical overflow, and will result in a negative number, `-2^31`. Obviously, all further computations based on that result are meaningless.  The situation is of course symmetric, similar problems will arise when subtracting 1 from the smallest integer.
 
 Integer numerical overflow can be trapped at runtime using compiler flags.
 

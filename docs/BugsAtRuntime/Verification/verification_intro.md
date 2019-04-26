@@ -5,7 +5,7 @@ Although compilers and static code checkers can detect quite a number of issues 
 
 ## OpenMP
 
-Valgrind was already mentioned before to detect memory leaks and erroneous memory accesses. However, it can also to used to verify that no deadlocks and data races occur in a multi-threaded application.  Unfortunately, the DRD component of valgrind can only handle C and C++ code, and POSIX threads (the `pthreads` library) out of the box.  Support for OpenMP using `gcc` and `g++` is possible, but requires your own build of GCC.  Hence Valgrind will not be discussed futher here.
+Valgrind was already mentioned before to detect memory leaks and erroneous memory accesses. However, it can also to used to verify that no deadlocks and data races occur in a multi-threaded application.  Unfortunately, the DRD component of valgrind can only handle C and C++ code, and POSIX threads (the `pthreads` library) out of the box.  Support for OpenMP using `gcc` and `g++` is possible, but requires your own build of GCC.  Hence Valgrind will not be discussed further here.
 
 Intel Inspector can detect many problems for multi-threaded code, both for POSIX threads, and OpenMP.  It can handle C/C++ as well as Fortran code.  Unfortunately, it is a commercial product, and requires a valid license.
 
@@ -13,7 +13,7 @@ As usual, the code should be compiled with the `-g` flag in order to ensure that
 
 It is important to note that Intel Inspector generates a lot of overhead, both to the run time of the applications, and to the amount of memory being used.  You may want to start using Intel Inspector as soon as possible in the development cycle.
 
-Intel Inspector has a GUI that that helps you to easily configure the verifications that should be done, and how thorough the checks should be.  The applications is started under control of Intel Inspector, and when it finishes, a report is generated and displayed.
+Intel Inspector has a GUI that that helps you to easily configure the verification that should be done, and how thorough the checks should be.  The applications is started under control of Intel Inspector, and when it finishes, a report is generated and displayed.
 
 Intel Inspector can detect data races and deadlocks.
 
@@ -39,7 +39,7 @@ If you want to use MPI checking, you have to
 
 Before the application starts, all checks will be listed.  When a check fails at runtime, the application is halted with an appropriate error message.
 
-Below you see example output for an application that runs with several processes, all executing an `MPI_Reduce`.  However, not all processes use the same length for the send buffer.  This violates the MPI specification, may cause indeterminate behaviour, and is most likely not wat you have in mind anyway.
+Below you see example output for an application that runs with several processes, all executing an `MPI_Reduce`.  However, not all processes use the same length for the send buffer.  This violates the MPI specification, may cause indeterminate behaviour, and is most likely not what you have in mind anyway.
 
     [0] ERROR: GLOBAL:COLLECTIVE:SIZE_MISMATCH: error
     [0] ERROR:    Mismatch found in local rank [1] (global rank [1]),

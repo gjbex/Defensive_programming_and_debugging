@@ -1,6 +1,6 @@
 # GCC sanitizer
 
-GCC's `gcc`/`g++` compilers support a number of runtime checks by instrumenting your code at compile time.  The workflow is straightforward:
+GCC's `gcc`/`g++` and `gfortran` compilers support a number of runtime checks by instrumenting your code at compile time.  The workflow is straightforward:
 
   1. compile and link your application, letting the compiler instrument your code;
   1. run your application; and

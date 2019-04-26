@@ -135,7 +135,7 @@ for (int i = 0; i < 10; i++)
 
 When the execution is halted the first time, the do-loop will be in its first iteration, so `i == 1`.  Using `c 5` at this point will resume the application and halt it the fifth time the breakpoint is hit. So when the application is halted, `i == 6` (the breakpoint was skipped 4 times).
 
-The `until <ln>` command can be very useful.  It will run the application until the specified line number `<ln>` is reached, without having to set a breakpoint.  However, it works only in the currect frame.  More generally, `advance <loc>` will continue to execute the application upto the specified location `<loc>` that takes the same format as that for the `break` command.
+The `until <ln>` command can be very useful.  It will run the application until the specified line number `<ln>` is reached, without having to set a breakpoint.  However, it works only in the current frame.  More generally, `advance <loc>` will continue to execute the application up to the specified location `<loc>` that takes the same format as that for the `break` command.
 
 While evaluating a function, it is often convenient to halt at the end of the function, just before it goes out of scope.  This is easily done using the `finish` command.
 
