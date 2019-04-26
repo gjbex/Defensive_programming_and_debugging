@@ -39,7 +39,7 @@ When you run the application, statistics are gathered in files with extensions `
 Those `.gcda` and `.gcno` files are binary, and not intended for human consumption.  The `gcov` tool will use the information stored in those files, and created an annotated source file with extension `.gcov`.  For instance, for a source file `palindrome.f90`, that is
 
 ~~~~bash
-$ gcov palidrome.f90
+$ gcov palindrome.f90
 ~~~~
 
 This will produce `palindrome.f90.gcov` which you can view using any text editor or even `less`.
@@ -55,7 +55,7 @@ To enable code coverage testing for Intel compilers, use the three compiler opti
 
 You can of course choose any directory you like to store the profile information.  Note that the directory should be created before compilation.
 
-When you run the application, statistics are gathered in files in the profile directory, `./profile` in the option above.  This is cummulative, so these files are updated each time you run the application.  However, these
+When you run the application, statistics are gathered in files in the profile directory, `./profile` in the option above.  This is cumulative, so these files are updated each time you run the application.  However, these
 
 Next, you have to merge the build and runtime information using
 
@@ -65,7 +65,7 @@ $ profmerge  -prof_dir ./profile
 
 Note that the name of the option is not exactly the same as the compiler options.
 
-The information contained in the profile directory is not hunman readable. However, you can generate an HTML overview using
+The information contained in the profile directory is not human readable. However, you can generate an HTML overview using
 
 ~~~bash
 $ codecov  -dpi ./profile/pgopti.dpi  -spi ./profile/pgopti.spi
