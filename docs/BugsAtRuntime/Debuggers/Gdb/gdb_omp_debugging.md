@@ -8,7 +8,7 @@ When starting the debugger, you may want to control the number of OpenMP threads
 $ OMP_NUM_THREADS=2  gdb  ./application.exe
 ~~~~
 
-All GDB commands you are familiar with will work when debugging an OpenMP application.  However, there are a few relevant ones specifically for multithreaded applications.
+All GDB commands you are familiar with will work when debugging an OpenMP application.  However, there are a few relevant ones specifically for multi-threaded applications.
 
 *Note*: none of the commands discussed below are specific to OpenMP as such, they will also work when you use threading libraries such as `pthreads`.
 
