@@ -47,7 +47,7 @@ Setting up the tests is trivial in Catch2.  You simply have to define a preproce
 
 ~~~~cpp
 #define CATCH_CONFIG_MAIN
-#include <catch/catch.hpp
+#include <catch/catch.hpp>
 ~~~~
 
 The main function will be generated automatically.  However, that will take the preprocessor/compiler a while, so it is recommended to put the lines above inn their own C++ source file.  That way, the code is generated and compiled only once, and not each time you add or make a change to a test.  Believe me, you will be grateful for this tip.
@@ -55,7 +55,7 @@ The main function will be generated automatically.  However, that will take the 
 
 ### Building and running
 
-The build the tests, the compiler needs to be aware of the location of the Catch2 header files, so you have to specify the appropriate `-I` flag.  The most convenient way is to use he single include file which is in the `single_include` directory of the distribution.
+The build the tests, the compiler needs to be aware of the location of the Catch2 header files, so you have to specify the appropriate `-I` flag.  The most convenient way is to use the single include file which is in the `single_include` directory of the distribution.
 
 ~~~~
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
