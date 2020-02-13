@@ -127,7 +127,7 @@ The test for the factorial of 5 will fail since the implementation contains a bu
 
 ## More assertions
 
-Besides the `@assertAqual` macro illustrated above, there is a long list of test macros available, e.g.,
+Besides the `@assertEqual` macro illustrated above, there is a long list of test macros available, e.g.,
 
   * `@assertTrue`/`@assertFalse`: test a Boolean condition;
   * `@assertLessThan`/.../`@assertGreaterThanOrEqual`: test numerical inequalities;
