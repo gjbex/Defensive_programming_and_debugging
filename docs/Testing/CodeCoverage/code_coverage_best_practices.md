@@ -34,9 +34,7 @@ To enable code coverage testing for GCC, use the three compiler options
   1. `-fprofile-arcs`
   1. `-ftest-coverage`
 
-When you run the application, statistics are gathered in files with extensions `.gcda` and `.gcno`.  This is cumulative, so these files are updated each time you run the application.  However, these
-
-Those `.gcda` and `.gcno` files are binary, and not intended for human consumption.  The `gcov` tool will use the information stored in those files, and created an annotated source file with extension `.gcov`.  For instance, for a source file `palindrome.f90`, that is
+When you run the application, statistics are gathered in files with extensions `.gcda` and `.gcno`.  This is cumulative, so these files are updated each time you run the application.  Those `.gcda` and `.gcno` files are binary, and not intended for human consumption.  The `gcov` tool will use the information stored in those files, and created an annotated source file with extension `.gcov`.  For instance, for a source file `palindrome.f90`, that is
 
 ~~~~bash
 $ gcov palindrome.f90
