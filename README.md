@@ -1,6 +1,7 @@
 # Definesive programming and debugging.
 
-The text can be conveniently read on the [Github pages site]()
+The text can be conveniently read on the
+[Github pages site](https://gjbex.github.io/DPD-online-book/)
 for this repository.
 
 This is an online resource for defensive programming and debugging.  You will
