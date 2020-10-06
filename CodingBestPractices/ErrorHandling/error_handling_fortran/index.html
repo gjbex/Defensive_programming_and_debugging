@@ -237,7 +237,7 @@
 <p>In Fortran, a primary example of non-local issues is the management of dynamic memory, i.e., memory allocated on the heap using the <code>allocate</code> statement.</p>
 <p>Consider the following code, the subroutine takes arrays as arguments that may have been allocated.</p>
 <pre><code class="fortran">subroutine create_array(x, n)
-    implicit nonse
+    implicit none
     real, dimension(:), allocatable, intent(inout) :: x
     integer, intent(in) :: n
     allocate(x(n))
@@ -252,14 +252,14 @@ subroutine daxpy(alpha, x, y)
 end subroutine daxpy
 </code></pre>
 
-<p>The <code>allocate</code> statement may fail when there is not enough memory space to accommodate the request.  However, since <code>create_vector</code> doesn't check, the application will continue under the assumption that its result is indeed an array with all <code>n</code> elements.</p>
-<p>At some point, e.g., in a call to the procedure <code>daxpy</code>, the array <code>x</code>, or <code>y</code>, or both may in fact not have been allocated at all, and the application will crash with a segmentation fault. The problem, in this case merely a symptom, will occur in <code>daxpy</code>, while the cause is in fact in <code>create_vector</code>, or, to be more precise, wherever the size of the array was computed. If this is a complex application, it may take you a while to track down the root cause of this crash.</p>
+<p>The <code>allocate</code> statement may fail when there is not enough memory space to accommodate the request.  However, since <code>create_array</code> doesn't check, the application will continue under the assumption that its result is indeed an array with all <code>n</code> elements.</p>
+<p>At some point, e.g., in a call to the procedure <code>daxpy</code>, the array <code>x</code>, or <code>y</code>, or both may in fact not have been allocated at all, and the application will crash with a segmentation fault. The problem, in this case merely a symptom, will occur in <code>daxpy</code>, while the cause is in fact in <code>create_array</code>, or, to be more precise, wherever the size of the array was computed. If this is a complex application, it may take you a while to track down the root cause of this crash.</p>
 <p>You want errors to occur as soon as possible since the closer that happens in space and time to the root cause, the easier it will be to identify and fix the issue.</p>
-<p>In this particular case, the procedure <code>create_vector</code> should check whether <code>allocate</code> succeeded, and if not, generate an error.</p>
+<p>In this particular case, the procedure <code>create_array</code> should check whether <code>allocate</code> succeeded, and if not, generate an error.</p>
 <pre><code class="fortran">subroutine create_array(x, n)
     use, intrinsic :: iso_fortran_env, only: error_unit
-    implicit nonse
-    real, dimension(:), allocatable, intent(inoout) :: x
+    implicit none
+    real, dimension(:), allocatable, intent(inout) :: x
     integer, intent(in) :: n
     integer :: istat
     allocate(x(n), stat=istat)
@@ -288,12 +288,12 @@ end subroutine create_array
 end module error_status
 </code></pre>
 
-<p>You can use this in the <code>create_vector</code> procedure, i.e.,</p>
+<p>You can use this in the <code>create_array</code> procedure, i.e.,</p>
 <pre><code class="fortran">subroutine create_array(x, n)
     use, intrinsic :: iso_fortran_env, only: error_unit
     use :: error_status, only : ALLOCATION_ERR
-    implicit nonse
-    real, dimension(:), allocatable, intent(inoout) :: x
+    implicit none
+    real, dimension(:), allocatable, intent(inout) :: x
     integer, intent(in) :: n
     integer :: istat
     allocate(x(n), stat=istat)
@@ -319,8 +319,8 @@ STOP 1
 <pre><code class="fortran">subroutine create_array(x, n)
     use, intrinsic :: iso_fortran_env, only: error_unit
     use :: error_status, only : ALLOCATION_ERR
-    implicit nonse
-    real, dimension(:), allocatable, intent(inoout) :: x
+    implicit none
+    real, dimension(:), allocatable, intent(inout) :: x
     integer, intent(in) :: n
     integer :: istat
     allocate(x(n), stat=istat)
@@ -459,7 +459,7 @@ STOP 5
 <p>Suppose you are developing an application that reads some parameters from a configuration file, it creates data structures, initialises them, and starts to compute.  One of the configuration parameters is the size of the vectors your computation uses, and those are dynamically allocated.</p>
 <p>Now you already know that your should check the result of <code>allocate</code> to ensure that the allocation succeeded.  Failing to do so will most likely result in a segmentation fault.</p>
 <p>However, the user of your application (potentially you) enters a vector size in the configuration file that is too large to be allocated.  No problem though, your application handles error conditions and reports to the user.</p>
-<p>You could report the error and terminate execution in the procedure where it actually occurs, the <code>create_vector</code> subroutine you defined in one of the previous sections.  This would inform the user that some array can not be allocated.  However, unless she is familiar with the nuts and bolts of the application, that may in fact be completely uninformative.  The subroutine <code>create_vector</code> has no clue about the context in which it is called, and can hardly be expected to produce a more meaningful error message.</p>
+<p>You could report the error and terminate execution in the procedure where it actually occurs, the <code>create_array</code> subroutine you defined in one of the previous sections.  This would inform the user that some array can not be allocated.  However, unless she is familiar with the nuts and bolts of the application, that may in fact be completely uninformative.  The subroutine <code>create_array</code> has no clue about the context in which it is called, and can hardly be expected to produce a more meaningful error message.</p>
 <p>It would be more useful to the user if this error were reported to the calling procedure, which has more contextual information, and that this procedure would report an error that has better semantics. At the end of the day, the relevant information is that you should reduce the value of a parameter in your configuration file.</p>
 <p>Handling errors in the appropriate context is not that easy.  It requires careful planning and formulating error messages from the perspective of the user at each layer in your application.  In a language such as Fortran, this means that procedures should return status information, typically as an <code>inout</code> argument.  In the Fortran API for the MPI library for instance, almost all functions take an error argument of type <code>integer</code> that can be used to check whether the procedure call was executed successfully.  Note that forgetting this argument in the procedure calls may lead to very interesting bugs.  In the Fortran 2008 API for this library, that argument is optional, so omitting it is no longer a deadly sin when you use this API.</p>
 <p>Note that proper error handling will be fairly complex and potentially increase the size of your code base.</p>
