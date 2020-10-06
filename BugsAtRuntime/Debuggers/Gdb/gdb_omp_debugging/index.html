@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../../img/favicon.ico">
+  <title>Debugging OpenMP applications with GDB - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Debugging OpenMP applications with GDB";
+    var mkdocs_page_input_path = "BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../../finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Debugging OpenMP applications with GDB</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#listing-threads">Listing threads</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#switching-threads">Switching threads</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scheduler-locking">Scheduler locking</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#sending-gdb-command-to-multiple-threads">Sending GDB command to multiple threads</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Finding bugs at runtime &raquo;</li>
+        
+      
+    
+    <li>Debugging OpenMP applications with GDB</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="how-can-you-debug-openmp-code-using-gdb">How can you debug OpenMP code using GDB?</h1>
+<p>Debugging OpenMP applications with GDB is fairly straightforward. To include debugging information in the application, use <code>-g</code> as usual when compiling and building the application.</p>
+<p>When starting the debugger, you may want to control the number of OpenMP threads.</p>
+<pre><code class="bash">$ OMP_NUM_THREADS=2  gdb  ./application.exe
+</code></pre>
+
+<p>All GDB commands you are familiar with will work when debugging an OpenMP application.  However, there are a few relevant ones specifically for multi-threaded applications.</p>
+<p><em>Note</em>: none of the commands discussed below are specific to OpenMP as such, they will also work when you use threading libraries such as <code>pthreads</code>.</p>
+<h2 id="listing-threads">Listing threads</h2>
+<p>When the program is halted in a parallel region, it will display the thread ID that hit the breakpoint.  You can get information on the running threads using</p>
+<pre><code>(gdb) info threads
+</code></pre>
+<p>The thread GDB halted in is marked with an asterisk.  Notice that the thread ID listed by GDB is not the OpenMP thread number.  So typically, GDB thread 1 will have OpenMP thread number 0, and so on.  This may be somewhat confusing.</p>
+<h2 id="switching-threads">Switching threads</h2>
+<p>The variables that will be printed are those local to the thread, so all shared and thread-private variables.  You can switch the context to another thread using the <code>thread</code> command, and the GDB thread ID to switch to, e.g.,</p>
+<pre><code>(gdb) thread 2
+</code></pre>
+<p>Note that it is very likely that this thread will be at another point in the source code. You can make it continue to the breakpoint using the <code>continue</code> command.  However, all threads will be resumed, so the first thread that hit the breakpoint will continue past it.  This may or may not be what you want.</p>
+<h2 id="scheduler-locking">Scheduler locking</h2>
+<p>Although it is quite useful to debug race conditions and deadlock situations that GDB halts all threads when the first reaches a breakpoint, sometimes you just like all threads to continue to the same breakpoint in order to conveniently check the value of variables across threads.</p>
+<p>This can be achieved by turning on scheduler locking, i.e.,</p>
+<pre><code>(gdb) set scheduler-locking on
+</code></pre>
+<p>Now the <code>continue</code>, <code>next</code>, <code>step</code> commands will only advance the current thread.</p>
+<p><em>Note</em>:  this can lead to a deadlock.</p>
+<p>To turn scheduler locking off again, simply use</p>
+<pre><code>(gdb) set scheduler-locking off
+</code></pre>
+<p>To check the status of scheduler locking, use the <code>show</code> command, i.e.,</p>
+<pre><code>(gdb) show scheduler-locking
+</code></pre>
+<h2 id="sending-gdb-command-to-multiple-threads">Sending GDB command to multiple threads</h2>
+<p>You can easily execute GDB command on multiple threads at once.  For instance, suppose you would like all threads to halt on a breakpoint, and compare that values of variables across threads.</p>
+<p>Suppose that thread number 1 has halted on the breakpoint, first turn on scheduler locking, and then let all threads but the first continue to the breakpoint. The total number of threads is 4.</p>
+<pre><code>(gdb) set scheduler-locking on
+(gdb) thread apply 2-4 continue
+</code></pre>
+<p>You can verify with <code>info thread</code> that all threads have halted at the breakpoint.  Now we can print the value of a variable, say <code>tid</code>, across threads.</p>
+<pre><code>(gdb) thread apply all print tid
+</code></pre>
+<p>The keyword <code>all</code> can be used as a shortcut for the list of all thread IDs. The thread list to apply the command to can be</p>
+<ul>
+<li>one or more thread IDs, separated by spaces, and/or</li>
+<li>one or more ranges, e.g., <code>2-4</code>; or</li>
+<li><code>all</code>.</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../../tracing/" class="btn btn-neutral float-right" title="Tracing applications">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../gdb_reverse_debugging/" class="btn btn-neutral" title="Reverse debugging with GDB"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../gdb_reverse_debugging/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../../tracing/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../../..';</script>
+    <script src="../../../../js/theme.js" defer></script>
+      <script src="../../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

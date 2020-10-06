@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Exceptions in C++ - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Exceptions in C++";
+    var mkdocs_page_input_path = "CodingBestPractices/ErrorHandling/error_handling_cpp.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Exceptions in C++</a>
+    <ul class="current">
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Writing good code &raquo;</li>
+        
+      
+    
+    <li>Exceptions in C++</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="error-handling-in-c">Error handling in C++</h1>
+<p>All advise given on error handling in C is of course also relevant for C++.  However, C++ adds exception handling as a way to deal with run-time errors, and propagate these through your application.</p>
+<p>To accommodate this, C++ has a few keywords: <code>throw</code>, <code>try</code> and <code>catch</code>.  When an error has been detected, an exception can be thrown, e.g.,</p>
+<pre><code class="cpp">#include &lt;stdexcept&gt;
+
+int fac(int n) {
+    if (n &lt; 0) {
+        std::string msg {&quot;fac received &quot;};
+        msg += std::to_string(n) + &quot;, argument must be positive&quot;;
+        throw std::domain_error {msg};
+    } else {
+        int value = 1;
+        for (int i = 2; i &lt;= n; i++)
+            value *= i;
+        return value;
+    }
+}
+</code></pre>
+
+<p>The <code>throw</code> statement will transfer control to the calling context of the <code>fac</code> function.  The destructor of all objects on the stack will be called since they go out of scope.</p>
+<p>The exception <code>domain_error</code> used here is declared in the <code>stdexcept</code> header.  This header declares some standard exceptions that cover many cases, e.g., <code>logic_error</code>, <code>invalid_argument</code>, <code>out_of_range</code>, and so on.</p>
+<p>In the calling context, the exception can be caught, and handled appropriately using a <code>try ... catch ...</code> statement, e.g.,</p>
+<pre><code class="cpp">...
+try {
+    std::cout &lt;&lt; fac(n) &lt;&lt; std::endl;
+catch (std::domain_error&amp; e) {
+    std::cerr &lt;&lt; &quot;math function called with argument not in its domain: &quot;
+              &lt;&lt; e.what() &lt;&lt; std::endl;
+    ...
+}
+...
+</code></pre>
+
+<p>In the code fragment above, the exception is caught and handled in the immediate calling context.  If that is not the case, the exception percolates up the call stack, for each function calling the destructors for the stack variables that go out of scope.</p>
+<p>Using exceptions makes it easier to handle exception in context to provide the user of your application with relevant feedback.  What can be done at that point depends on the exception safety level.  Generally, four levels of exception safety are recognised:</p>
+<ol>
+<li>Nothrow exception guarantee: the function or method never throws an exception.  This is expected from destructors.</li>
+<li>Strong exception guarantee: the state of the program is rolled to the state just before the exceptional state occurred, e.g., failed operations on STL containers.</li>
+<li>Basic exceptions guarantee: clean-up may be required, but the application is in a valid state.</li>
+<li>No exceptions guarantee: the application is not in a valid state, e.g., invariants are violated, or resource leaks may have occurred.</li>
+</ol>
+<p>For the last level, no exception guarantee, recovery will be dangerous, while handling exceptions gets easier on each higher level.</p>
+<p>Often, it can be convenient to define application-specific exceptions.  These can be derived from the <code>std::exception</code> class.  It is good practice to define a base class, perhaps abstract, that is the ancestor to all application-specific exceptions.</p>
+<p>It is worth noting that C++ has no <code>finally</code> block as other programming languages such as Java and Python have.  In those languages, the <code>finally</code> block is used to ensure that resources are managed properly both in case of normal behavior as well as failure.  In C++, this is not required if resource management follows the RAII principle (Resource Allocation Is Initialization), which essentially means that the destructor is responsible for proper resource deallocation.</p>
+<p>Another interesting point is rethrowing of exceptions.  If you want to rethrow an exception preserving its polymorphic type, <code>throw;</code> will do that, e.g.,</p>
+<pre><code class="cpp">try {
+    ...
+} catch (std::exception&amp; e) {
+    std::cerr &lt;&lt; &quot;Oops!&quot; &lt;&lt; std::endl;
+    throw;
+}
+</code></pre>
+
+<p>In the calling context of this fragment of code, <code>e</code> will still have its original polymorphic type.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../assertions/" class="btn btn-neutral float-right" title="Assertions">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../error_handling_c/" class="btn btn-neutral" title="Error handling in C"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../error_handling_c/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../assertions/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

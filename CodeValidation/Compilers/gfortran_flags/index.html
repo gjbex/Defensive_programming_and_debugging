@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Flags for gfortran - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Flags for gfortran";
+    var mkdocs_page_input_path = "CodeValidation/Compilers/gfortran_flags.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="" href="../../code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Flags for gfortran</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#language-specification-conformance">Language specification conformance</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#additional-warnings">Additional warnings</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Code validation &raquo;</li>
+        
+      
+    
+    <li>Flags for gfortran</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="options-for-gccs-fortran-compiler">Options for GCC's Fortran compiler</h1>
+<p>By default, the <code>gfortran</code> compiler issues some warnings, but it can produce more.  It is always good practice to switch on "all warnings" with <code>-Wall</code>.  Contrary to expectations, <code>-Wall</code> doesn't activate all warnings though.  A number of extra warnings on top of those enabled by <code>-Wall</code> can be switched on by specifying <code>-Wextra</code>.  It is highly recommended to always use these two compiler options, and eliminate all warnings reported by them, i.e.,</p>
+<pre><code class="bash">$ gfortran -Wall -Wextra ...
+</code></pre>
+
+<h2 id="language-specification-conformance">Language specification conformance</h2>
+<p>The <code>gfortran</code> compiler can also check for language specification conformity, at least up to some level, to quote the documentation, "improvements to GNU Fortran in this area are welcome."  The <code>-Wpedantic</code> flag will activate this, and you should specify the specification it should check, i.e.,</p>
+<ul>
+<li><code>-std=f95</code></li>
+<li><code>-std=f2003</code></li>
+<li><code>-std=f2008</code></li>
+<li><code>-std=f2018</code></li>
+</ul>
+<p>For example, to check for Fortran 2003 compliance, use</p>
+<pre><code class="bash">$ gfortran ... -Wpedantic -std=f2003 ...
+</code></pre>
+
+<h2 id="additional-warnings">Additional warnings</h2>
+<p>A few other options can be helpful as well.  Those are not activated by <code>-Wall</code> and <code>-Wextra</code>.</p>
+<p>It is good practice to have <code>implicit none</code> in each compilation unit, but that is also easy to forget.  The compiler has a flag, <code>-fimplicit-none</code>, that will verify that all variables have been declared, regardless of whether <code>implicit none</code> was specified.</p>
+<p>Another good practice is to explicitly declare what to use from a module in a <code>use</code> statement.  The compiler can warn you when this has not been done if you specify the <code>-Wuse-without-only</code> flags.</p>
+<p>You may want to be warned if you use variables that are not uninitialised, since this could lead to nasty bugs.  Use the <code>-Wmaybe-uninitialized</code> flag to do so (included in <code>-Wall</code>). <em>Note:</em> this warning will only be reported when the compiler is optimising the code, i.e., when you specify at least <code>-O1</code>.  Without optimisation, enabling this warning would produce too many false positives.</p>
+<p>It can also be useful to verify that procedures are either intrinsic, or have been declared <code>external</code> explicitly.  You can activate this check using the <code>-Wimplicit-procedure</code> flag.</p>
+<p>A potential source of bugs is unintended integer division.  Computing a value such as <code>1/2</code> will yield 0, which is most likely not your intention.  The compiler can detect this and issue a warning when you add the <code>-Winteger-division</code> flag.  However, remember that this is a compile time check, so you will not get a warnings for an expression such as <code>a/b</code> where <code>a</code> and <code>b</code> are <code>integer</code> variables, but their values are the result of a computation.</p>
+<p>Some additional checks on implicit conversion between types and kinds can be activated using the <code>-Wconversion-extra</code> flag.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../ifort_flags/" class="btn btn-neutral float-right" title="Flags for ifort">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../../Testing/CodeCoverage/code_coverage_best_practices/" class="btn btn-neutral" title="Best practices"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../../Testing/CodeCoverage/code_coverage_best_practices/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../ifort_flags/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

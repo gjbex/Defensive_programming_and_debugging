@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../../img/favicon.ico">
+  <title>Reverse debugging with GDB - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Reverse debugging with GDB";
+    var mkdocs_page_input_path = "BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../../finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Reverse debugging with GDB</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#workflow-for-reverse-debugging">Workflow for reverse debugging</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#example-session">Example session</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Finding bugs at runtime &raquo;</li>
+        
+      
+    
+    <li>Reverse debugging with GDB</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="can-you-go-back-in-time">Can you go back in time?</h1>
+<p>Some debuggers support reverse debugging, i.e., when your application is halted at a breakpoint, you can actually take a step backward in the execution.  The philosophy is that you run up to a point where there is trouble, and then step back in time to see when the problem arises.</p>
+<p>This may sound promising, and it is an interesting approach, but not without its issues.  The main problem is the memory requirement of this approach.  Since there is in general no way to reverse the actual computation, the state of the application has to be recorded.  Imagine that one of the data structures in your application is a 100,000 by 100,000 matrix of floating point numbers, and that this matrix is modified in each time step of an iterative process, then it is easy to compute the memory requirements of storing the state for a single time step: it would be 40 billion bytes.  Keeping track over multiple time steps would require an excessive amount of memory.</p>
+<p>Hence the designers of Arm DDT have decided to forego reverse debugging, since it does not scale for typical HPC applications that run thousands or even hundred thousands of processes.</p>
+<p>Another issue is that the execution time will potentially be much longer, due to the bookkeeping operations the debugger has to perform in order to keep track of the state of the application.  This is an obvious concern for HPC applications, but it may already be an issue for small scale scientific applications as well.</p>
+<p>In GDB you can actually do reverse debugging, and for small scale applications it can sometimes be useful.</p>
+<h2 id="workflow-for-reverse-debugging">Workflow for reverse debugging</h2>
+<p>The workflow can be summarised as follows:</p>
+<ol>
+<li>find a location in the code that is close to the point were you know there is a problem, but where the state is still okay; set a breakpoint at that location;</li>
+<li>set a breakpoint at the earliest location where the problem manifests itself;</li>
+<li>run the application until it halts at the first breakpoint;</li>
+<li>enable reverse debugging by enabling state recording using the <code>record</code> command;</li>
+<li>continue executing the application until it halts at the second breakpoint;</li>
+<li>step back and inspect the state of variables to your heart's content.</li>
+</ol>
+<p>Note that for performance and to conserve memory, the number of statements executed between the first and second breakpoint should be minimal.</p>
+<p>The commands to go back in time are named after those to go forward in time, i.e.,</p>
+<ul>
+<li><code>reverse-next</code></li>
+<li><code>reverse-step</code></li>
+<li><code>reverse-continue</code></li>
+<li><code>reverse-finish</code></li>
+</ul>
+<p>The command <code>set exec-direction reverse</code> changes the semantics of <code>next</code>, <code>step</code> and <code>continue</code> so that they step back in time.  This may be convenient, but can also lead to considerable confusion.</p>
+<h2 id="example-session">Example session</h2>
+<p>Consider an application that operates on vectors, the relevant data structures and function declarations are listed below.</p>
+<pre><code class="c">typedef struct {
+    double *element;
+    int n;
+} Vector;
+
+Vector *init_vector(int n);
+void fill_vector(Vector *v, double start_value, double delta_value);
+void print_vector(Vector *v);
+</code></pre>
+
+<p>The function <code>init_vector</code> allocates an array of length <code>n</code> to <code>element</code>, and initialises all elements to 0.</p>
+<p>The main code, lines 14 through 18, are shown below.</p>
+<pre><code class="c">for (int j = 0; j &lt; nr_vectors; j++) {
+     vectors[j] = init_vector(vector_len);
+     fill_vector(vectors[j], j, 0.1*(j + 1.0));
+     print_vector(vectors[j]);
+}
+</code></pre>
+
+<p>We start the application under the control of the debugger and set breakpoints at lines 15 and 17 respectively.  We will start recording for reverse debugging at line 15, continue till line 17, and reverse.</p>
+<pre><code>(gdb) b 15
+Breakpoint 1 at 0xb61: file features.c, line 15.
+(gdb) b 17
+Breakpoint 2 at 0xbc4: file features.c, line 17.
+(gdb) r
+
+Breakpoint 1, main () at features.c:15
+15          vectors[j] = init_vector(vector_len);
+(gdb) record
+(gdb) n
+16          fill_vector(vectors[j], j, 0.1*(j + 1.0));
+(gdb) p vectors[j]-&gt;element[1]
+$1 = 0
+(gdb) n
+
+Breakpoint 2, main () at features.c:17
+17          print_vector(vectors[j]);
+(gdb) p vectors[j]-&gt;element[1]
+$2 = 0.10000000000000001
+(gdb) reverse-next
+16          fill_vector(vectors[j], j, 0.1*(j + 1.0));
+(gdb) p vectors[j]-&gt;element[1]
+$3 = 0
+</code></pre>
+<p>Executing the <code>reverse-next</code> command has restored <code>vectors[j]</code> to the state before the function call to <code>fill_vector</code>.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../gdb_omp_debugging/" class="btn btn-neutral float-right" title="Debugging OpenMP applications with GDB">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../gdb_attach/" class="btn btn-neutral" title="Attaching GDB to running processes"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../gdb_attach/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../gdb_omp_debugging/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../../..';</script>
+    <script src="../../../../js/theme.js" defer></script>
+      <script src="../../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

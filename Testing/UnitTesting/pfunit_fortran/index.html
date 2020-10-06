@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>pfUnit for Fortran - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "pfUnit for Fortran";
+    var mkdocs_page_input_path = "Testing/UnitTesting/pfunit_fortran.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">pfUnit for Fortran</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#code-to-test">Code to test</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#unit-tests">Unit tests</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#scaffolding">Scaffolding</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#running-tests">Running tests</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#more-assertions">More assertions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#setup-and-tear-down">Setup and tear down</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Unit testing &raquo;</li>
+        
+      
+    
+    <li>pfUnit for Fortran</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="pfunit-additional-features">pFUnit additional features</h1>
+<p><a href="https://sourceforge.net/projects/pfunit/">pFUnit</a> is a very rich framework for developing unit tests.  The screencast presented some of its features, but it is useful to know some more.</p>
+<h3 id="code-to-test">Code to test</h3>
+<p>Consider the following module defined in <code>fac_mod.f90</code> under test.</p>
+<pre><code class="fortran">module fac_mod
+    use, intrinsic :: iso_fortran_env, only : i32 =&gt; INT32
+    implicit none
+
+    public :: fac
+
+contains
+
+    integer(kind=i32) function fac(n)
+        implicit none
+        integer(kind=i32), intent(in) :: n
+        integer(kind=i32) :: r = 1_i32
+        integer :: i
+        do i = 2, n
+            r = r*i
+        end do
+        fac = r
+    end function fac
+
+end module fac_mod
+</code></pre>
+
+<h3 id="unit-tests">Unit tests</h3>
+<p>Unit tests for this module reside in a file with extension <code>.pf</code>, e.g., <code>fac_tests.pf</code>, and consist of Fortran code with annotations and macros that are preprocessed by pFUnit.</p>
+<p>The test below verifies that the factorial of 0 is 1.</p>
+<pre><code class="fortran">@test
+subroutine test_fac_0()
+    use fac_mod
+    use pfunit_mod
+    implicit none
+
+    @assertEqual(1, fac(0))
+end subroutine test_fac_0
+</code></pre>
+
+<p>A second test in the same file will test whether the factorial of 5 is 120, i.e.,</p>
+<pre><code class="fortran">@test
+subroutine test_fac_5()
+    use fac_mod
+    use pfunit_mod
+    implicit none
+
+    @assertEqual(120, fac(5))
+end subroutine test_fac_5
+</code></pre>
+
+<h3 id="scaffolding">Scaffolding</h3>
+<p>The actual testing program is provided by the pFUnit framework.  To ensure that the tests will be included, an include file <code>testSuites.inc</code> is created in which you specify the test suite(s) to take into account.</p>
+<pre><code class="fortran">ADD_TEST_SUITE(fac_tests_suite)
+</code></pre>
+
+<p>The <code>.pf</code> files has to be preprocessed first, i.e.,</p>
+<pre><code>tests: tests.exe
+
+ifneq ($(BASEMK_INCLUDED),YES)
+include $(PFUNIT)/include/base.mk
+endif
+
+FC = gfortran
+FFLAGS += -g -I$(PFUNIT)/mod -I.
+LIBS = $(PFUNIT)/lib/libpfunit$(LIB_EXT)
+
+SRCS = $(wildcard *.pf)
+OBJS = $(SRCS:.pf=.o)
+APPL_OBJS = fac_mod.o
+
+tests.exe: $(APPL_OBJS) $(OBJS)
+    $(FC) $(FFLAGS) $(FPPFLAGS) -o $@  \
+        $(PFUNIT)/include/driver.F90 $(OBJS) $(APPL_OBJS) $(LIBS)
+
+testSuites.inc: $(SRCS)
+
+%.F90: %.pf
+    $(PFUNIT)/bin/pFUnitParser.py $&lt; $@
+
+fac_mod.o: fac_mod.f90
+    $(FC) $(FFLAGS) -c $&lt;
+
+%.o: %.F90
+    $(FC) -c $(FFLAGS) $(FPPFLAGS) $&lt;
+
+clean:
+    $(RM) *.exe
+</code></pre>
+
+<p>The <code>.pf</code> files will be preprocessed by <code>pFUnitParser.py</code> into <code>.F90</code> files.  Note the <code>.F90</code> extension which ensure that the Fortran preprocessor will be called prior to compilation.</p>
+<p>The executable is built using the provided <code>driver.F90 that will use the</code>testSuites.inc` file to determine the test suites to run.</p>
+<p>To build the tests, the <code>PFUNIT</code> environment variable should be set to the path where pFUnit is installed, and make can be run, i.e.,</p>
+<pre><code class="bash">$ export PFUNIT=/path/to/pfunit
+$ make
+</code></pre>
+
+<h3 id="running-tests">Running tests</h3>
+<p>When the executable is successfully built, you can run the tests by executing it.</p>
+<pre><code class="bash">$ ./tests.exe
+</code></pre>
+
+<p>The test for the factorial of 5 will fail since the implementation contains a bug.</p>
+<h2 id="more-assertions">More assertions</h2>
+<p>Besides the <code>@assertEqual</code> macro illustrated above, there is a long list of test macros available, e.g.,</p>
+<ul>
+<li><code>@assertTrue</code>/<code>@assertFalse</code>: test a Boolean condition;</li>
+<li><code>@assertLessThan</code>/.../<code>@assertGreaterThanOrEqual</code>: test numerical inequalities;</li>
+<li><code>@assertAny</code>/<code>@assertAll</code>: test values of logical arrays;</li>
+<li><code>@assertSameShape</code>: test shape of (multi-dimensional) arrays;</li>
+<li><code>@assertIsNaN</code>/<code>@assertIsFinite</code>: test whether a floating point value is NaN or infinite;</li>
+<li><code>@assertIsAssociated</code>: test whether a pointer is associated with a target;</li>
+<li><code>@assertFailure</code>: test whether an inappropriate code path is taken.</li>
+</ul>
+<p>There are negations for some assertions, e.g., <code>@assertNotEqual</code> and <code>@assertNotAssociated</code>.</p>
+<p>The <code>@assertEqual</code> macro is overloaded, it can test for equality of integer, real and complex numbers, logical values and strings.  For assertions on real values, an optional argument can and should be supplied, the tolerance for comparison.  At the risk of repeating ourselves, you should <em>never</em> test for exact equality of real numbers.</p>
+<p>Although almost all the test macros could be expressed by the generic <code>@assertTrue</code>, e.g., <code>@assertNotEqual(a, b)</code> is logically equivalent to <code>@assertTrue(a /= b)</code> it is good practice to use the most appropriate macro to formulate your test.  Doing so will make your intent clear, and may yield failure messages that are more informative.</p>
+<h2 id="setup-and-tear-down">Setup and tear down</h2>
+<p>In order to ensure that each test runs in a well-prepared environment, you can use fixtures.  These are artefacts that are set up before a test runs, and that are teared down (cleaned up) after the test finishes.  A pFUnit definition file can define these setup and teardown subroutine by using the <code>@before</code> and <code>@after</code> annotations respectively.  The setup and tear down procedures take no arguments.</p>
+<p>The purpose of the setup procedure (annotated with <code>@before</code>) is to, well, set up the stage for testing.  It may for instance initialise a data structure under test, or initialise a network connection.</p>
+<p>The tear down procedure (annotated with <code>@after</code>) ensures that all resources acquired by the setup procedure are released. So it may deallocate the memory of the data structure, or close the connection.</p>
+<p>Although this approach is straightforward, it is not ideal since the scope of the fixture objects would have to be global or defined in a separate module.  Hence it is more elegant to create a new class derived from pFUnit's <code>TestCase</code> base class.  In the new class, the base class methods <code>setUp</code> and <code>tearDown</code> can be overridden to initialise and clean up the fixtures.  The tests are also implemented as methods of the new class.</p>
+<p>Suppose that we want to test procedures that perform computations on arrays, we could create an array as a fixture.  It would be a field of a user defined type derived from <code>TestCase</code>, i.e.,</p>
+<pre><code class="fortran">module tests
+    use pfunit_mod
+    implicit none
+
+    @testcase
+    type, extends(TestCase) :: tests_type
+        integer :: n = 5
+        integer, allocatable, dimension(:) :: data_array
+    contains
+        procedure :: setUp
+        procedure :: tearDown
+    end type tests_type
+contains
+    ...
+end module tests
+</code></pre>
+
+<p>The definition of the <code>setUp</code> and <code>tearDown</code> procedures are contained in the module.</p>
+<pre><code class="fortran">subroutine setUp(this)
+    implicit none
+    class(tests_type), intent(inout) :: this
+    integer :: i
+    allocate(this%data_array(this%n))
+    do i = 1, this%n
+        this%data_array(i) = i
+    end do
+end subroutine setUp
+</code></pre>
+
+<pre><code class="fortran">subroutine tearDown(this)
+     implicit none
+     class(tests_type), intent(inout) :: this
+     deallocate(this%data_array)
+end subroutine tearDown
+</code></pre>
+
+<p>For the <code>setUp</code> and <code>tearDown</code> methods, no annotation is required since they override <code>TestCase</code> methods.</p>
+<p>The tests themselves are also contained in the module as methods of the <code>tests_type</code> class, e.g.,</p>
+<pre><code class="fortran">@test
+subroutine test_sum(this)
+    use pfunit_mod
+    implicit none
+    class(tests_type), intent(inout) :: this
+    integer :: i, total
+    total = 0
+    do i = 1, size(this%data_array)
+        total = total + this%data_array(i)
+    end do
+    @assertEqual(15, total)
+end subroutine test_sum
+</code></pre>
+
+<p>In the test subroutine, you need to use the <code>pfunit_mod</code> module since you will be using assertions such as <code>@assertEqual</code>.</p>
+<p>Note that many unit testing frameworks allow more flexibility.  They can have setup and tear down functions that are called before the first test in a suite starts, and after the last test in a suite ends.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../cunit_c/" class="btn btn-neutral float-right" title="CUnit for C">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../unit_testing_best_practices/" class="btn btn-neutral" title="Best practices"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../unit_testing_best_practices/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../cunit_c/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

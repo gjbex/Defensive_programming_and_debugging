@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../../img/favicon.ico">
+  <title>Attaching GDB to running processes - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Attaching GDB to running processes";
+    var mkdocs_page_input_path = "BugsAtRuntime/Debuggers/Gdb/gdb_attach.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../../finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Attaching GDB to running processes</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#enabling-process-tracing">Enabling process tracing</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#temporarily-enabling-process-tracing-for-non-root-users">Temporarily enabling process tracing for non-root users</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#permanently-enabling-process-tracing-for-non-root-users">Permanently enabling process tracing for non-root users</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#attach-gdb-to-a-running-application">Attach GDB to a running application</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#tracing-system-calls">Tracing system calls</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-files-does-my-application-use">What files does my application use?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-resources-does-my-application-use">What resources does my application use?</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Finding bugs at runtime &raquo;</li>
+        
+      
+    
+    <li>Attaching GDB to running processes</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="how-do-i-get-a-handle-on-a-running-program">How do I get a handle on a running program?</h1>
+<p>In some circumstance, you need information on what a running program is doing.  You can't or don't want to stop and relaunch it under control of a debugger.  No problem, GDB can actually attach to a running application.</p>
+<p>However, most modern Linux operating systems have hardened kernels, and by default, process tracing is not permitted.  The error message you would get when trying it would be similar to</p>
+<pre><code>ptrace: Operation not permitted
+</code></pre>
+<p>You will need root access to change the default behaviour, either temporarily or permanently.  The latter may be convenient, but perhaps not such a good idea from a security point of view.  Kernel hardening has been done for a reason.  A third alternative is to run the debugger as root, but I would strongly advise against that.</p>
+<h2 id="enabling-process-tracing">Enabling process tracing</h2>
+<h3 id="temporarily-enabling-process-tracing-for-non-root-users">Temporarily enabling process tracing for non-root users</h3>
+<p><em>As root</em> on an Ubuntu system, execute the following command</p>
+<pre><code class="bash"># echo 0 &gt; /proc/sys/kernel/yama/ptrace_scope
+</code></pre>
+
+<p>Process tracing will be allowed until the next reboot, or until you revert it manually by executing, again <em>as root</em></p>
+<pre><code class="bash"># echo 1 &gt; /proc/sys/kernel/yama/ptrace_scope
+</code></pre>
+
+<h3 id="permanently-enabling-process-tracing-for-non-root-users">Permanently enabling process tracing for non-root users</h3>
+<p>On Ubuntu, edit the file <code>/etc/sysctl.d/10-ptrace.conf</code>.  Its last line reads</p>
+<pre><code class="bash">kernel.yama.ptrace_scope = 1
+</code></pre>
+
+<p>This line should be changed to</p>
+<pre><code class="bash">kernel.yama.ptrace_scope = 0
+</code></pre>
+
+<p>Again, this may not be wise.</p>
+<h2 id="attach-gdb-to-a-running-application">Attach GDB to a running application</h2>
+<p>To attach the GDB debugger to a running application, you first need the application's process ID.  You can use the <code>top</code> command for that purpose.  The process ID for each process is displayed in the first column (PID).  Alternatively, you can use <code>pgrep</code>.  For instance, suppose the application you want to attach to is <code>infinite_loop.exe</code> (perhaps aptly named), you would get the process ID using</p>
+<pre><code class="bash">$ pgrep infinite_loop
+13661
+</code></pre>
+
+<p>The process ID will of course be different on your system, and vary from run to run.</p>
+<p>You can attach GDB as follows:</p>
+<pre><code class="bash">$ gdb ./infinite_loop.exe 13661
+</code></pre>
+
+<p>This will immediately halt the application, showing the statement that will be executed next.  You can now use GDB to explore the state of your application, printing variables, stepping, and so on.  When you quit the debugger, your application will continue to run.</p>
+<p>If you decide while debugging that there is no point for it to run, you can stop the application from within GDB by using the <code>kill</code> command.  You will be prompted for confirmation.</p>
+<h2 id="tracing-system-calls">Tracing system calls</h2>
+<p>The Linux command <code>strace</code> can be used to quickly get an idea of what is going on if your application seems to be stuck.  It will print a trace of the system calls done by the process, e.g., read/write operations or exec calls.</p>
+<p>Although this gives of course much less information than attaching a debugger, it can be useful nevertheless.  For instance, you can detect at a glance that the application is stuck in a read operation, so it might be waiting for a reply from a network operation.</p>
+<p>Using <code>strace</code> is straightforward, simply determine the process ID of the application you want to trace, and run <code>strace</code>, e.g.,</p>
+<pre><code class="bash">$ strace -p 13661
+</code></pre>
+
+<h2 id="what-files-does-my-application-use">What files does my application use?</h2>
+<p>Sometimes an application uses temporary files without you being aware of it, which may lead to interesting problems.  To determine which files are used by a running process, determine its process ID and run <code>lsof</code> (list open files).</p>
+<pre><code class="bash">$ lsof  -p 13661
+</code></pre>
+
+<p>For a dynamically linked application, this will also show the currently loaded shared object files.</p>
+<h2 id="what-resources-does-my-application-use">What resources does my application use?</h2>
+<p>To check the amount of memory an application currently has allocated, or the user time versus the system time, <code>prtstat</code> can be quite useful.  Again, determine the process ID of the running application, and use</p>
+<pre><code class="bash">$ prtstat 13661
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../gdb_reverse_debugging/" class="btn btn-neutral float-right" title="Reverse debugging with GDB">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../gdb_features/" class="btn btn-neutral" title="GDB Features"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../gdb_features/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../gdb_reverse_debugging/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../../..';</script>
+    <script src="../../../../js/theme.js" defer></script>
+      <script src="../../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Catch2 for C++ - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Catch2 for C++";
+    var mkdocs_page_input_path = "Testing/UnitTesting/catch2_cpp.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Catch2 for C++</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#the-basics">The basics</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#defining-the-tests">Defining the tests</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#setting-up-the-tests">Setting up the tests</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#building-and-running">Building and running</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#more-assertions">More assertions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#fixtures">Fixtures</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#behavior-driven-design-bdd">Behavior-driven design (BDD)</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Unit testing &raquo;</li>
+        
+      
+    
+    <li>Catch2 for C++</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="catch2-unit-testing-for-c">Catch2: unit testing for C++</h1>
+<p>Although you could use CUnit for testing C++ code, there are better alternatives.  A very nice framework is <a href="https://github.com/catchorg/Catch2">Catch2</a>.  You can express tests quite naturally using Catch2 so that they resemble a narrative.</p>
+<p>The framework takes a further step along that path by offering support for <a href="https://en.wikipedia.org/wiki/Behavior-driven_development">Behaviour Driven Development</a> (BDD).</p>
+<p>Catch2 is a header-only library, so it is trivial to install, and has support for CMake if you're so inclined.</p>
+<h2 id="the-basics">The basics</h2>
+<p>The function under test computes the factorial of a given integer, i.e.,</p>
+<pre><code class="cpp">#include &lt;stdexcept&gt;
+
+int fac(int n) {
+    if (n &lt; 0)
+        throw std::domain_error {&quot;argument must be positive&quot;};
+    int result {1};
+    for (int i = 2; i &lt; n; ++i)
+        result *= i;
+    return result;
+}
+</code></pre>
+
+<h3 id="defining-the-tests">Defining the tests</h3>
+<p>Defining tests for Catch2 is quite straightforward using the <code>TEST_CASE</code> macro.  It takes one or two arguments, the name of the test that has to be unique, and, optionally, a tag that is used to group tests. In the example below, <code>"factorials"</code> is the name of this test, while <code>"[fac]"</code> is the tag.</p>
+<pre><code class="cpp">#include &lt;catch/catch.hpp&gt;
+
+TEST_CASE(&quot;factorials&quot;, &quot;[fac]&quot;) {
+    REQUIRE( fac(0) == 1 );
+    REQUIRE( fac(3) == 6 );
+}
+</code></pre>
+
+<p>The code block implements the test, using the <code>REQUIRE</code> macro relying on C++ Boolean expressions to implement the tests.  Note that the Boolean expressions should be limited to comparison or a function call. Expressions that include logical operators <code>&amp;&amp;</code>, <code>||</code> and <code>!</code> are too hard to provide meaningful feedback when a test fails.</p>
+<h3 id="setting-up-the-tests">Setting up the tests</h3>
+<p>Setting up the tests is trivial in Catch2.  You simply have to define a preprocessor variable in a C++ file, i.e.,</p>
+<pre><code class="cpp">#define CATCH_CONFIG_MAIN
+#include &lt;catch/catch.hpp&gt;
+</code></pre>
+
+<p>The main function will be generated automatically.  However, that will take the preprocessor/compiler a while, so it is recommended to put the lines above inn their own C++ source file.  That way, the code is generated and compiled only once, and not each time you add or make a change to a test.  Believe me, you will be grateful for this tip.</p>
+<h3 id="building-and-running">Building and running</h3>
+<p>The build the tests, the compiler needs to be aware of the location of the Catch2 header files, so you have to specify the appropriate <code>-I</code> flag.  The most convenient way is to use the single include file which is in the <code>single_include</code> directory of the distribution.</p>
+<pre><code>~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+test_fac.exe is a Catch v2.5.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+factorials
+-------------------------------------------------------------------------------
+test_fac.cpp:6
+...............................................................................
+
+test_fac.cpp:8: FAILED:
+  REQUIRE( fac(3) == 6 )
+with expansion:
+  2 == 6
+
+===============================================================================
+test cases: 1 | 1 failed
+assertions: 2 | 1 passed | 1 failed
+</code></pre>
+
+<p>The report is quite comprehensive, showing you the computed versus the expected value for the test(s) that failed, as well as summary information.  In this case, the single test case failed, while of the two assertions, one failed, and one passed.</p>
+<p>The <code>fac</code> function needs some work.</p>
+<h2 id="more-assertions">More assertions</h2>
+<p>Although <code>REQUIRE</code> is Catch2's main work horse, a few other macros and features are very useful as well.  As was mentioned when discussing best practices, it is important to test for failure, and with Catch2, the <code>REQUIRE_THROWS_AS</code> can be used for this purpose.  In the example above, the <code>fac</code> function will throw a <code>domain_error</code> exception when its argument is strictly negative, since the factorial is only defined for positive integers.  Testing for this is straightforward.</p>
+<pre><code class="cpp">#include &lt;stdexcept&gt;
+    ...
+    REQUIRE_THROWS_AS( fac(-1), std::domain_error );
+    ...
+</code></pre>
+
+<p>To test on the exception's message, rather than its type, <code>REQUIRE_THROWS</code> can be used, e.g.,</p>
+<pre><code class="cpp">    ...
+    REQUIRE_THROWS_WITH( fac(-1), &quot;argument must be positive&quot; );
+    ...
+</code></pre>
+
+<p>This form is useful to test non-trivial exception messages.</p>
+<p>Finally, it is also possible to verify that an exception is thrown (<code>REQUIRE_THROWS</code>) or not (<code>REQUIRE_NOTHROW</code>).</p>
+<p>Catch2 has no dedicated macro for testing floating point equality, but the <code>Approx</code> class is provided for this purpose.  It has two methods to set either the relative (<code>epsilon</code>) or absolute (<code>margin</code>) accuracy of the comparison.  For instance, suppose that the function <code>compute_pi</code>, well, computes the value of pi, then it could be tested whether the result deviates from 3.14 by less than one percent as follows:</p>
+<pre><code class="cpp">    REQUIRE( compute_pi() == Approx.epsilong(0.01) );
+</code></pre>
+
+<p>Alternatively, the following test would check whether the computed value is in the interval [3.13, 3.15]:</p>
+<pre><code class="cpp">    REQUIRE( compute_pi() == Approx.magrin(0.01) );
+</code></pre>
+
+<p>Another quite useful macro is <code>REQUIRE_THAT</code>.  It takes two arguments, the computed value and a matcher.  To check whether a string matches a regular expression, the <code>Catch::Matchers::Matches</code> matcher can be used, e.g., suppose the function <code>gen_ip4_address</code> returns strings such as <code>"127.0.0.</code>"<code>to represent IP4 addresses, than the following</code>REQUIRE_THAT` macro would verify that.</p>
+<pre><code class="cpp">    using Catch::Matchers::Matches;
+    ...
+    REQUIRE_THAT( gen_ip4_address(),
+                  Matches(R&quot;(^\d{1,3}(?:\.\d{1,3}){3}$)&quot;) );
+    ...
+</code></pre>
+
+<p>Besides the <code>Matches</code> matcher, Catch2 also defines <code>StartsWith</code>, <code>EndsWith</code>, <code>Equals</code> and <code>Contains</code> for <code>std::string</code>.  For <code>std::vector</code>, three matchers are defined, <code>Contains</code>, <code>ContainsVector</code> (subset) and <code>Equals</code>.  Moreover, a generic <code>Predicate</code> matcher can be used to turn a lambda function (or any callable for that matter into a matcher.</p>
+<p>Note that matchers can be combined into Boolean expressions involving the operators <code>&amp;&amp;</code>, <code>||</code> and <code>!</code>.</p>
+<p>Finally, a second version for each  <code>REQUIRE</code> macro is defined, e.g., <code>CHECK</code>, <code>CHECK_THAT</code>, etc.  Unlike the <code>REQUIRE</code> family, execution of the test case doesn't stop when a <code>CHECK</code> fails.</p>
+<h2 id="fixtures">Fixtures</h2>
+<p>Fixtures for Catch2 tests are implemented as classes.  The constructor will do the set up and, if required, the destructor is responsible for the tear down.</p>
+<p><code>TEST_CASE_METHOD</code> is used to define test cases.  This macro takes two or three arguments.  The first is the class that implements the fixture, the second is the unique name of the test case, and, optionally, the third is the tag.</p>
+<p>As a somewhat contrived example, consider a stack that is initialized, and integer values are pushed onto it, starting from 0 up to <code>max_value</code>.</p>
+<pre><code class="cpp">#include &lt;stack&gt;
+
+class VectorFixture {
+    protected:
+        std::stack&lt;int&gt; data;
+        const int max_value {5};
+    public:
+        VectorFixture() : data() {
+            for (int i = 1; i &lt;= max_value; ++i)
+                data.push(i);
+        };
+};
+</code></pre>
+
+<p>Now tests that use this fixture can be defined as <code>TEST_CASE_METHOD</code>, e.g.,</p>
+<pre><code class="cpp">#include &lt;catch2/catch.hpp&gt;
+
+TEST_CASE_METHOD(VectorFixture, &quot;sum&quot;, &quot;[stack]&quot;) {
+    int sum {0};
+    while (!data.empty()) {
+        sum += data.top();
+        data.pop();
+    }
+    REQUIRE( sum == max_value*(max_value + 1)/2 );
+}
+
+TEST_CASE_METHOD(VectorFixture, &quot;product&quot;, &quot;[stack]&quot;) {
+    int prod {1};
+    while (!data.empty()) {
+        prod *= data.top();
+        data.pop();
+    }
+    REQUIRE( prod == fac(max_value) );
+}
+</code></pre>
+
+<p>As you can see, for each test case, the stack in the fixtures is emptied, illustrating that the fixture is set up (and teared down) for each individual test case.</p>
+<p>Alternatively, you can also define the test cases as ordinary object methods in for the fixture class, and register them as such using the <code>METHOD_AS_TEST_CASE</code> macro.</p>
+<h2 id="behavior-driven-design-bdd">Behavior-driven design (BDD)</h2>
+<p>Catch2 also supports a behavior-driven design approach to testing, and in fact, according to the library's author, this is the preferred way to handle fixtures.
+The tests for the factorial function can be implemented as a scenario, i.e.,</p>
+<pre><code class="cpp">#include &lt;catch2/catch.hpp&gt;
+#include &lt;stdexcept&gt;
+
+SCENARIO( &quot;factorial function return values and exceptions&quot;, &quot;[fac]&quot; ) {
+    GIVEN( &quot;factorial function 'fac'&quot; ) {
+        WHEN( &quot;argument == 0&quot; ) {
+            THEN( &quot;fac(0) == 1&quot; ) {
+                REQUIRE( fac(0) == 1 );
+            }
+        }
+        WHEN( &quot;argument &gt; 0&quot; ) {
+            THEN( &quot;fac(n) == n*fac(n-1)&quot; ) {
+                for (int i = 1; i &lt; 6; i++)
+                    REQUIRE( fac(i) == i*fac(i - 1) );
+            }
+        }
+        WHEN( &quot;argument &lt; 0&quot; ) {
+            THEN( &quot;exception thrown&quot; ) {
+                REQUIRE_THROWS_AS( fac(-1), std::domain_error );
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>When the resulting test application is run with the <code>-s</code> option, it will show the following output.</p>
+<pre><code>test_fac.exe is a Catch v2.5.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Scenario: factorial function return values and exceptions
+      Given: factorial function 'fac'
+       When: argument == 0
+       Then: fac(0) == 1
+-------------------------------------------------------------------------------
+test_fac.cpp:9
+...............................................................................
+
+test_fac.cpp:10: PASSED:
+  REQUIRE( fac(0) == 1 )
+with expansion:
+  1 == 1
+
+-------------------------------------------------------------------------------
+Scenario: factorial function return values and exceptions
+      Given: factorial function 'fac'
+       When: argument &gt; 0
+       Then: fac(n) == n*fac(n-1)
+-------------------------------------------------------------------------------
+test_fac.cpp:14
+...............................................................................
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  1 == 1
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  2 == 2
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  6 == 6
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  24 == 24
+
+test_fac.cpp:16: PASSED:
+  REQUIRE( fac(i) == i*fac(i - 1) )
+with expansion:
+  120 == 120
+
+-------------------------------------------------------------------------------
+Scenario: factorial function return values and exceptions
+      Given: factorial function 'fac'
+       When: argument &lt; 0
+       Then: exception thrown
+-------------------------------------------------------------------------------
+test_fac.cpp:20
+...............................................................................
+
+test_fac.cpp:21: PASSED:
+  REQUIRE_THROWS_AS( fac(-1), std::domain_error )
+
+===============================================================================
+All tests passed (7 assertions in 1 test case)
+</code></pre>
+
+<p>To illustrate how BDD simplifies creating and working with fixtures, consider the following implementation of the same tests as in the section on fixtures.</p>
+<pre><code class="cpp">#define CATCH_CONFIG_MAIN
+#include &lt;catch2/catch.hpp&gt;
+#include &lt;stack&gt;
+
+int fac(int n) {
+    int result = 1;
+    for (int i = 2; i &lt;= n; ++i)
+        result *= i;
+    return result;
+}
+
+SCENARIO( &quot;stack test&quot;, &quot;[stack]&quot; ) {
+    GIVEN( &quot;stack with numbers 1 to 5&quot; ) {
+        const int max_val {5};
+        std::stack&lt;int&gt; data;
+        for (int i = 1; i &lt;= max_val; ++i)
+            data.push(i);
+        WHEN( &quot;computing sum&quot; ) {
+            int sum {0};
+            while (!data.empty()) {
+                sum += data.top();
+                data.pop();
+            }
+            THEN( &quot;sum == 5*6/2&quot; ) {
+                REQUIRE( sum == max_val*(max_val + 1)/2 );
+            }
+        }
+        WHEN( &quot;computing product&quot; ) {
+            int prod {1};
+            while (!data.empty()) {
+                prod *= data.top();
+                data.pop();
+            }
+            THEN( &quot;product == 5!&quot; ) {
+                REQUIRE( prod == fac(max_val) );
+            }
+        }
+    }
+}
+</code></pre>
+
+<p>When the test application is run with the <code>-s</code> flag, the following output is produced.</p>
+<pre><code>stack_test.exe is a Catch v2.5.0 host application.
+Run with -? for options
+
+-------------------------------------------------------------------------------
+Scenario: stack test
+      Given: stack with numbers 1 to 5
+       When: computing sum
+       Then: sum == 5*6/2
+-------------------------------------------------------------------------------
+stack_test.cpp:19
+...............................................................................
+
+stack_test.cpp:25: PASSED:
+  REQUIRE( sum == max_val*(max_val + 1)/2 )
+with expansion:
+  15 == 15
+
+-------------------------------------------------------------------------------
+Scenario: stack test
+      Given: stack with numbers 1 to 5
+       When: computing product
+       Then: product == 5!
+-------------------------------------------------------------------------------
+stack_test.cpp:29
+...............................................................................
+
+stack_test.cpp:35: PASSED:
+  REQUIRE( prod == fac(max_val) )
+with expansion:
+  120 == 120
+
+===============================================================================
+All tests passed (2 assertions in 1 test case)
+</code></pre>
+
+<p>The code in the <code>GIVEN</code> section of the code is executed before each <code>WHEN</code> case.  Arguably, this is a very nice style of formulating tests.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../FunctionalTesting/functional_testing_intro/" class="btn btn-neutral float-right" title="Introduction">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../cunit_c/" class="btn btn-neutral" title="CUnit for C"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../cunit_c/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../FunctionalTesting/functional_testing_intro/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

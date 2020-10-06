@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Data races & deadlocks - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Data races & deadlocks";
+    var mkdocs_page_input_path = "Taxonomy/data_races_deadlocks.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Data races & deadlocks</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#data-races">Data races</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#formal-definition">Formal definition</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#data-races-in-openmp-and-mpi">Data races in OpenMP and MPI</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#deadlocks">Deadlocks</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#formal-definition_1">Formal definition</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#example-web-shopping">Example: web shopping</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#deadlocks-in-openmp-and-mpi">Deadlocks in OpenMP and MPI</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Taxonomy of bugs &raquo;</li>
+        
+      
+    
+    <li>Data races & deadlocks</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="data-races-and-deadlocks">Data races and deadlocks</h1>
+<p>Data races and deadlocks are bugs that occur only in the context of parallel programming.</p>
+<h2 id="data-races">Data races</h2>
+<p>Data races can lead to incorrect results of computations.  Potentially, this type of bug is subtle, and may go unnoticed for a long time.</p>
+<h3 id="formal-definition">Formal definition</h3>
+<p>Formally, a data race will occur when two or more threads</p>
+<ol>
+<li>access the same memory location concurrently;</li>
+<li>at least one thread accesses that memory location for writing; and</li>
+<li>no implicit or explicit locks are used to control access.</li>
+</ol>
+<h3 id="data-races-in-openmp-and-mpi">Data races in OpenMP and MPI</h3>
+<p>Both OpenMP and MPI applications may be susceptible to this type of bug.</p>
+<p>For OpenMP, there are several ways to introduce a data race, e.g.,</p>
+<ul>
+<li>a variable that should be thread-private is shared;</li>
+<li>a shared variable is used for a reduction operation, but neither a <code>reduction</code> clause, a <code>critical</code> or an <code>atomic</code> directive is used to guarantee atomic updates.</li>
+<li>an inappropriate <code>nowait</code> clause on a workshare directive.</li>
+</ul>
+<p>In MPI application, data races can be caused by, e.g.,</p>
+<ul>
+<li>reusing a communication buffer before that was save, e.g., asynchronous point-to-point communication or collectives;</li>
+<li>inappropriately or missing active target synchronisation when using one-sided communication;</li>
+<li>inappropriate or missing fences for passive target synchronisation when using one-sided communication;</li>
+<li>shared memory operations without proper synchronisation.</li>
+</ul>
+<p>Data races in multi-threaded application can be detected using Valgrind or Intel Inspector.  For OpenMP, only the latter will work out of the box.</p>
+<h2 id="deadlocks">Deadlocks</h2>
+<p>Informally, a deadlock occurs in a concurrent system when each process is waiting for some other process to take action.</p>
+<h3 id="formal-definition_1">Formal definition</h3>
+<p>Formally, a deadlock situation occurs when all the following four conditions are met:</p>
+<ol>
+<li>Mutual exclusion: At least one resource must be held in a non-shareable mode. Otherwise, the processes would not be prevented from using the resource when necessary. Only one process can use the resource at any given instant of time.</li>
+<li>Hold and wait or resource holding: a process is currently holding at least one resource and requesting additional resources which are being held by other processes.</li>
+<li>No preemption: a resource can be released only voluntarily by the process holding it.</li>
+<li>Circular wait: each process must be waiting for a resource which is being held by another process, which in turn is waiting for the first process to release the resource. In general, there is a set of waiting processes, P = {P1, P2, ..., PN}, such that P1 is waiting for a resource held by P2, P2 is waiting for a resource held by P3 and so on until PN is waiting for a resource held by P1.</li>
+</ol>
+<p>These are known as the Coffman conditions.</p>
+<h3 id="example-web-shopping">Example: web shopping</h3>
+<p>As an example, consider Alice and Bob using an online shopping application.  Both are a fan of the obscure author Justin Aane who wrote the novel "Pride", and its sequel "Prejudice".  The web shop has only one copy of each left in stock.  Alice adds "Pride" to her shopping basket, while Bob adds "Prejudice" to his.  Now Alice would would like to add "Prejudice", while Bob would like to add "Pride".  However, both see that the books are no longer in stock.  They decide to keep the novel they already put in their shopping basket, and to wait until the missing book is back in stock to make the purchase.  However, both "Pride" and "Prejudice" are out print, and Alice and Bob find themselves in a deadlock situation.</p>
+<p>Formally, the books are the resources and our protagonists, Alice and Bob the processes. A resource (book) is held by a process (person) when it is in that persons shopping basket.</p>
+<ol>
+<li>Since there is just a single copy of each book, having one in a shopping basket is mutually exclusive: either Alice or Bob can have it in their respective basket, but not both simultaneously.  (Condition 1: mutual exclusion)</li>
+<li>Both Alice and Bob hold on to the content of their shopping basket, while waiting to add the missing volume. (Condition 2: hold and wait)</li>
+<li>Bob can't make Alice remove her "Pride" from her shopping basket, and Alice has no influence over Bob's basket either. (Condition 3: no preemption)</li>
+<li>Alice is waiting for "Prejudice", held by Bob, who is in turn waiting for "Pride", held by Alice. (Condition 4: circular wait)</li>
+</ol>
+<h3 id="deadlocks-in-openmp-and-mpi">Deadlocks in OpenMP and MPI</h3>
+<p>For OpenMP application, deadlocks will not occur, unless you are careless when using explicit lock functions from its runtime library.</p>
+<p>In MPI applications, there are several ways to create a deadlock, e.g.,</p>
+<ul>
+<li>both partners in point-to-point communication do a blocking synchronous send (<code>MPI_Ssend</code>, or an <code>MPI_Send</code> that does an <code>MPI_Ssend</code>);</li>
+<li>not all processes in a communicator participate in a collective communication operation;</li>
+<li>active target synchronisation for one-sided communication is implemented incorrectly (<code>MPI_Win_post</code>/<code>MPI_Win_start</code>/<code>MPI_Win_complete</code>/<code>MPI_Win_wait</code>).</li>
+</ul>
+<p>Deadlocks in multi-threaded application can be detected using Valgrind or Intel Inspector.  For OpenMP, only the latter will work out of the box.</p>
+<p>Deadlocks in MPI applications can be diagnosed by Intel Trace Analyzer and Collector (ITAC) or MUST.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../data_bugs/" class="btn btn-neutral float-right" title="Bugs in data">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../arithmetic_bugs/" class="btn btn-neutral" title="Arithmetic bugs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../arithmetic_bugs/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../data_bugs/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

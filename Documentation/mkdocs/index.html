@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>MkDocs for application documentation - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "MkDocs for application documentation";
+    var mkdocs_page_input_path = "Documentation/mkdocs.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">MkDocs for application documentation</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#initialisation">initialisation</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#configuration-file">Configuration file</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#documentation-pages-markdown">Documentation pages: MarkDown</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#rendering-documentation">Rendering documentation</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Documentation &raquo;</li>
+        
+      
+    
+    <li>MkDocs for application documentation</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="mkdocs">MkDocs</h1>
+<p><a href="https://www.mkdocs.org/">MkDocs</a> complements Doxygen nicely, since it is very useful for tutorial-style documentation.  The format is MarkDown, a very simple text mark-up format that is ubiquitous nowadays.  It is used in many online tools such as blogging software, but also in development tools such as GitHub and Jupyter notebooks.</p>
+<h2 id="initialisation">initialisation</h2>
+<p>Suppose we have a project in a directory <code>my_project</code> that has a source directory and some files.  Initially, the directory looks like this.</p>
+<pre><code>my_project/
+└── src
+    ├── bye.c
+    ├── hello.c
+    └── Makefile
+</code></pre>
+
+<p>When you want to start to document this project, you can set it up using MkDocs' <code>new</code> command, e.g.,</p>
+<pre><code class="bash">$ mkdocs new my_project
+</code></pre>
+
+<p>The directory will now look as follows:</p>
+<pre><code>my_project/
+├── docs
+│   └── index.md
+├── mkdocs.yml
+└── src
+    ├── bye.c
+    ├── hello.c
+    └── Makefile
+</code></pre>
+
+<p>A configuration file <code>mkdocs.yml</code> has been created, as well as a <code>docs</code> directory that will contain the MarkDown pages with the documentation, and an <code>index.md</code> file in that directory that serves as the entry point into your documentation.</p>
+<h2 id="configuration-file">Configuration file</h2>
+<p>The configuration file is in YAML format, and initially looks as follows:</p>
+<pre><code>site_name: My Docs
+</code></pre>
+
+<p>This will have to be customised to your requirements.  The site name can be changed to, e.g., the name of your project.  Several other meta-data items can be added, e.g.,</p>
+<pre><code>site_name: my_project documentation
+site_description: this is a project that implements some brilliant software.
+site_author: Geert Jan Bex
+theme: readthedocs
+</code></pre>
+
+<p>You also have to specify where to create the documentation, e.g., in a subdirectory <code>html_docs</code> of <code>my_project</code> directory.</p>
+<pre><code>site_name: my_project documentation
+site_description: this is a project that implements some brilliant software.
+site_author: Geert Jan Bex
+theme: readthedocs
+site_dir: html_docs/worker
+</code></pre>
+
+<p>Lastly, you can specify the titles of the pages of your documentation, and the MarkDown files.</p>
+<pre><code>site_name: my_project documentation
+site_description: this is a project that implements some brilliant software.
+site_author: Geert Jan Bex
+theme: readthedocs
+site_dir: html_docs/worker
+pages:
+- Introduction and motivation: 'index.md'
+- Step by step: 'steps.md'
+</code></pre>
+
+<p>Of course the <code>index.md</code> file should be edited, and the <code>steps.md</code> file created.</p>
+<h2 id="documentation-pages-markdown">Documentation pages: MarkDown</h2>
+<p>Individual pages are written as MarkDown text.  Below is an example for <code>steps.md</code>.</p>
+<pre><code class="markdown">  ## High-level description
+  This project supports a workflow in several steps.
+
+    1. First you say hello,
+    1. then you say bye.
+
+  ## Usage
+  There are two applications to achieve this, `hello` and `bye` respectively.  You can call `hello` as
+
+  ```bash
+  $ hello gjb
+  ```
+  Here, `gjb` is the name of the person you want to say hello to.
+
+  _Caution:_ if you use a name that doesn't exists, you will get an error.
+</code></pre>
+
+<p>As you can see, it is almost a normal text, with some special annotation to define style elements. For instance,
+  * <code># Heading 1</code>
+  * <code>## Heading 2</code>
+  * <code>### Heading 3</code>
+  * …
+produce headings at various levels. Unordered lists can be created by using a two-spaced indentation, followed by <code>*</code> for each item, e.g.,</p>
+<pre><code>  * First item
+  * Second item
+</code></pre>
+
+<p>Similarly, an ordered list can be created as follows,</p>
+<pre><code>  1. First item
+  1. Second item
+</code></pre>
+
+<p>Note that the numbering is automatically done for you, so reordering items is no issue.</p>
+<p>Text can have styles such as
+  * <em>emphasized</em>: <code>_emphasized_</code>
+  * <strong>bold</strong>: <code>__bold__</code>
+  * ~~strike-through~~: <code>~~strike-through~~</code>
+  * <code>code</code>: <code></code>code<code></code></p>
+<p>Code snippets can be rendered with syntax highlighting as</p>
+<pre><code>  ```fortran
+  IF (a &lt; b) THEN
+      a = a - b
+  END IF
+  ```
+</code></pre>
+
+<p>Hyperlinks can be added as <code>[text](url)</code>.</p>
+<p>Incidentally, this text has been written in MarkDown as well.</p>
+<h2 id="rendering-documentation">Rendering documentation</h2>
+<p>Once you are done, you can build the documentation by executing</p>
+<pre><code class="bash">$ mkdocs build
+</code></pre>
+
+<p>A very nice feature of MkDocs is that it can offer a live preview of your work in progress, which will shorten your turn-around time while writing documentation.  It contains a web server that runs locally, and that you can point your browser to.</p>
+<pre><code class="bash">$ mkdocs serve
+INFO    -  Building documentation...
+[I 180820 14:52:04 server:271] Serving on http://127.0.0.1:8000
+[I 180820 14:52:04 handlers:58] Start watching changes
+</code></pre>
+
+<p>You can view the documentation by entering the URL <code>http://127.0.0.1:8000</code> in your web browser.  When you edit the documentation, the pages in your web browser are automatically updated.</p>
+<p>The main page of MkDocs generated <a href="https://atools.readthedocs.io/en/latest/">documentation for atools</a> looks like this.</p>
+<p><img alt="MkDocs generated index page" src="../mkdocs.png" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../Testing/UnitTesting/unit_testing_intro/" class="btn btn-neutral float-right" title="Introduction">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../documentation_best_practices/" class="btn btn-neutral" title="Best practices"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../documentation_best_practices/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../Testing/UnitTesting/unit_testing_intro/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

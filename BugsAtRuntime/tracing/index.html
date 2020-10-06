@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Tracing applications - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Tracing applications";
+    var mkdocs_page_input_path = "BugsAtRuntime/tracing.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Tracing applications</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#display-values">Display values</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#commands-at-breakpoints">Commands at breakpoints</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#dynamic-print">Dynamic print</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#watching-for-change">Watching for change</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#hardware-watch-points">Hardware watch points</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Finding bugs at runtime &raquo;</li>
+        
+      
+    
+    <li>Tracing applications</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="what-is-changing">What is changing?</h1>
+<p>When you observe programmers that are not familiar with debuggers, you'll often see them insert print statement to monitor how the value of a variable changes over time.</p>
+<p>This pollutes the source code, and you'll certainly forget to take out some print statements when you are done debugging. A debugger offers multiple ways to achieve a similar result without the hassle.</p>
+<h2 id="display-values">Display values</h2>
+<p>Often, you want to inspect a value each time the debugger halts at a breakpoint.  This can easily be achieved using the command <code>display</code>.  The argument to display is an expression that will be evaluated and displayed each time the application hits a breakpoint.</p>
+<p>A trivial example would be to simply show the value of a variable, consider, e.g.,</p>
+<pre><code class="fortran">real :: total
+integer :: i
+...
+total = 0.0
+do i = 0, max_pow
+   total = total + 10.0**i
+end do
+</code></pre>
+
+<p>When you set a breakpoint in the do-loop, so at the statement that increments <code>total</code>, and run till you hit that breakpoint, you can display the values of <code>i</code> and <code>total</code>.</p>
+<pre><code>(gdb) display i
+1: i = 0
+(gdb) display total
+2: total = 0
+</code></pre>
+<p>Now when you resume execution and hit a breakpoint, the values of <code>i</code> and <code>total</code> will be displayed, i.e.,</p>
+<pre><code>(gdb) c
+Continuing.
+
+Breakpoint 1, display_demo () at display_demo.f90:9
+9           total = total + 10.0**i
+1: i = 1
+2: total = 1
+</code></pre>
+<p>You can get an overview of all displays in your debug session using <code>info display</code>, i.e.,</p>
+<pre><code>(gdb) i display
+Auto-display expressions now in effect:
+Num Enb Expression
+1:   y  i
+2:   y  total
+</code></pre>
+<p>As with breakpoints, displays have a numerical identifier that you can use to enable or disable them, delete them, and so on, e.g.,</p>
+<pre><code>(gdb) d display 1
+</code></pre>
+<p>Although this can be useful, GDB offers more powerful options.</p>
+<h2 id="commands-at-breakpoints">Commands at breakpoints</h2>
+<p>This feature actually exceeds tracing, it can be used for other purposes as well.  The <code>command</code> command allows to specify action to be taken when a breakpoint is hit.  Here, you will see how to use it to trace the value of variables as your code executes.</p>
+<p>First you set a breakpoint, next you add the command to be executed, i.e.,</p>
+<pre><code>(gdb) b 9
+Breakpoint 1 at 0x5555555548a3: file display_demo.f90, line 9.
+(gdb) commands
+Type commands for breakpoint(s) 2, one per line.
+End with a line saying just "end".
+&gt;silent
+&gt;printf "i = %d, total = %f\n", i, total
+&gt;continue
+&gt;end
+</code></pre>
+<p>The <code>silent</code> command suppresses the usual output that is displayed when the application hits a breakpoint.  In this case, you use it because you just want to display variable values as the code executes.</p>
+<p>The <code>printf</code> command is quite similar to the Bash <code>printf</code> built-in.  Its first argument is a formatting string, the following arguments are the expressions to display the values for.  Don't forget to add the newline character <code>\n</code> to get readable output.  Some format specifiers you can use are</p>
+<ul>
+<li><code>%f</code>: floating point number;</li>
+<li><code>%d</code>, <code>%x</code>: signed integer in decimal, and hexadecimal, respectively;</li>
+<li><code>%s</code>, <code>%c</code>: string and character, respectively.</li>
+</ul>
+<p>The <code>continue</code> command ensures that the application will resume execution.</p>
+<p>When you execute the application, you would see output similar to the following for our running example,</p>
+<pre><code>(gdb) r
+Starting program: /home/gjb/Documents/Projects/training-material/Debugging/Gdb/Fortran/Tree/display_demo.exe
+i = 0, total = 0.000000
+i = 1, total = 1.000000
+i = 2, total = 11.000000
+i = 3, total = 111.000000
+i = 4, total = 1111.000000
+i = 5, total = 11111.000000
+i = 6, total = 111111.000000
+i = 7, total = 1111111.000000
+i = 8, total = 11111111.000000
+i = 9, total = 111111112.000000
+i = 10, total = 1111111168.000000
+</code></pre>
+<h2 id="dynamic-print">Dynamic print</h2>
+<p>As mentioned, <code>command</code> has more applications than simple tracing, and frankly, it is an overkill for that purpose thanks to GDB's dynamic print command <code>dprintf</code>.</p>
+<p>As its first argument this command takes a location, at which it should be executed each time that location is reached during the execution.  This is convenient, since no breakpoint has to be set.  The format string is the same as for the <code>printf</code> command.</p>
+<p>For our running example,</p>
+<pre><code>(gdb) dprintf 9, "i = %d, total = %f\n", i, total
+Dprintf 1 at 0x5555555548a3: file display_demo.f90, line 9.
+(gdb) r
+Starting program: /home/gjb/Documents/Projects/training-material/Debugging/Gdb/Fortran/Tree/display_demo.exe
+i = 0, total = 0.000000
+i = 1, total = 1.000000
+i = 2, total = 11.000000
+i = 3, total = 111.000000
+i = 4, total = 1111.000000
+i = 5, total = 11111.000000
+i = 6, total = 111111.000000
+i = 7, total = 1111111.000000
+i = 8, total = 11111111.000000
+i = 9, total = 111111112.000000
+i = 10, total = 1111111168.000000
+</code></pre>
+<p>As you can see, the same output is generated as the one you got by using <code>command</code>, with a lot less effort.</p>
+<h2 id="watching-for-change">Watching for change</h2>
+<p>Although tracing can be useful, it can be fairly cumbersome when not much changes over time.  It would be more useful to only display values that change.  Consider the following straightforward code sample.</p>
+<pre><code class="fortran">integer :: i, j
+integer, dimension(rows, cols) :: values
+character(len=32) :: fmt_str
+...
+do j = 1, cols
+    do i  = 1, rows
+        values(i, j) = (i - 1)*cols + j
+    end do
+end do
+</code></pre>
+
+<p>You want to monitor changes on the outer do-loop variable <code>j</code>.  When that variable changes, you want to see the value of <code>i</code>, as well as the new and old value of <code>j</code>.</p>
+<p>This can easily be achieved by combining a number of concepts you already know.  We define a GDB variable <code>$current_j</code> to keep track of the current value of the Fortran variable <code>j</code>.  We set a conditional breakpoint in the inner do-loop, so that execution will only halt when <code>j</code> is not equal to <code>$current_j</code>, and we attach commands to that breakpoint.</p>
+<pre><code>(gdb) set $current_j = 0
+(gdb) b 10 if j .ne. $current_j
+Breakpoint 1 at 0x8ef: file watch.f90, line 10.
+(gdb) commands
+Type commands for breakpoint(s) 1, one per line.
+End with a line saying just "end".
+&gt;silent
+&gt;printf "i = %d, j = %d, old j = %d\n", i, j, $current_j
+&gt;set $current_j = j
+&gt;continue
+&gt;end
+(gdb) r
+i = 1, j = 1, old j = 0
+i = 1, j = 2, old j = 1
+i = 1, j = 3, old j = 2
+i = 1, j = 4, old j = 3
+</code></pre>
+<h2 id="hardware-watch-points">Hardware watch points</h2>
+<p>As you saw in the video, hardware watch points can be very useful to pinpoint suspicious memory access patterns.  Typically, there are situations when the value of a variable or a data structure is modified, but you don't know where in the code that might happen.</p>
+<p>Consider the following situation.  The application computes the evolution of the temperature of a rectangular flat surface represented as a 2D array.  The boundaries of the surface have a constant temperature throughout the computation.  The 2D matrix is initialised such that its first and last row, and its first and last column are set to the boundary temperature (<code>init_temp</code>).  In each time step, the temperature at each interior point of the 2D array is updated by taking into account the temperatures of its neighbours (<code>update_temp</code>).  In addition, with a given probability, an interior point of the 2D array is set to a random value (<code>perturb_temp</code>).</p>
+<pre><code class="fortran">real, dimension(x_max, y_max) :: temp
+real :: boundary, prob
+integer :: t
+...
+call init_temp(temp, boundary)
+call show_temp(temp)
+do t = 1, t_max
+    call update_temp(temp)
+    call perturb_temp(temp, prob)
+end do
+call show_temp(temp)
+</code></pre>
+
+<p>When you run the application, you notice that some values on the boundary have changed, and that shouldn't happen according to the design of the program.  There must be a bug.</p>
+<p>This is a toy example, but you can easily imagine a similar, but vastly more complicated setting. You could set breakpoints in the do-loop, but to identify the culprit you have to check for change after each procedure call, which is tedious and error prone.</p>
+<p>It is much easier and faster to just set a watch point on a boundary, so that the application will halt as soon as that it is modified.  So first set a breakpoint after the initialisation of <code>temp</code> is done, run the application, set a watch point, and continue.</p>
+<pre><code>(gdb) b 9
+(gdb) r
+(gdb) watch temp(1, 1)@x_max
+Hardware watchpoint 2: temp(1, 1)@x_max
+(gdb) c
+Continuing.
+
+Hardware watchpoint 2: temp(1, 1)@x_max
+
+Old value = (0, 0, 0, 0)
+New value = (0, 0, 0.101466358, 0)
+perturb_temp (temp=..., prob=0.699999988) at watch_point.f90:62
+62            end if
+</code></pre>
+<p>Presto!  The boundary is inadvertently modified by the procedure <code>perturb_temp</code>.  Now you can concentrate on that procedure to pinpoint the exact problem in the algorithm.</p>
+<p>Contrary to appearances, he <code>watch</code> command doesn't actually monitor the value of variables, but rather the value stored in the memory the variable refers to.  This explains why it is called a "hardware watch point".  Watch points come in a few flavours:</p>
+<ul>
+<li><code>watch</code>: break when the value is modified;</li>
+<li><code>rwatch</code>: break when the value is read;</li>
+<li><code>awatch</code>: break when the values is read or modified.</li>
+</ul>
+<p>As you would expect, <code>info watchpoints</code> will list the watch points in your current debug session.  Watch points will also be shown when you use <code>info breakpoints</code>, and you can manage them in the exact same way, e.g., disabling/enabling, deleting, and so on.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../Debuggers/ArmDdt/arm_ddt/" class="btn btn-neutral float-right" title="Arm DDT parallel debugger">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../Debuggers/Gdb/gdb_omp_debugging/" class="btn btn-neutral" title="Debugging OpenMP applications with GDB"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../Debuggers/Gdb/gdb_omp_debugging/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../Debuggers/ArmDdt/arm_ddt/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

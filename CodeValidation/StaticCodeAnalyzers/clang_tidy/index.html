@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Clang Tidy - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Clang Tidy";
+    var mkdocs_page_input_path = "CodeValidation/StaticCodeAnalyzers/clang_tidy.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="" href="../../code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Clang Tidy</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#how-do-you-set-it-up">How do you set it up?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-does-it-check">What does it check?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-does-it-report-issues">How does it report issues?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#can-it-do-more">Can it do more?</a>
+    </li>
+    </ul>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Code validation &raquo;</li>
+        
+      
+    
+    <li>Clang Tidy</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="clang-tidy"><code>clang-tidy</code></h1>
+<p>Cppcheck is a nice and useful static code analyser, but clang-tidy is definitely worth mentioning as an alternative.</p>
+<p>It is part of the clang toolchain that compiles C (<code>clang</code>) and C++ (<code>clang++</code>) code against the LLVM backend.  clang is still not as popular on HPC systems as the GNU and Intel families of compilers, but for debugging, it can be a valuable tool.</p>
+<p>The warnings generated by <code>clang</code> and <code>clang++</code> are pretty thorough. To get to know everything the compilers can warn about, you can use a single flag <code>-Weverything</code> (easy to remember too).  However, don't use this in production, as you may get warnings that are inconsistent with other command line options.  The <code>-Weverything</code> is in fact only intended for compiler developers.</p>
+<p><code>clang-tidy</code> is a very useful tool, part of the clang toolchain, and can detect additional problems that the compilers won't warn about.</p>
+<p>A drawback is that to use <code>clang-tidy</code>, you first have to create a compilation database.  This is easy if CMake is your build tool.  Since an introduction to CMake is out of scope for this course, there are two options:
+  1. you are familiar with CMake, just read on;
+  1. you are not familiar with CMake, feel free to treat this as optional material, and skip it.</p>
+<h2 id="how-do-you-set-it-up">How do you set it up?</h2>
+<p>If CMake is your build tool, then generating a compilation database for <code>clang-tidy</code> is trivial:</p>
+<pre><code class="bash">$ cmake  -DCMAKE_EXPORT_COMPILER_COMMANDS=on  path/to/source
+</code></pre>
+
+<p>This generates a file <code>compile_commands.json</code>, the compilation database for the project.</p>
+<h2 id="what-does-it-check">What does it check?</h2>
+<p><code>clang-tidy</code> implements many checks, and not all are useful in your context.  To see which checks are enabled, simply run <code>clang-tidy</code> with the <code>-list-checks</code> options, i.e.,</p>
+<pre><code class="bash">$ clang-tidy  -list-checks
+</code></pre>
+
+<p>You will see that by default, only checks with the prefix <code>clang-analyzer</code> are enabled, in total some 80 checks at the time of writing.</p>
+<p>However, many more checks can be enable in addition to these 80 core checks.  To view all available checks, enable them all.</p>
+<pre><code class="bash">$ clang-tidy  -checks='*'  -list-checks
+</code></pre>
+
+<p>You will recognize check categories,
+  * android: checks related to Android;  not useful for HPC;
+  * bugprone: checks that target bugprone code constructs;
+  * cert: checks related to CERT Secure Coding Guidelines;
+  * clang-analyzer: Clang Static Analyzer checks;
+  * cppcoreguidelines: checks related to C++ Core Guidelines;
+  * fuchsia: checks related to Fuchsia coding conventions;  not useful for HPC;
+  * google: checks related to Google style guide;
+  * hicpp: checks related to High Integrity C++ Coding Standard;
+  * llvm: checks related to the LLVM coding conventions;
+  * misc: checks that they didn’t have a better category for;
+  * modernize: checks that advocate usage of modern (currently “modern” means “C++11”) language constructs;
+  * mpi: checks related to MPI (Message Passing Interface);
+  * objc: checks related to Objective-C coding conventions;  not useful for HPC, unless you use Objective-C;
+  * performance: checks that target performance-related issues;
+  * readability: checks that target readability-related issues that don’t relate to any particular coding style.</p>
+<p>Some of these categories are quite useful to catch bugs as you can guess by their names, e.g., <code>bugprone</code>, <code>clang-analyzer</code>.  Other categories focus more on coding style, e.g., <code>google</code> and <code>readability</code>.  Yet others are only useful in a very specific context, e.g., <code>android</code> if you happen to develop for the Android platform, or <code>mpi</code> for distributed parallel programming using an MPI library.</p>
+<p>Enabling checks is based on globbing, e.g., to enable the readability checks, you would use <code>-checks='read*'</code>.  Note that the <code>clang-analyzer</code> checks are enabled as well.</p>
+<p>The simplest approach is to enable all checks, i.e., <code>-check='*'</code>.  However, this may take some time for large projects, and some tests are certainly useless for your project.</p>
+<p>Although you could specify the checks explicitly on the command line, that would be error prone and inconvenient.  A more convenient approach is to use a configuration file.  <code>clang-tidy</code> can generate one for you that you can modify later, e.g., to have a configuration file that enables the <code>readability</code> checks, use</p>
+<pre><code class="bash">$ clang-tidy  -checks='read*'  -dump-config
+</code></pre>
+
+<p>The output looks like the following</p>
+<pre><code>--
+Checks:          'clang-diagnostic-*,clang-analyzer-*,read*'
+WarningsAsErrors: ''
+HeaderFilterRegex: ''
+AnalyzeTemporaryDtors: false
+FormatStyle:     none
+User:            gjb
+CheckOptions:
+  - key:             google-readability-braces-around-statements.ShortStatementLines
+    value:           '1'
+  - key:             google-readability-function-size.StatementThreshold
+    value:           '800'
+...
+</code></pre>
+<p>Saving this output into a file <code>.clang-tidy</code> will ensure that this configuration is used when you run <code>clang-tidy</code>.  By modifying the <code>Checks</code> line, you can enable additional checks.</p>
+<h2 id="how-does-it-report-issues">How does it report issues?</h2>
+<p>The output <code>clang-tidy</code> generates is very similar to that of a compiler, e.g.,</p>
+<pre><code class="bash">$ clang-tidy  array.c
+1 warning generated.
+/home/gjb/training-material/Debugging/ClangTidy/array.c:8:11: warning: The left operand of '&gt;' is a garbage value [clang-analyzer-core.UndefinedBinaryOperatorResult]
+   if (m &gt; n) {
+         ^
+/home/gjb/training-material/Debugging/ClangTidy/array.c:7:5: note: 'm' declared without an initial value
+   int m;
+   ^
+/home/gjb/training-material/Debugging/ClangTidy/array.c:8:11: note: The left operand of '&gt;' is a garbage value
+   if (m &gt; n) {
+         ^
+</code></pre>
+
+<p>As with all verification tools, it pays to use them from the start of your project.  It can be both intimidating and depressing to be confronted with <code>clang-tidy</code> output for a large code base.</p>
+<h2 id="can-it-do-more">Can it do more?</h2>
+<p>Indeed, actually <code>clang-tidy</code> can fix your code in some circumstances.  Caveat emptor, it is an automatic tool, so I would advice using it with care.  For instance, using the <code>-fix</code> option on the example above would insert braces around the body of the for-loop.</p>
+<pre><code class="bash">$ clang-tidy  -fix  -checks='google*'  array.c
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../../BugsAtRuntime/finding_bugs_intro/" class="btn btn-neutral float-right" title="Introduction">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../Compilers/icc_flags/" class="btn btn-neutral" title="Flags for icc/icpc"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../Compilers/icc_flags/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../../../BugsAtRuntime/finding_bugs_intro/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

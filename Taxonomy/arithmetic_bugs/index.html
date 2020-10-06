@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Arithmetic bugs - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Arithmetic bugs";
+    var mkdocs_page_input_path = "Taxonomy/arithmetic_bugs.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Arithmetic bugs</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#integers">Integers</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#overflow">Overflow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#divide-by-zero">Divide by zero</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#real-numbers">Real numbers</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#overflow_1">Overflow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#underflow">Underflow</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#round-off-loss-of-precision">Round off &amp; loss of precision</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#divide-by-zero-and-invalid-operations">Divide by zero and invalid operations</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Taxonomy of bugs &raquo;</li>
+        
+      
+    
+    <li>Arithmetic bugs</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="arithmetic-bugs">Arithmetic bugs</h1>
+<p>Given that computing numerical results is at the heart of almost all scientific software, this category of bugs is quite important. The primary source of issues is that you will be thinking in mathematical terms, rather than computational terms.</p>
+<h2 id="integers">Integers</h2>
+<p>In mathematics, the set of integer number is infinite, while in most programming languages, integers are represented by 8, 16, 32 or 64 bits.  For simplicity, we will only consider 32 bit integers, but the same argument holds for the other representations.</p>
+<h3 id="overflow">Overflow</h3>
+<p>This means that the largest signed integer that can be represented using 32 bits is <code>2^31 - 1</code>.  The smallest signed 32 bits integer is <code>-2^31</code>.</p>
+<p>Adding 1 to that number causes a numerical overflow, and will result in a negative number, <code>-2^31</code>. Obviously, all further computations based on that result are meaningless.  The situation is of course symmetric, similar problems will arise when subtracting 1 from the smallest integer.</p>
+<p>Integer numerical overflow can be trapped at runtime using compiler flags.</p>
+<h3 id="divide-by-zero">Divide by zero</h3>
+<p>Interestingly, an integer division by zero will result in runtime error due to a floating point exception.  The application will crash.</p>
+<h2 id="real-numbers">Real numbers</h2>
+<p>For real numbers, the situation is more complicated.  Again, in mathematics the set of real number is infinite, but there are infinitely many real numbers between any given two real numbers as well.  Real numbers are represented as floating point numbers with 16 bits (half precision), 32 bits (single precision), 64  bits (double precision), or 128 bits (quadruple precision).  This implies that almost no real number can be represented exactly as a floating point number, which has a number of unpleasant consequences.</p>
+<p>For simplicity, we will only discuss the 32 bit (single precision) representation, the same arguments hold for all other representations with the corresponding values for the constants involved.</p>
+<h3 id="overflow_1">Overflow</h3>
+<p>Just like for integers, overflow can be an issue. The largest floating point number is <code>3.40282347E+38</code>. When a computation results in a number larger than this value, an overflow occurs, and the result will be <code>Infinity</code>.  All further computations will results in either infinity, or <code>NaN</code> (Not a Number).</p>
+<h3 id="underflow">Underflow</h3>
+<p>The smallest strictly positive floating point number that can be represented is <code>1.17549435E-38</code>.  Computations that result in smaller strictly positive values will be rounded to zero, which is an underflow.  This type of problem is of course harder to spot.  The result might genuinely be zero, so this situation has to be handled with care if it can arise.  Underflow may be the result of multiplying two small floating point numbers.  Just like for overflow, underflow illustrates that associativity may not always hold.  For example, consider</p>
+<pre><code>(1.0E20 * 1.0E-20) * (1.0E-20 * 1.0E20)
+</code></pre>
+
+<p>versus</p>
+<pre><code>1.0E20 * (1.0E-20 * 1.0E-20) * 1.0E20
+</code></pre>
+
+<p>The first expression evaluates to 1.0, the second to 0.0, although they are mathematically equivalent.</p>
+<p>Another source of numerical underflow would be applying the <code>exp</code> function to a large negative number.</p>
+<h3 id="round-off-loss-of-precision">Round off &amp; loss of precision</h3>
+<p>Round off errors can also have unpleasant consequences.  The smallest floating point value that can be added to 1 such that the result is different from 1 is <code>1.19209290E-07</code>., so in single precision, <code>1.0 + 1.0E-08</code> would be rounded to <code>1.0</code>.</p>
+<p>Round off also implies that the addition of floating point numbers is not associative, i.e., <code>a + (b + c)</code> is not necessarily equal to <code>(a + b) + c</code>. It is especially important that you realize this when adding many floating point numbers that have different orders of magnitude.  As a trivial illustration, consider the following two expressions:</p>
+<pre><code class="c">(1.0 + 7.0E-08) + 7.0E-08
+</code></pre>
+
+<p>versus</p>
+<pre><code class="c">1.0 + (7.0E-08 + 7.0E-08)
+</code></pre>
+
+<p>From a mathematical point of view, they should yield the same result, however, this is not the case for floating point numbers.</p>
+<p>Although in general this is fairly innocent, it may lead to entirely wrong results when the numerical algorithm is not robust against this issue.  You may solve the issue by choosing a more precise floating point representation, but that will come at a price.  Your application will require more memory to store the data, and the performance may be impacted by as much has a factor of 2.  Usually, it pays to check whether another algorithm may be a better solution.</p>
+<h3 id="divide-by-zero-and-invalid-operations">Divide by zero and invalid operations</h3>
+<p>Dividing a floating point number by zero results in <code>Infinity</code>, and no exception is thrown by default.  Division by zero can be caught at runtime when using GCC's sanitizer.</p>
+<p>Similar, operations that are invalid, e.g., <code>sqrt(-1.0)</code> will result in <code>NaN</code> (Not a Number), while your application will happily continue to compute nonsense.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../data_races_deadlocks/" class="btn btn-neutral float-right" title="Data races & deadlocks">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../structural_bugs/" class="btn btn-neutral" title="Structural bugs"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../structural_bugs/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../data_races_deadlocks/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

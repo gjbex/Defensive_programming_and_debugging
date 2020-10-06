@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../../img/favicon.ico">
+  <title>GDB Features - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "GDB Features";
+    var mkdocs_page_input_path = "BugsAtRuntime/Debuggers/Gdb/gdb_features.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../../../finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">GDB Features</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-prepare-for-debugging">How to prepare for debugging?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-do-you-start-the-debugger">How do you start the debugger?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-get-help">How to get help?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-quit-the-debugger">How to quit the debugger?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-view-your-source-code">How to view your source code?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#breakpoints">Breakpoints</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-execute-and-to-step-through-code">How to execute and to step through code?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#what-can-you-do-at-a-breakpoint">What can you do at a breakpoint?</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#inspecting-values">Inspecting values</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#inspecting-types">Inspecting types</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#executing-functions-and-modifying-state">Executing functions and modifying state</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#exploring-data-structures">Exploring data structures</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-deal-with-function-calls">How to deal with function calls?</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Finding bugs at runtime &raquo;</li>
+        
+      
+    
+    <li>GDB Features</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="what-can-you-do-with-gdb">What can you do with GDB?</h1>
+<p>The screencasts have shown you a number of features of GDB, but there is a lot more you can do.  Here you'll get a recap of what was shown, as well as an overview of a few additional features.</p>
+<h2 id="how-to-prepare-for-debugging">How to prepare for debugging?</h2>
+<p>Make sure your application can be debugged conveniently.  This implies compiling with
+  * <code>-g</code> to add references to the source code in the executable, and
+  * <code>-O0</code> to switch off optimisation.</p>
+<p>Note that <code>-g</code> has no influence on the performance of your application, it just adds a little bit to its size.  In most circumstances, you don't care about it.</p>
+<p>Remember to build with optimisation enabled once you're done debugging.</p>
+<h2 id="how-do-you-start-the-debugger">How do you start the debugger?</h2>
+<p>Start GDB on the command line to debug the executable <code>application.exe</code> using</p>
+<pre><code class="bash">$ gdb ./application.exe
+</code></pre>
+
+<p>If your application takes command line arguments, those can be conveniently passed by using GDB's <code>--args</code> option.  You normally run your application using</p>
+<pre><code class="bash">$ ./application.exe  --verbose  --n 5
+</code></pre>
+
+<p>To debug it with the same command line arguments, simply invoke the debugger as follows</p>
+<pre><code class="bash">$ gdb  --args  ./application.exe  --verbose  --n 5
+</code></pre>
+
+<h2 id="how-to-get-help">How to get help?</h2>
+<p>GDB has a help system that is quite useful.  The <code>help</code> command will list the available topics.  You can also request help on specific command, e.g., <code>help print</code>.  If you don't really know which topic covers the concept you are looking for, you can use the <code>apropos</code> command, e.g., <code>apropos variable</code>.</p>
+<h2 id="how-to-quit-the-debugger">How to quit the debugger?</h2>
+<p>The <code>quit</code> or <code>q</code> command will quit the debugger, but you'll be asked for confirmation.</p>
+<h2 id="how-to-view-your-source-code">How to view your source code?</h2>
+<p>Although you would typically have an editor open that displays the source code of the application you are debugging, it can nevertheless be convenient to list it in the debugger itself, just to have a quick peek.   The <code>list</code> or <code>l</code> command will do that for you.  It can be used in a number of ways, e.g.,</p>
+<ul>
+<li><code>l</code>: list the code at the current location;</li>
+<li><code>l &lt;ln&gt;</code>: list the code in the current file around line <code>&lt;ln&gt;</code>;</li>
+<li><code>l &lt;file&gt;</code>: list the code in file <code>&lt;file&gt;</code>;</li>
+<li><code>l &lt;file&gt;:&lt;ln&gt;</code>: list the code in the file <code>&lt;file&gt;</code> around line <code>&lt;ln&gt;</code>;</li>
+<li><code>l &lt;func&gt;</code>: list the source code of the function named <code>&lt;func&gt;</code>.</li>
+</ul>
+<p>If you don't feel comfortable with this way of working, you can enable TUI mode.  This will split your screen into two parts.  The upper part shows your source code, the lower is the GDB command line.  When GDB is running, you can switch to TUI mode as follows:</p>
+<pre><code>(gdb) tui enable
+</code></pre>
+<p>You can switch back to non-TUI using</p>
+<pre><code>(gdb) tui disable
+</code></pre>
+<p>You should experiment with it to see what is most comfortable for you.  If you decide you like TUI, you can start GDB in TUI mode by invoking <code>gdbtui</code>, rather than <code>gdb</code>, on the command line of your shell.</p>
+<h2 id="breakpoints">Breakpoints</h2>
+<p>Setting a breakpoint can be done with the <code>break</code> or <code>b</code> command, followed by</p>
+<ul>
+<li>a line number, e.g., <code>b 15</code></li>
+<li>a function name, e.g., <code>b fib</code></li>
+<li>a file name and a line number, e.g., <code>b fib.c:17</code></li>
+<li>or a file name and a function name, e.g., <code>b fib.c:fib</code></li>
+</ul>
+<p>A breakpoint can be conditional, and that condition is formulated in the programming language of the application being debugged.  E.g., the following GDB command would halt the application when it enters the function <code>fib</code> when called with an argument <code>n</code> that is less than 2.</p>
+<pre><code>(gdb) b fib if n &lt; 2
+</code></pre>
+<p>The syntax of the condition is that of the programming language being debugged, so for C/C++ versus Fortran, respectively</p>
+<ul>
+<li><code>==</code> versus <code>.eq.</code></li>
+<li><code>!=</code> versus <code>.ne.</code></li>
+<li><code>&lt;</code> versus <code>.lt.</code></li>
+<li><code>&amp;&amp;</code> versus <code>.and.</code></li>
+<li>...</li>
+</ul>
+<p>Note that the "new style" Fortran comparison operators <code>==</code>, <code>&lt;</code>, ..., and <code>/=</code> will not work, which is, frankly, a bit of a pain.</p>
+<p>GDB offers quite some options to manage breakpoints.  Breakpoints have a numerical identifier so that specific actions can be performed on them.  In the following <code>&lt;n&gt;</code> denotes a breakpoint number.  Current breakpoints can be</p>
+<ul>
+<li>listed using <code>info breakpoints</code>, or <code>i b</code></li>
+<li>temporarily disabled/enabled using <code>disable b &lt;n&gt;</code> and <code>enable b &lt;n&gt;</code></li>
+<li>delete a breakpoint using <code>delete &lt;n&gt;</code> or <code>d &lt;n&gt;</code></li>
+<li>delete all current breakpoints using <code>delete</code> or <code>d</code></li>
+</ul>
+<p>If you want to make an existing breakpoint conditional, that is as simple as attaching a condition to it using the <code>cond</code> command, e.g.,</p>
+<pre><code>(gdb) b 17
+Breakpoint 3 at 0x156f: file watch_point.f90, line 19.
+...
+cond b i == 10
+</code></pre>
+<p>Now the breakpoint with identifier 3 will be conditional, i.e., the application will only halt when the variable <code>i</code> is equal to 10.  So there is no need to create a new breakpoint.</p>
+<h2 id="how-to-execute-and-to-step-through-code">How to execute and to step through code?</h2>
+<p>To run the application, use the <code>run</code> command, followed by the required command line arguments, if any, e.g.,</p>
+<pre><code>(gdb) r 15
+</code></pre>
+<p>The command above will start the application with <code>15</code> as the first and only command line argument.</p>
+<p>The application will run until</p>
+<ul>
+<li>it reaches the first enabled breakpoint, or</li>
+<li>until it terminates abnormally, or</li>
+<li>until it terminates normally.</li>
+</ul>
+<p>Once the application hits a breakpoint, you can continue the execution in several ways:</p>
+<ul>
+<li>use <code>continue</code> or <code>c</code> to resume execution until the next breakpoint is hit (which might be the same if the code iterates),</li>
+<li>use <code>next</code> or <code>n</code> to execute the statement the execution halted at, stepping over function calls, or</li>
+<li>use <code>step</code> or <code>s</code> to step into a function that is in the current statement.</li>
+</ul>
+<p>The <code>continue</code> command can optionally be followed by a number, e.g., for the following code fragment the breakpoint is in the for-loop:</p>
+<pre><code class="c">for (int i = 0; i &lt; 10; i++)
+    printf(&quot;%d\n&quot;, i);
+</code></pre>
+
+<p>When the execution is halted the first time, the do-loop will be in its first iteration, so <code>i == 1</code>.  Using <code>c 5</code> at this point will resume the application and halt it the fifth time the breakpoint is hit. So when the application is halted, <code>i == 6</code> (the breakpoint was skipped 4 times).</p>
+<p>The <code>until &lt;ln&gt;</code> command can be very useful.  It will run the application until the specified line number <code>&lt;ln&gt;</code> is reached, without having to set a breakpoint.  However, it works only in the current frame.  More generally, <code>advance &lt;loc&gt;</code> will continue to execute the application up to the specified location <code>&lt;loc&gt;</code> that takes the same format as that for the <code>break</code> command.</p>
+<p>While evaluating a function, it is often convenient to halt at the end of the function, just before it goes out of scope.  This is easily done using the <code>finish</code> command.</p>
+<h2 id="what-can-you-do-at-a-breakpoint">What can you do at a breakpoint?</h2>
+<p>Checking the value of variables is one of the main operations once your application hits a breakpoint.  This way, you can verify that your expectations are met.</p>
+<p>By the way, during lengthy debug sessions, you may want a reminder of the point  in the code you are currently at.  For this purpose, the <code>frame</code> command is quite useful.  It will display the current frame and the line of code the application will execute next, e.g.,</p>
+<pre><code>(gdb)
+#0  main () at features.c:11
+11      if (vectors == NULL)
+</code></pre>
+<p>We will discuss frames in more detail in a later section.</p>
+<h3 id="inspecting-values">Inspecting values</h3>
+<p>The value of a variable can be displayed using the <code>print</code> or <code>p</code> command, e.g.,</p>
+<pre><code>(gdb) p a
+</code></pre>
+<p>GDB will attempt to provide a view that is as useful as possible if it can determine the semantics of the variable.  For an array, it will print the elements.  For a C structure, member names and their respective values will be displayed.  Since pointers have no semantics for the compiler, the usual dereferencing is required to display relevant information besides the raw address.</p>
+<p>For example, consider the following data structure that represents a vector with <code>n</code> double precision floating point elements.  The <code>element</code> member is a pointer, do before you can store values as elements, dynamic memory allocation has to be done.</p>
+<pre><code class="c">typedef struct {
+    double *element;
+    int n;
+} Vector;
+</code></pre>
+
+<p>Now consider the following variable:</p>
+<pre><code class="c">Vector *vectors[5];
+</code></pre>
+
+<p>Note the difference between <code>vectors</code> and <code>vectors[0]-&gt;element</code>-- the former is an array, the second is a pointer.</p>
+<p>After it has been properly initialised, you could print several things at a breakpoint:</p>
+<ol>
+<li><code>p vectors</code>: array of 5 addresses, each for a <code>Vector</code>;</li>
+<li><code>p &amp;vectors</code>: address of the first <code>Vector</code> in the array;</li>
+<li><code>p vectors[0]</code>: address of the first <code>Vector</code>;</li>
+<li><code>p *vectors[0]</code>: struct representation with the value of the <code>n</code> field, and the address assigned to the <code>element</code> field for the first <code>Vector</code>;</li>
+<li><code>p vectors[0]-&gt;n</code>: value of the <code>n</code> member of the first <code>Vector</code>;</li>
+<li><code>p &amp;vectors[0]-&gt;n</code>: address of the member <code>n</code> of the first <code>Vector</code>;</li>
+<li><code>p vectors[0]-&gt;element</code>: address of the first element of the first <code>Vector</code>;</li>
+<li><code>p *(vectors[0]-&gt;element)</code>: value of the first element of the first <code>Vector</code>;</li>
+<li><code>p vectors[0]-&gt;element[0]</code>: value of the first element of the first <code>Vector</code>;</li>
+<li><code>p vectors[1]@3</code>: the addresses of the second up to and including the fourth <code>Vector</code>;</li>
+<li><code>p vectors[0]-&gt;element[0]@vectors[0]-&gt;n</code>: all element values of the first <code>Vector</code>.</li>
+</ol>
+<p>The last example is fairly involved, so step by step:
+  1. <code>vectors[0]-&gt;n</code> is the number of elements of the first <code>Vector</code> in the array, call that <code>k</code> for convenience,
+  1. <code>vectors[0]-&gt;element[0]@k</code> is a slice that starts at index 0 and has length <code>k</code>.</p>
+<p>Since this expression is somewhat unwieldy, you could use a <em>GDB variable</em> to store the length of the <code>Vector</code>, i.e.,</p>
+<pre><code>(gdb) set $len = vectors[0]-&gt;n
+(gdb) p vectors[0]-&gt;element[0]@$len
+</code></pre>
+<p>Note that when you display a result using <code>print</code>, the result is in fact stored in a GDB variable, e.g.,</p>
+<pre><code>(gdb) p vectors[0]-&gt;n
+$5 = 3
+(gdb) p $5 + 5
+$6 = 8
+</code></pre>
+<h3 id="inspecting-types">Inspecting types</h3>
+<p>Very often, you are not only interested in the value of variables, but also in the definition of their data type.  Two commands can be quite useful to get that information, <code>whatis</code> and <code>ptype</code>.  The former provides a more high-level view on the type, while the latter gives you more details.</p>
+<p>For instance, for the running example, you might want to explore the data structure, e.g.,</p>
+<pre><code>(gdb) whatis vectors
+type = Vector *[100]
+(gdb) ptype vectors
+type = struct {
+    double *element;
+    int n;
+} *[100]
+</code></pre>
+<p>Using <code>whatis</code>, you would have to dig up the type definition of <code>Vectors</code>, which is a <code>typedef</code> to the structure that is displayed directly by <code>ptype</code>.</p>
+<h3 id="executing-functions-and-modifying-state">Executing functions and modifying state</h3>
+<p>It is even possible to evaluate arbitrary function calls in GDB.  Consider the following  declarations:</p>
+<pre><code class="c">double vector_length(Vector *v);
+void fill_vector(Vector *v, double start_value, double delta_value);
+Vector *init_vector(int n);
+</code></pre>
+
+<p>The first function can be evaluated at a breakpoint using <code>print</code> which will display the result of the computation.</p>
+<pre><code>(gdb) p vector_length(vectors[0])
+</code></pre>
+<p>The second function does not return a value, so it is better to call it using the <code>call</code> command.</p>
+<pre><code>(gdb) call fill_vector(vectors[0], 1.0, 0.2)
+</code></pre>
+<p>It is even possible to create a new <code>Vector</code> structure, assign it to a GDB variable, and call additional functions on it.</p>
+<pre><code>(gdb) set $v = init_vector(5)
+(gdb) p vector_length($v)
+</code></pre>
+<p>You can modify the value of variables at runtime while in the debugger using the <code>set var</code> command.</p>
+<pre><code>(gdb) set var vectors[0] = init_vector(vector_len)
+</code></pre>
+<p>This can help you experiment while debugging by setting values to what you suspect they should be.  However, thread with care, there be dragons.  It is all too easy to completely mess up the state of your application.</p>
+<h3 id="exploring-data-structures">Exploring data structures</h3>
+<p>If you know your data structures well and are proficient referencing/dereferencing memory then <code>print</code> will serve you well.  However, to explore code that you are not familiar with, the <code>explore</code> command may be a great help.  It interactively guides you through the data exploration.</p>
+<p>The session below would be typical for the data structure in the running example.</p>
+<pre><code>(gdb) explore vectors
+'vectors' is an array of 'Vector *'.
+Enter the index of the element you want to explore in 'vectors': 0
+'vectors[0]' is a pointer to a value of type 'Vector'
+Continue exploring it as a pointer to a single value [y/n]: y
+
+The value of '*(vectors[0])' is of type 'Vector' which is a typedef of type 'struct {...}'
+The value of '*(vectors[0])' is a struct/class of type 'struct {...}' with the following fields:
+
+element = &lt;Enter 0 to explore this field of type 'double *'&gt;
+    n = 5 .. (Value of type 'int')
+
+Enter the field number of choice: 0
+'(*(vectors[0])).element' is a pointer to a value of type 'double'
+Continue exploring it as a pointer to a single value [y/n]: y
+'*((*(vectors[0])).element)' is a scalar value of type 'double'.
+*((*(vectors[0])).element) = 0
+
+Press enter to return to parent value:
+
+Returning to parent value...
+
+The value of '*(vectors[0])' is a struct/class of type 'struct {...}' with the following fields:
+
+element = &lt;Enter 0 to explore this field of type 'double *'&gt;
+    n = 5 .. (Value of type 'int')
+
+Enter the field number of choice: 0
+'(*(vectors[0])).element' is a pointer to a value of type 'double'
+Continue exploring it as a pointer to a single value [y/n]: n
+Continue exploring it as a pointer to an array [y/n]: y
+Enter the index of the element you want to explore in '(*(vectors[0])).element': 1
+'((*(vectors[0])).element)[1]' is a scalar value of type 'double'.
+((*(vectors[0])).element)[1] = 0.10000000000000001
+
+Press enter to return to parent value:
+
+Returning to parent value...
+
+Enter the index of the element you want to explore in '(*(vectors[0])).element'---Type &lt;return&gt; to continue, or q &lt;return&gt; to quit---
+</code></pre>
+<p>As you can see, this can be rather useful to gather information on an unknown data structure.  Whether you like this approach is very much a personal preference.  Personally, I prefer going with  <code>print</code> and <code>ptype</code>, but les gouts et les couleurs ...</p>
+<h2 id="how-to-deal-with-function-calls">How to deal with function calls?</h2>
+<p>When a function is called, information is placed on the stack, an area of memory reserved for that purpose.  It contains values of the arguments the function was called with, as well as local variables in that function.</p>
+<p>Using the <code>frame</code> command, you can check at any time which function you are currently looking at, including the arguments it was called with, and see the line of code that will be executed next.</p>
+<p>To list all the local variables and their value in the function you can use the <code>info locals</code> command.  This is useful to get a quick overview.  Similarly, <code>info args</code> will display the arguments names and values to the function in this frame.</p>
+<p>The call stack that stores the frames can be visualised using the <code>backtrace</code> or <code>bt</code> command, e.g.,</p>
+<pre><code>(gdb) bt
+#0  fill_vector (v=0x555555757280, start_value=0,
+    delta_value=0.10000000000000001) at vectors.c:23
+#1  0x0000555555554bc4 in main () at features.c:16
+</code></pre>
+<p>In this case, there are two frames.  The top frame is the function <code>fill_vector</code> where the debugger is  currently halted, the bottom frame is the <code>main</code> function from where <code>fill_vector</code> was called.</p>
+<p>Often, you will want to examine the calling context of a function, i.e., a frame that is higher up in the call stack.  You can move to the frame of the <code>main</code> function by using the <code>up</code> command, i.e.,</p>
+<pre><code>(gdb) up
+#1  0x0000555555554bc4 in main () at features.c:16
+16          fill_vector(vectors[j], j, 0.1*(j + 1.0));
+</code></pre>
+<p>Now, it is easy to inspect the value of variable in the <code>main</code> function.  To move back to the called function you can use <code>down</code>.  <code>up</code> and <code>down</code> allow you to easily traverse the call stack.  However, you can jump to a particular frame immediately by using <code>frame &lt;fn&gt;</code> where <code>&lt;fn&gt;</code> denotes the frame number as displayed in the output of <code>backtrace</code>.</p>
+<p>Note that regardless of the frame you are examining, the application is halted in the exact same statement until you decide to step or otherwise resume the execution.</p>
+<p>GDB has of course  many more features, which will be explored later.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../gdb_attach/" class="btn btn-neutral float-right" title="Attaching GDB to running processes">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../../../parallel_debugging_best_practices/" class="btn btn-neutral" title="Best practices for parallel applications"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../../../parallel_debugging_best_practices/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../gdb_attach/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../../..';</script>
+    <script src="../../../../js/theme.js" defer></script>
+      <script src="../../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

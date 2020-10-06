@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>CUnit for C - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "CUnit for C";
+    var mkdocs_page_input_path = "Testing/UnitTesting/cunit_c.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">CUnit for C</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#the-basics">The basics</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#defining-the-tests">Defining the tests</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#setting-up-the-tests">Setting up the tests</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#building-and-running">Building and running</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#more-assertions">More assertions</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#initialise-and-clean-up">Initialise and clean up</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Unit testing &raquo;</li>
+        
+      
+    
+    <li>CUnit for C</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="cunit-testing-for-c">CUnit testing for C</h1>
+<p><a href="http://cunit.sourceforge.net/">CUnit</a> is a very rich framework for developing unit tests for C functions..</p>
+<h2 id="the-basics">The basics</h2>
+<p>The function under test computes the factorial of a given integer, i.e.,</p>
+<pre><code class="c">int fac(int n) {
+    int f = 1;
+    while (n &gt; 1)
+        f *= --n;
+    return f;
+}
+</code></pre>
+
+<h3 id="defining-the-tests">Defining the tests</h3>
+<p>Unit tests are functions that are registered as such, and executed by the framework.  The signature of these functions is <code>void f(void)</code>, and their body contains at least one CUnit assertions, e.g.,</p>
+<pre><code class="c">#include &lt;CUnit/CUnit.h&gt;
+
+void test_fac_0(void) {
+    CU_ASSERT_EQUAL(fac(0), 1);
+}
+</code></pre>
+
+<p>This test would verify that the computed result, i.e., <code>fac(0)</code>, the factorial of 0, is equal to the expected result 1.  Typically, several tests would be defined to cover the paths through the <code>fac</code> function, e.g.,</p>
+<pre><code class="c">void test_fac_3(void) {
+    CU_ASSERT_EQUAL(fac(3), 6);
+}
+</code></pre>
+
+<h3 id="setting-up-the-tests">Setting up the tests</h3>
+<p>When the tests are defined, a test application can be created.  The first and last step is to initialise and clean up the test registry, i.e.,</p>
+<pre><code class="c">#include &lt;err.h&gt;
+#include &lt;CUnit/Basic.h&gt;
+
+int main(void) {
+    if (CU_initialize_registry() != CUE_SUCCESS)
+        errx(EXIT_FAILURE, &quot;can't initialize test registry&quot;);
+    ...
+    CU_cleanup_registry();
+    return 0;
+}
+</code></pre>
+
+<p>Unit tests are grouped into suites, so you need to add at least one suite to the registry once that has been initialized.  A suite has a unique name, <code>fac</code> in the code fragment below.  For now, don't worry about the second and third argument of the <code>CU_add_suite</code> function, a later section will discuss that.</p>
+<pre><code class="c">    ...
+    CU_pSuite facSuite = CU_add_suite(&quot;fac&quot;, NULL, NULL);
+    if (CU_get_error() != CUE_SUCCESS)
+        errx(EXIT_FAILURE, &quot;%s&quot;, CU_get_error_msg());
+    ...
+</code></pre>
+
+<p>Now the unit test functions can be added to the test suite, i.e.,</p>
+<pre><code class="c">    ...
+    CU_add_test(facSuite, &quot;fac(0)&quot;, test_fac_0);
+    CU_add_test(facSuite, &quot;fac(3)&quot;, test_fac_3);
+    ...
+</code></pre>
+
+<p>The last step is to ensure that the tests are executed when the application runs.  The simplest way to do this is by using the <code>CU_basic_run_tests</code> function.  This will execute all the tests in each suite that was added to the registry.  This is the complete definition of the <code>main</code> function.</p>
+<pre><code class="c">int main(void) {
+    if (CU_initialize_registry() != CUE_SUCCESS)
+        errx(EXIT_FAILURE, &quot;can't initialize test registry&quot;);
+    CU_pSuite facSuite = CU_add_suite(&quot;fac&quot;, NULL, NULL);
+    if (CU_get_error() != CUE_SUCCESS)
+        errx(EXIT_FAILURE, &quot;%s&quot;, CU_get_error_msg());
+    CU_add_test(facSuite, &quot;fac(0)&quot;, test_fac_0);
+    CU_add_test(facSuite, &quot;fac(3)&quot;, test_fac_3);
+    CU_basic_run_tests();
+    CU_cleanup_registry();
+    return 0;
+}
+</code></pre>
+
+<h3 id="building-and-running">Building and running</h3>
+<p>To build the test application, remember to link with the <code>-lcunit</code> flag and other flags or libraries required on your system (use <code>pkg-config</code> to determine those).</p>
+<p>When you run the test application, you will get a report like the one below</p>
+<pre><code>    CUnit - A unit testing framework for C - Version 2.1-3
+    http://cunit.sourceforge.net/
+
+
+Suite fac, Test fac(3) had failures:
+    1. tests.c:17  - CU_ASSERT_EQUAL(fac(3),6)
+
+Run Summary:    Type  Total    Ran Passed Failed Inactive
+              suites      1      1    n/a      0        0
+               tests      2      2      1      1        0
+             asserts      2      2      1      1      n/a
+
+Elapsed time =    0.000 seconds
+</code></pre>
+
+<p>There is one suite in the registry, and that was run, it had two tests, both were run, one passed, the other failed.  In total, there wre two assertions, both ran, one passed, the other failed.</p>
+<p>The test that failed was <code>fac(3)</code>, clearly, the <code>fac</code> function requires some work.</p>
+<h2 id="more-assertions">More assertions</h2>
+<p>Besides the <code>CU_ASSERT_EQUAL</code> macro illustrated above, there is a long list of test macros available, e.g.,</p>
+<ul>
+<li><code>CU_ASSERT_TRUE</code>/<code>CU_ASSERT_FALSE</code>: test Boolean condition;</li>
+<li><code>CU_ASSERT_DOUBLE_EQUAL</code>: test floating point equality up to a given tolerance;</li>
+<li><code>CU_ASSERT_NSTRING_EQUAL</code>: test string equality;</li>
+<li><code>CU_ASSERT_PTR_EQUAL</code>: test whether addresses are equal;</li>
+<li><code>CU_PASS</code>/<code>CU_FAIL</code>: test whether code paths are taken.</li>
+</ul>
+<p>For each <code>EQUAL</code> macro, there is a corresponding <code>NOT_EQUAL</code> version that asserts inequality.</p>
+<p>At the risk of repeating ourselves, <em>never</em> use <code>CU_ASSERT_EQUAL</code> to compare floating point values!</p>
+<p>Although all the test macros could be expressed by the generic <code>CU_ASSERT</code>, e.g., <code>CU_ASSERT_EQUAL(a, b)</code> is logically equivalent to <code>CU_ASSERT(a == b)</code> it is good practice to use the most appropriate macro to formulate your test.  Doing so will make your intent clear, and may yield failure messages that are more informative.</p>
+<h2 id="initialise-and-clean-up">Initialise and clean up</h2>
+<p>In most unit testing frameworks, this is called setup and tear down.  In the context of CUnit, the initialisation and cleanup function are provided to a test suite, and they are run before the first test starts, and the last test in that suite completes, respectively.</p>
+<p>The purpose of the initialisation function is to set up the stage for testing.  It may for instance initialise a data structure under test, or initialise a connection to a database.  The concept is often called a "fixture", since it ensures a consistent state when the tests are run.</p>
+<p>The clean up function ensures that all resources acquired by the initialisation function are released. So it may free the memory allocated for the data structure, or close the connection to the database.</p>
+<p>The initialisation and clean up functions take no arguments and are expected to return 0 upon successful completion.  They are passed as the optional second and third argument of the <code>CU_add_suite</code> function.</p>
+<p>Suppose that we want to test functions that perform computations on arrays, we could create an array as a fixture.  The initialisation and cleanup function could be implemented as follows.</p>
+<pre><code class="c">static const int size = 5;
+static int *array;
+
+int initialize() {
+    array = (int *) malloc(size*sizeof(int));
+    if (!array)
+        return 1;
+    for (int i = 0; i &lt; size; i++)
+        array[i] = i + 1;
+    return 0;
+}
+
+int cleanup() {
+    free(array);
+    return 0;
+}
+</code></pre>
+
+<p>The tests would be defined below the declaration of the static variables so that they can access them.</p>
+<pre><code class="c">void test_sum() {
+    int sum = 0;
+    for (int i = 0; i &lt; size; i++)
+        sum += array[i];
+    CU_ASSERT_EQUAL(sum, 15);
+}
+</code></pre>
+
+<p>It is of course unfortunate that global variables have to be used as fixtures, although at least their scope is limited to the file since they were declared static.  The initialisation and cleanup function can now be assigned to a test suite by passing them as arguments to <code>CU_</code>.</p>
+<pre><code class="c">    ...
+    CU_pSuite suite = CU_add_suite(&quot;array&quot;, initialize, cleanup);
+    ...
+</code></pre>
+
+<p>Note that many unit testing frameworks allow more flexibility.  They can have setup and tear down functions that are called before and after each individual test.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../catch2_cpp/" class="btn btn-neutral float-right" title="Catch2 for C++">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../pfunit_fortran/" class="btn btn-neutral" title="pfUnit for Fortran"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../pfunit_fortran/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../catch2_cpp/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

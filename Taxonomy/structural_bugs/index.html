@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Structural bugs - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../css/theme.css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Structural bugs";
+    var mkdocs_page_input_path = "Taxonomy/structural_bugs.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Structural bugs</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#control-flow">Control flow</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#loop-termination">Loop termination</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#missing-code-paths">Missing code paths</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#logic-problems">Logic problems</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#negation-and-double-negation">Negation and double negation</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#not-so-exclusive-cases">Not so exclusive cases</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#semantics-of-logic-evaluation">Semantics of logic evaluation</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#processing-bugs">Processing Bugs</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#initialisation-bugs">Initialisation bugs</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/unit_testing_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/UnitTesting/catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Testing/CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Taxonomy of bugs &raquo;</li>
+        
+      
+    
+    <li>Structural bugs</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="structural-bugs">Structural bugs</h1>
+<p>These issues are likely the ones that first come to mind when you think of bugs.</p>
+<p>This is a very broad category that can be divided into a number of subcategories.  </p>
+<ul>
+<li>Control flow</li>
+<li>Logic</li>
+<li>Processing</li>
+<li>Initialisation</li>
+</ul>
+<p>In the sections below, each type will be discussed, and examples will be given.</p>
+<h2 id="control-flow">Control flow</h2>
+<h3 id="loop-termination">Loop termination</h3>
+<p>A prime example of a control flow bug is improper termination of loops.  Programmers who switch between 1-based languages (e.g., Fortran, MATLAB, R, ...) and 0-based languages (C, C++, Python) or those just starting to use the latter are prone to this.</p>
+<p>Consider the following C code fragment:</p>
+<pre><code class="c">const int n = 5;
+double data[n];
+for (int i = 0; i &lt;= n; i++)
+    data[i] = some_function(i);
+</code></pre>
+
+<p>Although the loop index <code>i</code> starts at 0, which is correct, during the last iteration <code>i</code> will be equal to <code>n</code>, so <code>data[n]</code> will try to access the array out of bounds, since it's last element is at index <code>n - 1</code>, rather than <code>n</code>.</p>
+<p>This situation is somewhat less likely to happen in Fortran code.</p>
+<p>Out of bound array access can be detected using compiler flags and Valgrind.</p>
+<p>The following example involves a <code>while</code> iteration, and is also quite common.  The application reads (a simplified form of) a FASTA file.  For each sequence, it counts and prints the sequence ID, followed by the number of A, C, G, and T nucleotides.</p>
+<pre><code class="c">#include &lt;err.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+#define MAX_ID_LEN 80
+
+typedef struct {
+    int a, c, g, t;
+} NucleotideCounts;
+
+void reset_counts(NucleotideCounts *counts);
+void update_counts(NucleotideCounts *counts, char *sequence);
+void print_counts(NucleotideCounts counts);
+
+int  main(int argc, char *argv[]) {
+    if (argc != 2)
+        errx(1, &quot;no file name given&quot;);
+    FILE *fp;
+    if (!(fp = fopen(argv[1], &quot;r&quot;)))
+        err(2, &quot;can't open file '%s'&quot;, argv[1]);
+    char *line_ptr = NULL;
+    size_t nr_chars = 0;
+    char current_id[MAX_ID_LEN] = &quot;&quot;, next_id[MAX_ID_LEN] = &quot;&quot;;
+    NucleotideCounts counts;
+    while (getline(&amp;line_ptr, &amp;nr_chars, fp) != -1) {
+        int nr_assigned = sscanf(line_ptr, &quot;&gt; %s&quot;, next_id);
+        if (nr_assigned == 1) {
+            if (strlen(current_id) &gt; 0) {
+                printf(&quot;%s: &quot;, current_id);
+                print_counts(counts);
+            }
+            strncpy(current_id, next_id, MAX_ID_LEN);
+            reset_counts(&amp;counts);
+        } else if (nr_chars &gt; 0) {
+            update_counts(&amp;counts, line_ptr);
+        }
+    }
+    free(line_ptr);
+    fclose(fp);
+    return 0;
+}
+
+void reset_counts(NucleotideCounts *counts) {
+    counts-&gt;a = counts-&gt;c = counts-&gt;g = counts-&gt;t = 0;
+}
+
+void update_counts(NucleotideCounts *counts, char *sequence) {
+    for (char *nucl = sequence; *nucl != '\0'; nucl++)
+        switch (*nucl) {
+            case 'A':
+                counts-&gt;a++;
+                break;
+            case 'C':
+                counts-&gt;c++;
+                break;
+            case 'G':
+                counts-&gt;g++;
+                break;
+            case 'T':
+                counts-&gt;t++;
+                break;
+            case '\n':
+                break;
+            case '\r':
+                break;
+            default:
+                warnx(&quot;invalid nucleotide symbol '%c'&quot;, *nucl);
+        }
+}
+
+void print_counts(NucleotideCounts counts) {
+    printf(&quot;A: %d, C = %d, G = %d, T = %d\n&quot;,
+           counts.a, counts.c, counts.g, counts.t);
+}
+</code></pre>
+
+<p>However, when you run the application on the following FASTA file, the output is not what you would hope for.</p>
+<pre><code>&gt; seq01
+AACGTACCT
+CCAGGT
+&gt; seq02
+GGACAGGTT
+AGGCTAAGC
+TC
+&gt; seq03
+CGGAC
+</code></pre>
+
+<p>You will see the result for the first two sequences, but not for the last.</p>
+<pre><code class="bash">$ ./count_nucleotides_c.exe seq.fasta
+seq01: A: 4, C = 5, G = 3, T = 3
+seq02: A: 5, C = 4, G = 7, T = 4
+</code></pre>
+
+<p>The output is correct but incomplete.  By now, you will easily find the problem and fix it using a debugger.</p>
+<p>Unfortunately, there are no tools that can help you detect such problems, except for a set of comprehensive unit and functional tests.</p>
+<h3 id="missing-code-paths">Missing code paths</h3>
+<p>Consider the following Fortran function that computes the factorial of a given number.</p>
+<pre><code class="fortran">integer function factorial(n)
+    implicit none
+    integer, intent(in) :: n
+    integer :: i
+    factorial = 1
+    do i = 2, n
+        factorial = factorial(i)
+    end do
+end function factorial
+</code></pre>
+
+<p>This function has two code paths, although they are implicit since there is no <code>if</code> statement.
+  1. If <code>n &lt; 2</code>, the <code>do</code> loop is not executed, only the result is set to 1.
+  1. If <code>n &gt;= 2</code>, the result is initialised to 1, and modified in each iteration of the <code>do</code> loop.</p>
+<p>The function will return a result for each value of its argument (ignoring integer overflow issues for now).  However, if the function is called with a negative argument, the return value is 1, which is of course incorrect.</p>
+<p>A code path to cover this case is not implemented, and hence the factorial function does have a bug.</p>
+<p>A comprehensive battery of tests may be able to pick up on such issues.</p>
+<h2 id="logic-problems">Logic problems</h2>
+<h3 id="negation-and-double-negation">Negation and double negation</h3>
+<p>Although all programmers are very familiar with propositional logic, surprisingly many bugs are caused by mistakes, especially when negation is involved.  Consequences of the following rules are often messed up:</p>
+<ul>
+<li><code>not(a and b) == not(a) or not(b)</code> (De Morgan)</li>
+<li><code>not(a or b) == not(a) and not(b)</code> (De Morgan)</li>
+<li><code>(a and b) or c == (a or c) and (b or c)</code> (distribution)</li>
+<li><code>(a or b) and c == (a and c) or (b and c)</code> (distribution)</li>
+</ul>
+<p>In these simple forms hardly anyone will make a mistake, but matters get more interesting when double negation is involved, e.g., <code>not(a and not(b)) == not(a) or b</code>.</p>
+<p>In general, humans have a somewhat harder time dealing with double negation.  Even if your code contains double negation, and the implementation is in fact correct, it will be harder to understand when someone reads your code.  Modifications may lead to bugs.</p>
+<p>Idiomatic C is quite prone to this, since you'll often see code like the example below.  Experienced C programmers have no problem interpreting this code, but the casual ones may stumble.</p>
+<pre><code class="c">const int n = 10;
+double *data;
+if (!(data = (double *) malloc(n*sizeof(double)))) {
+    /* Oops, NULL pointer returned!  Handle this! */
+}
+</code></pre>
+
+<p>The assignment in C is an expression, not a statement, so it may appear anywhere the syntax allows any expression.  The value of the expression is the value that was assigned, so in this case the address returned by the <code>malloc</code> function.  This address can be <code>NULL</code> if <code>malloc</code> failed to allocate memory as requested, otherwise it will be a valid memory address.  The semantics is that <code>NULL</code> is false, all other addresses are true.  So if <code>malloc</code> returns <code>NULL</code>, the Boolean expression in the <code>if</code> statement evaluates to true, so that the problem can be handled.</p>
+<p>A less idiomatic formulation of this code might actually be beneficial, depending on the experience level of those involved in the project.</p>
+<pre><code class="c">const int n = 10;
+double *data= (double *) malloc(n*sizeof(double));
+if (data == NULL) {
+    /* Oops, NULL pointer returned! Handle this! */
+}
+</code></pre>
+
+<h3 id="not-so-exclusive-cases">Not so exclusive cases</h3>
+<p>Consider the following Fortran subroutine that classifies numbers into categories low, medium, and high.</p>
+<pre><code class="fortran">subroutine print_classification(x)
+    implicit none
+    real, intent(in) :: x
+    real, parameter :: low = -5.0, high = 5.0
+    if (x &lt; low) then
+        print '(A)', 'low'
+    else if (low &lt; x .and. x &lt; high) then
+        print '(A)', 'medium'
+    else
+        print '(A)', 'high'
+    end if
+end subroutine print_classification
+</code></pre>
+
+<p>The intent is that when the argument is</p>
+<ul>
+<li>less than -5.0, <code>low</code> should be printed,</li>
+<li>between -5.0 and 5.0, <code>medium</code> should be printed, and</li>
+<li>larger than 5.0, <code>high</code> should be printed.</li>
+</ul>
+<p>This is almost always what happens, except when the argument is -5.0.</p>
+<ol>
+<li><code>x &lt; low</code> is false,</li>
+<li><code>low &lt; x .and. x &lt; high</code> is also false, so</li>
+<li>print <code>high</code>.</li>
+</ol>
+<p>Note that the description of what the subroutine is supposed to do is ambiguous, which illustrates a problem caused by the formulation of the requirements.</p>
+<p>Again, only proper testing will help detect such issues.</p>
+<h3 id="semantics-of-logic-evaluation">Semantics of logic evaluation</h3>
+<p>The semantics of logic evaluation differs among programming languages.  C, C++, and Python implement lazy evaluation. For Fortran the situation is more complicated since the standard doesn't specify whether logic evaluation is lazy or not.</p>
+<p>The following example was already discussed previously.  Consider a C fragment that processes a string, but only if it is non-empty.</p>
+<pre><code class="c">char *text;
+...
+if (strlen(text) &amp;&amp; text != NULL)
+    process(&amp;text);
+</code></pre>
+
+<p>Although we test for both conditions, this code will yield a segmentation fault if <code>text</code> is a null pointer.  In C, Boolean expressions are evaluated from left to right.  Also, evaluation is lazy, so for a logical and, if the left operand evaluates to false, there is no point in evaluating the right operand, since the expression as a whole will evaluate to false, regardless of the right operand's value.</p>
+<pre><code class="c">char *text;
+...
+if (text != NULL &amp;&amp; strlen(text))
+    process(&amp;text);
+</code></pre>
+
+<p>To summarise the behaviour for lazy evaluation of Boolean expressions:
+  * <code>&lt;expr_1&gt; &amp;&amp; &lt;expr_2&gt;</code>: <code>&lt;expr_1&gt;</code> is always evaluated, <code>&lt;expr_2&gt;</code> only when <code>&lt;expr_1&gt;</code> evaluates to true;
+  * <code>&lt;expr_1&gt; || &lt;expr_2&gt;</code>: <code>&lt;expr_1&gt;</code> is always evaluated, <code>&lt;expr_2&gt;</code> only when <code>&lt;expr_1&gt;</code>  false.</p>
+<p>For some programming languages, e.g., Bash, it is considered idiomatic to use lazy evaluation to control the flow of execution.  Although you can do the same in C or C++, it is not considered idiomatic, and will make your code hard to understand.</p>
+<pre><code class="c">char *text;
+...
+!text &amp;&amp; strlen(text) &amp;&amp; process(&amp;text);
+</code></pre>
+
+<p>Sometimes, a construct such as the one below is used, again relying on lazy evaluation.</p>
+<pre><code class="c">FILE *fp;
+(fp = fopen(file_name, &quot;w&quot;)) || (fp = stdout);
+fprintf(fp, &quot;hello&quot;);
+fp == stdout || fclose(fp);
+</code></pre>
+
+<p>Please save yourself some problems and don't indulge in this kind of programming.</p>
+<p>The last type of potential confusion, and hence a source of bugs, is the distinction between logical and bitwise operators.  Although they may yield the same results in some circumstances, they will not in others.</p>
+<table>
+<thead>
+<tr>
+<th>logical operator</th>
+<th>bitwise operator</th>
+<th>semantics</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>||</code></td>
+<td><code>|</code></td>
+<td>or</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td><code>&amp;</code></td>
+<td>and</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td><code>~</code></td>
+<td>not</td>
+</tr>
+</tbody>
+</table>
+<p>For example,</p>
+<ul>
+<li><code>2 &amp; 4 == 0</code> which is false, while <code>2 &amp;&amp; 4 == 1</code> which is true,</li>
+<li><code>~1 == -2</code> which is true, while <code>!1 == 0</code> which is false.</li>
+</ul>
+<p>Bitwise operators are not lazy, both operands will always be evaluated.</p>
+<p>Cppcheck will warn you about potential confusion between <code>&amp;</code> and <code>&amp;&amp;</code>, and <code>|</code> and <code>||</code>.</p>
+<p>For Fortran, the semantics depends on the compiler, since the specification is silent on the matter.  The <code>gfortran</code> 8.2 compiler will generate code that does lazy logical evaluation, while for Intel's <code>ifort</code> 2018 compiler this is not the case.  Relying on the behavior of a certain compiler is sure to yield non-portable, and hence buggy applications.</p>
+<h2 id="processing-bugs">Processing Bugs</h2>
+<p>Arithmetic bugs are typically classified as processing bugs, but as mentioned in the introduction, they merit their own category.</p>
+<p>Another type of important processing bugs are resource leaks.  A prime example would be memory leaks.  Memory is dynamically allocated, but not deallocated.  Over time, the memory footprint of the application increases, and the operating system may run out of memory.  In the best case, the allocation error is handled gracefully, in the worst, you get a segmentation fault.</p>
+<p>Memory leaks can be identified using GCC's sanitizer, Cppcheck, Valgrind or Intel Inspector.</p>
+<p>Other types of resources may leak as well, and this may have unpleasant consequences.  A handle to a file that is open for writing but is not closed, may lead to data loss and perhaps even corrupt data files.
+If file I/O is localised in time, and the granularity of compute and I/O phases is large, it may be prudent to only open the file at the start of the I/O phase and close it at the end.  If the program crashes during a compute phase, your data is safe.  However, keep in mind that opening and closing files has overhead,  so it is not a good idea if a program is continuously doing I/O operations.  An operating system command such as <code>lsof</code> can help you identify open files while your program is running.</p>
+<p>Network connections are another potential source of resource leaks.  Opening, but not closing many connections may result in a de facto denial of access attack on a database or another resource.  The same considerations as for file I/O apply to network connections.  In many HPC systems, file I/O on a compute nodes is essentially network I/O, since this typically is done on shared file systems.  The operating system command <code>netstat</code> may be useful to determine network connections.</p>
+<p>In the context of MPI, resources have to be managed as well.  Communicators, derived data types, groups, windows for one-sided communication and so on are created, and must be paired with the corresponding call to free them once they are no longer required.  For example, an <code>MPI_Win_free</code> should be paired with an <code>MPI_Win_create</code>.  A tool such as Intel Trace Analyser and Collector can help identifying such issues.</p>
+<h2 id="initialisation-bugs">Initialisation bugs</h2>
+<p>The initialisation of variables, or the lack thereof, is another nice source of problems.</p>
+<p>As mentioned previously, explicitly initialising variables is good practice, and compilers as well as static code analysers can help you detect the use of uninitialised variables.</p>
+<p>Attempting to use memory that has not been allocated also falls into this category.  The following Fortran code will result in a segmentation fault.</p>
+<pre><code class="fortran">program unallocated
+    use, intrinsic :: iso_fortran_env, only : error_unit
+    implicit none
+    integer :: n, i
+    real, dimension(:), allocatable :: data
+    real :: r
+    character(len=80) :: buffer
+
+    if (command_argument_count() &lt; 1) then
+        write (fmt='(A)', unit=error_unit) &amp;
+            'missing command argument, positive integer expected'
+        stop 1
+    end if
+    call get_command_argument(1, buffer)
+    read (buffer, fmt='(I10)') n
+    do i = 1, n
+        call random_number(r)
+        data(i) = r
+    end do
+    print '(A, F15.5)', sum(data)
+end program unallocated
+</code></pre>
+
+<p>The variable <code>data</code> has been declared <code>allocatable</code>, but the <code>allocate</code> statement is missing.</p>
+<p>This type of problem can sometimes be detected by the compiler, but certainly by Valgrind.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../arithmetic_bugs/" class="btn btn-neutral float-right" title="Arithmetic bugs">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../requirements_bugs/" class="btn btn-neutral" title="Bugs in requirements"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../requirements_bugs/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../arithmetic_bugs/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>

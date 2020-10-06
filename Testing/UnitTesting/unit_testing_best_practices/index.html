@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <meta name="author" content="Geert Jan Bex">
+  
+  <link rel="shortcut icon" href="../../../img/favicon.ico">
+  <title>Best practices - Defensive programming and debugging</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700" />
+
+  <link rel="stylesheet" href="../../../css/theme.css" />
+  <link rel="stylesheet" href="../../../css/theme_extra.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" />
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Best practices";
+    var mkdocs_page_input_path = "Testing/UnitTesting/unit_testing_best_practices.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+        <a href="../../.." class="icon icon-home"> Defensive programming and debugging</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../..">Welcome to Defensive Programming and Debugging</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Preface</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/economics_of_bugs/">Motivation</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/scope/">Scope</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Intro/software/">Software environment</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Taxonomy of bugs</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/taxonomy_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/requirements_bugs/">Bugs in requirements</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/structural_bugs/">Structural bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/arithmetic_bugs/">Arithmetic bugs</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_races_deadlocks/">Data races & deadlocks</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Taxonomy/data_bugs/">Bugs in data</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Writing good code</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/coding_best_practices/">Coding style</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_fortran/">Error handling in Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_c/">Error handling in C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/error_handling_cpp/">Exceptions in C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodingBestPractices/ErrorHandling/assertions/">Assertions</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Documentation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/documentation_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Documentation/mkdocs/">MkDocs for application documentation</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Unit testing</span></p>
+                <ul class="current">
+                    <li class="toctree-l1"><a class="reference internal" href="../unit_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1 current"><a class="reference internal current" href="./">Best practices</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#what-to-test">What to test?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#how-to-test">How to test?</a>
+    </li>
+    </ul>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../pfunit_fortran/">pfUnit for Fortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../cunit_c/">CUnit for C</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../catch2_cpp/">Catch2 for C++</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Functional testing</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../FunctionalTesting/functional_testing_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../FunctionalTesting/functional_testing_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code coverage</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeCoverage/code_coverage_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../CodeCoverage/code_coverage_best_practices/">Best practices</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Code validation</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="" href="../../../CodeValidation/code_validation_intro.md">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gfortran_flags/">Flags for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/ifort_flags/">Flags for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/gcc_flags/">Flags for gcc/g++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/Compilers/icc_flags/">Flags for icc/icpc</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../CodeValidation/StaticCodeAnalyzers/clang_tidy/">Clang Tidy</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Finding bugs at runtime</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_intro/">Introduction</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/finding_bugs_best_practices/">Best practices</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/heisenbugs/">Reproducibility & Heisenbugsi</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/parallel_debugging_best_practices/">Best practices for parallel applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_features/">GDB Features</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_attach/">Attaching GDB to running processes</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_reverse_debugging/">Reverse debugging with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/Gdb/gdb_omp_debugging/">Debugging OpenMP applications with GDB</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/tracing/">Tracing applications</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Debuggers/ArmDdt/arm_ddt/">Arm DDT parallel debugger</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gfortran_flags/">Compiler instrumentation for gfortran</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/ifort_flags/">Compiler instrumentation for ifort</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/gcc_sanitize/">Sanitizer instrumentation for C/C++</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../BugsAtRuntime/Verification/Compilers/icc_flags/">Compiler instrumentation for icc/icpc</a>
+                    </li>
+                </ul>
+                <p class="caption"><span class="caption-text">Appendices</span></p>
+                <ul>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/rosetta_stone/">Rosetta stone</a>
+                    </li>
+                    <li class="toctree-l1"><a class="reference internal" href="../../../Appendices/syntax_vs_semantics/">Syntax versus semantics</a>
+                    </li>
+                </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../../..">Defensive programming and debugging</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../../..">Docs</a> &raquo;</li>
+    
+      
+        
+          <li>Unit testing &raquo;</li>
+        
+      
+    
+    <li>Best practices</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="unit-testing-best-practices">Unit testing best practices</h1>
+<p>Very often code defects are introduced while the code evolves to implement new features or even to fix emerging problems.  Without proper testing these new bugs may go unnoticed for a while, even until after the release of a new version of a software project.</p>
+<p>Hence it is good practice to have a set of tests at hand for regression testing, i.e., testing whether what used to work correctly, still does.  It is a very important aspect of a software project with a non-trivial life-cycle.</p>
+<p>Testing code by running an application and visually inspecting the results is very error-prone. It is all too easy  to miss a problem when the output is fairly long, as would be the case for most software projects.  Hence a different approach should be taken.</p>
+<p>Another consideration when planning tests is that they should be easy to run and should complete in a reasonably short time.  Such tests offer no excuses to delay running them or to not run them frequently. If those tests can be part of the software build process, and hence automated, that is an additional benefit.</p>
+<p>From the output of a test failure, it should be very clear what the issue is. If we have tests that check a single concern, or a single use case, this will help to pinpoint the failure's causes much more easily.</p>
+<p>Fortunately, all these criteria are met by the unit testing paradigm, popularised by the extreme programming developed by Kent Beck and Ron Jeffries around 1998.</p>
+<p>Quoting from "The art of unit testing", Kent Beck defines a unit test as</p>
+<blockquote>
+<p>A unit test is an automated piece of code that invokes a unit of work in the system and then checks a single assumption about the behaviour of that unit of work.</p>
+</blockquote>
+<p>Many implementations of unit testing frameworks exist, often multiple for the same programming language. They provide a framework that takes care of the scaffolding, i.e., the main function, to run the test, the formatting of the tests output and messages, and summary reporting.</p>
+<p>As a programmer, you simply implement functions that test for specific features of your software, usually at the level of individual functions.  The framework provides functions to</p>
+<ul>
+<li>compare expected to computed values,</li>
+<li>the result of Boolean expressions,</li>
+<li>whether exceptions have been thrown (if expected), and so on.</li>
+</ul>
+<p>Once the test code is written, building and running it is very easy, and can be added as a target to a make file.</p>
+<h2 id="what-to-test">What to test?</h2>
+<p>You will typically write unit tests that compare the return value of a function to an expected value. Good tests not only check for normal cases, but also for <em>edge or corner</em> cases.  By way of example, consider the factorial function.  One would of course write tests to verify that its return value for 3 is 6, or for 5 is 120, but the cases where it is easy to make mistakes should also be tested, in this example the input values 0 and 1 (edge cases).</p>
+<p>If the code under tests has branches, i.e., conditional statements, we should make sure that there is at least one test for each branch. The same applies to iteration statements when the number of iterations is computed, there should be tests in case no iterations have to be executed, a single iteration or multiple iterations.</p>
+<p>Another important aspect to test for is whether a function throws an exception or generates an error when it is supposed to, since this is the function's declared behaviour.  For the factorial example, we should verify that an error occurs when you pass to it a strictly negative argument value.</p>
+<p>Apart from providing some confidence that changes don't break our software, writing tests alongside code will actually prevent bugs, since you should really think about the behaviour of your code when writing tests. It is quite probable that while doing so, you will catch bugs without even executing the unit tests.</p>
+<p>This idea is taken to the extreme in Test Driven Development (TDD).  A requirement is translated into a number of tests, and only when these are implemented, the actual functions are developed.  This approach is kind of satisfying: at first all tests fail, since there is a trivial implementation only.  As the development progresses, and the implementation gradually nears completion, more and more tests succeed.</p>
+<h2 id="how-to-test">How to test?</h2>
+<p>Note that unit tests should be simple, i.e., a unit test check one particular aspect, so that failure is easy to map to its cause.  This means that functions implementing unit tests are typically very short, but that we may have quite many of them.</p>
+<p>Another very important issue to keep in mind is that tests should be independent. You should be able to run them in any order without altering the results. This implies that unit tests have to be free of side effects.</p>
+<p>To summarise the characteristics of a good unit test:</p>
+<ul>
+<li>it is specific: failure of a test localises a defect in a small fragment of code;</li>
+<li>it is orthogonal to other unit tests: unit tests should be independent of one another.</li>
+</ul>
+<p>The collection of all tests for your software project should be complete.  There should be tests for all functions, but also for all code paths through your code.  An aspect that is often forgotten is that you should also test for expected failure.  Is an exception actually thrown, or does the exit status of a function reflect a problem?</p>
+<p>When implementing a new feature or making a change, you should of course develop tests specific to that addition or modification.  However, it is not enough to simply run those new tests.  Even if they fail, your code might still be broken, since an addition or a modification might introduce a bug for existing code.  This situation is called a regression, since the code was correct, but due to changes, it no longer is.  Hence it is important to run all tests, to ensure that there are no regressions.  This practice is referred to as regression testing.  If unit testing is done well, regression testing is always performed.</p>
+<p>Of course, many tests require a context to run in. Variables and data structures must have been initialised, a file should be present, and so on. Unit testing frameworks provide setup and teardown functions that can be run before and after each individual test respectively to set, or clean up the stage.  These temporary artefacts are often referred to as fixtures.</p>
+<p>Unit testing frameworks typically also provide the means to group tests into so called suites, and run setup and teardown functions before running the first and after running the last test of that suite.  Units tests for large projects are typically organised into multiple suites that deal with specific subsets of the code or functionality.</p>
+<p>Below you can see when various setup and teardown functions are called when test suites are executed.</p>
+<p><img alt="setup and teardown call sequence" src="../setup_teardown.png" /></p>
+<p>We will discuss a unit testing framework for <a href="http://pfunit.sourceforge.net/">Fortran</a> and one for <a href="http://cunit.sourceforge.net/">C</a>, and show how they can be used.  As mentioned, many frameworks are available, but once you understand one, it is very easy to start using another since they all operate along similar principles.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../pfunit_fortran/" class="btn btn-neutral float-right" title="pfUnit for Fortran">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../unit_testing_intro/" class="btn btn-neutral" title="Introduction"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../unit_testing_intro/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../pfunit_fortran/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '../../..';</script>
+    <script src="../../../js/theme.js" defer></script>
+      <script src="../../../search/main.js" defer></script>
+    <script defer>
+        window.onload = function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        };
+    </script>
+
+</body>
+</html>
