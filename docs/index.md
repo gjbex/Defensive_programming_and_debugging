@@ -1,5 +1,8 @@
 # Welcome to Defensive Programming and Debugging
 
+This material complements the content of the FutureLearn MOOC on
+["Defensive programming and debugging"](https://www.futurelearn.com/courses/defensive-programming-and-debugging).
+
 This is an online resource for defensive programming and debugging.  You will
 find material on
 * coding best practices

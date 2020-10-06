@@ -2,7 +2,8 @@
 
 The text can be conveniently read on the
 [Github pages site](https://gjbex.github.io/DPD-online-book/)
-for this repository.
+for this repository.  The material complements that of the FutureLearn MOOC
+on ["Defensive programming and debugging"](https://www.futurelearn.com/courses/defensive-programming-and-debugging).
 
 This is an online resource for defensive programming and debugging.  You will
 find material on
