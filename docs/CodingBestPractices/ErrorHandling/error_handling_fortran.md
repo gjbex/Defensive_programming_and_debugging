@@ -15,7 +15,7 @@ Consider the following code, the subroutine takes arrays as arguments that may h
 
 ~~~~fortran
 subroutine create_array(x, n)
-    implicit nonse
+    implicit none
     real, dimension(:), allocatable, intent(inout) :: x
     integer, intent(in) :: n
     allocate(x(n))
@@ -30,19 +30,19 @@ subroutine daxpy(alpha, x, y)
 end subroutine daxpy
 ~~~~
 
-The `allocate` statement may fail when there is not enough memory space to accommodate the request.  However, since `create_vector` doesn't check, the application will continue under the assumption that its result is indeed an array with all `n` elements.
+The `allocate` statement may fail when there is not enough memory space to accommodate the request.  However, since `create_array` doesn't check, the application will continue under the assumption that its result is indeed an array with all `n` elements.
 
-At some point, e.g., in a call to the procedure `daxpy`, the array `x`, or `y`, or both may in fact not have been allocated at all, and the application will crash with a segmentation fault. The problem, in this case merely a symptom, will occur in `daxpy`, while the cause is in fact in `create_vector`, or, to be more precise, wherever the size of the array was computed. If this is a complex application, it may take you a while to track down the root cause of this crash.
+At some point, e.g., in a call to the procedure `daxpy`, the array `x`, or `y`, or both may in fact not have been allocated at all, and the application will crash with a segmentation fault. The problem, in this case merely a symptom, will occur in `daxpy`, while the cause is in fact in `create_array`, or, to be more precise, wherever the size of the array was computed. If this is a complex application, it may take you a while to track down the root cause of this crash.
 
 You want errors to occur as soon as possible since the closer that happens in space and time to the root cause, the easier it will be to identify and fix the issue.
 
-In this particular case, the procedure `create_vector` should check whether `allocate` succeeded, and if not, generate an error.
+In this particular case, the procedure `create_array` should check whether `allocate` succeeded, and if not, generate an error.
 
 ~~~~fortran
 subroutine create_array(x, n)
     use, intrinsic :: iso_fortran_env, only: error_unit
-    implicit nonse
-    real, dimension(:), allocatable, intent(inoout) :: x
+    implicit none
+    real, dimension(:), allocatable, intent(inout) :: x
     integer, intent(in) :: n
     integer :: istat
     allocate(x(n), stat=istat)
@@ -74,14 +74,14 @@ module error_status
 end module error_status
 ~~~~
 
-You can use this in the `create_vector` procedure, i.e.,
+You can use this in the `create_array` procedure, i.e.,
 
 ~~~~fortran
 subroutine create_array(x, n)
     use, intrinsic :: iso_fortran_env, only: error_unit
     use :: error_status, only : ALLOCATION_ERR
-    implicit nonse
-    real, dimension(:), allocatable, intent(inoout) :: x
+    implicit none
+    real, dimension(:), allocatable, intent(inout) :: x
     integer, intent(in) :: n
     integer :: istat
     allocate(x(n), stat=istat)
@@ -111,8 +111,8 @@ Using these compiler macros, the `create_array` procedure can be implemented as 
 subroutine create_array(x, n)
     use, intrinsic :: iso_fortran_env, only: error_unit
     use :: error_status, only : ALLOCATION_ERR
-    implicit nonse
-    real, dimension(:), allocatable, intent(inoout) :: x
+    implicit none
+    real, dimension(:), allocatable, intent(inout) :: x
     integer, intent(in) :: n
     integer :: istat
     allocate(x(n), stat=istat)
@@ -292,7 +292,7 @@ Now you already know that your should check the result of `allocate` to ensure t
 
 However, the user of your application (potentially you) enters a vector size in the configuration file that is too large to be allocated.  No problem though, your application handles error conditions and reports to the user.
 
-You could report the error and terminate execution in the procedure where it actually occurs, the `create_vector` subroutine you defined in one of the previous sections.  This would inform the user that some array can not be allocated.  However, unless she is familiar with the nuts and bolts of the application, that may in fact be completely uninformative.  The subroutine `create_vector` has no clue about the context in which it is called, and can hardly be expected to produce a more meaningful error message.
+You could report the error and terminate execution in the procedure where it actually occurs, the `create_array` subroutine you defined in one of the previous sections.  This would inform the user that some array can not be allocated.  However, unless she is familiar with the nuts and bolts of the application, that may in fact be completely uninformative.  The subroutine `create_array` has no clue about the context in which it is called, and can hardly be expected to produce a more meaningful error message.
 
 It would be more useful to the user if this error were reported to the calling procedure, which has more contextual information, and that this procedure would report an error that has better semantics. At the end of the day, the relevant information is that you should reduce the value of a parameter in your configuration file.
 
