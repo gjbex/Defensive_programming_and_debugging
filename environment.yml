@@ -1,0 +1,42 @@
+name: mkdocs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - _libgcc_mutex=0.1=conda_forge
+  - _openmp_mutex=4.5=1_gnu
+  - ca-certificates=2020.6.20=hecda079_0
+  - certifi=2020.6.20=py38h32f6830_0
+  - click=7.1.2=pyh9f0ad1d_0
+  - future=0.18.2=py38h32f6830_1
+  - importlib-metadata=1.7.0=py38h32f6830_0
+  - jinja2=2.11.2=pyh9f0ad1d_0
+  - ld_impl_linux-64=2.34=hc38a660_9
+  - libffi=3.2.1=he1b5a44_1007
+  - libgcc-ng=9.3.0=h24d8f2e_14
+  - libgomp=9.3.0=h24d8f2e_14
+  - libstdcxx-ng=9.3.0=hdf63c60_14
+  - livereload=2.6.2=pyh9f0ad1d_0
+  - lunr=0.5.8=py38h32f6830_0
+  - markdown=3.2.2=py_0
+  - markupsafe=1.1.1=py38h1e0a361_1
+  - mkdocs=1.1.2=py_0
+  - ncurses=6.2=he1b5a44_1
+  - nltk=3.4.4=py_0
+  - openssl=1.1.1g=h516909a_1
+  - pip=20.2.2=py_0
+  - python=3.8.5=h4d41432_2_cpython
+  - python_abi=3.8=1_cp38
+  - pyyaml=5.3.1=py38h1e0a361_0
+  - readline=8.0=he28a2e2_2
+  - setuptools=49.3.1=py38h32f6830_0
+  - six=1.15.0=pyh9f0ad1d_0
+  - sqlite=3.32.3=hcee41ef_1
+  - tk=8.6.10=hed695b0_0
+  - tornado=6.0.4=py38h1e0a361_1
+  - wheel=0.34.2=py_1
+  - xz=5.2.5=h516909a_1
+  - yaml=0.2.5=h516909a_0
+  - zipp=3.1.0=py_0
+  - zlib=1.2.11=h516909a_1007
+prefix: /home/gjb/miniconda3/envs/mkdocs
