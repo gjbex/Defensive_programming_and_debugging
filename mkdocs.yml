@@ -59,7 +59,7 @@ nav:
     - 'Finding bugs at runtime':
         - 'Introduction': BugsAtRuntime/finding_bugs_intro.md
         - 'Best practices': BugsAtRuntime/finding_bugs_best_practices.md
-        - 'Reproducibility & Heisenbugsi': BugsAtRuntime/heisenbugs.md
+        - 'Reproducibility & Heisenbugs': BugsAtRuntime/heisenbugs.md
         - 'Best practices for parallel applications': BugsAtRuntime/parallel_debugging_best_practices.md
         - 'GDB Features': BugsAtRuntime/Debuggers/Gdb/gdb_features.md
         - 'Attaching GDB to running processes': BugsAtRuntime/Debuggers/Gdb/gdb_attach.md
