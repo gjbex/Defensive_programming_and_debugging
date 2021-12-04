@@ -38,3 +38,7 @@ developed for PRACE, the European supercomputing organization.
 * Geert Jan Bex (geertjan.bex@uhasselt.be)
 * Mag Selwa
 * Ingrid Barcena Roig
+
+## Contributors
+
+* Damien Francois: fixing typos
