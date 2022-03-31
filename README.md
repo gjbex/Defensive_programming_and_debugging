@@ -1,4 +1,4 @@
-# Definesive programming and debugging.
+# Defensive programming and debugging.
 
 The text can be conveniently read on the
 [Github pages site](https://gjbex.github.io/DPD-online-book/)
@@ -23,7 +23,7 @@ other programming languages.
 
 ## Contributions
 
-This is work in progress, and you are welcome to [conntribute](CONTRIBUTING.md).  The material is
+This is work in progress, and you are welcome to [contribute](CONTRIBUTING.md).  The material is
 release under the [CC BY 4.0 license](LICENSE).
 
 
