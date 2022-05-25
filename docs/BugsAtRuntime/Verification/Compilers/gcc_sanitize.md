@@ -61,3 +61,8 @@ A few of the interesting undefined behaviours the sanitizer will check for are:
   1. `null`: error on null pointer dereferencing, rather than segmentation fault.
 
 Note that both `bounds` and `null` are also captured by `-fsanitize=address`, but the former are more lightweight with respect to the instrumentation.
+
+
+## Integer overflow
+
+Unfortunately (depending on your point of view), integer overflow is not an error.  The sanitizer can detect it in some circumstances when you specify `-fsanitize=signed-integer-overflow`.  Note that the compiler doesn't always instrument the code, so there may be false negatives.
