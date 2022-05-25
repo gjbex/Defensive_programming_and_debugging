@@ -20,6 +20,10 @@ This is mainly aimed at scientific and high performance computing, so examples
 are given for C, C++ and Fortran.  However, the principles are very similar for
 other programming languages.
 
+## Source code
+
+Source code illustrating various kinds of bugs and the use of tools can be found in
+the [source code directory](source_code/).
 
 ## Contributions
 
