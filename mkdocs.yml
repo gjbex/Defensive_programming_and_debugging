@@ -4,7 +4,7 @@ site_author: Geert Jan Bex
 nav:
     - index.md
     - 'Preface':
-        # - Introduction: Intro/intro_dpd.md
+        - 'Introduction': Intro/intro_dpd.md
         - 'Motivation': Intro/economics_of_bugs.md
         - 'Scope': Intro/scope.md
         - 'Software environment': Intro/software.md
@@ -38,7 +38,7 @@ nav:
         - 'pfUnit for Fortran': Testing/UnitTesting/pfunit_fortran.md
         - 'CUnit for C': Testing/UnitTesting/cunit_c.md
         - 'Catch2 for C++': Testing/UnitTesting/catch2_cpp.md
-        # - 'pytest for Python': UnitTesting/pytest_python.md
+        - 'pytest for Python': Testing/UnitTesting/pytest_python.md
     - 'Functional testing':
         - 'Introduction': Testing/FunctionalTesting/functional_testing_intro.md
         - 'Best practices': Testing/FunctionalTesting/functional_testing_best_practices.md
